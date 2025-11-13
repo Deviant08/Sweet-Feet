@@ -406,6 +406,9 @@ footer {
   font-weight: 300;
   /* margin-bottom: 1rem; */
   color: #6d5f49;
+  border-top-right-radius: 2rem;
+  border-top-left-radius: 2rem;
+  border-top: ridge 3px #f9e4d0;
 }
 
 .icon svg {
