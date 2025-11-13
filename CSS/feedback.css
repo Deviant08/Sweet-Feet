@@ -1,0 +1,47 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+}
+
+.calltoaction h2 {
+  /* margin: 7rem 0; */
+  margin-top: 8rem;
+  margin-bottom: 2rem;
+  font-size: 3rem;
+}
+
+.submit {
+  margin-top: 1rem;
+}
+
+.calltoaction {
+  text-align: left;
+}
+
+#name {
+  margin-bottom: 1.5rem;
+  border-radius: 5%;
+  width: 20rem;
+  height: 2.5rem;
+  border: 1px ridge #d5b074e5;
+  box-shadow: 0.5px 0px 0.2px 0.3px #766444;
+}
+
+#email {
+  margin-bottom: 1.5rem;
+  border-radius: 5%;
+  width: 16rem;
+  height: 2.5rem;
+  border: 1px ridge #d5b074e5;
+  box-shadow: 0.5px 0px 0.3px 0.3px #766444;
+}
+#message {
+  /* margin-bottom: 1.5rem; */
+  border-radius: 5%;
+  width: 19rem;
+  height: 2.5rem;
+  border: 1px ridge #d5b074e5;
+  box-shadow: 0.5px 0px 0.3px 0.3px #766444;
+}
