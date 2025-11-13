@@ -211,16 +211,25 @@ main {
 }
 .intro_uno h1 {
   font-size: 8rem;
-  margin-bottom: 1rem;
+  margin-bottom: 5rem;
   font-weight: 700;
-}
-.intro_dos {
-  padding-bottom: 2rem;
 }
 
 .intro_uno p {
   font-size: 2.3rem;
-  line-height: 1.7;
+  line-height: 1.9;
+  letter-spacing: 2px;
+  margin-bottom: 4rem;
+}
+
+.CTA {
+  text-decoration: none;
+  color: inherit;
+  font-size: 1.7rem;
+}
+
+.intro_dos {
+  padding-bottom: 2rem;
 }
 .intro_dos h2 {
   font-size: 3.7rem;
