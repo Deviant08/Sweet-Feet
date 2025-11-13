@@ -23,6 +23,10 @@ body {
   font-weight: 600;
 }
 
+body::-webkit-scrollbar {
+  display: none;
+}
+
 p {
   font-size: 2rem;
   font-weight: 500;
@@ -198,7 +202,7 @@ main {
 
 .sweet_product {
   margin-top: 4rem;
-  margin-bottom: 4rem;
+  margin-bottom: 10rem;
 }
 
 .sweet_product h2 {
@@ -272,15 +276,15 @@ main {
   border: 0.5px ridge #4325063a;
   /* object-fit: fill; */
   border-radius: 5%;
-  width: 25rem;
-  height: 25rem;
+  width: 28rem;
+  height: 27rem;
   transform-style: preserve-3d;
   transition: all 0.1s ease;
 }
 
 .product img:hover {
   transform: rotateX(5deg) rotateY(5deg) scale(1.04);
-  box-shadow: 15px 15px 30px rgba(41, 24, 1, 0.224);
+  box-shadow: 15px 15px 20px #160c0230;
 }
 /* .product img:active {
   box-shadow: 10px 10px 20px rgba(41, 24, 1, 0.224);
@@ -295,12 +299,10 @@ main {
   width: 100%;
   height: 100%;
 }
-/* .product_trainers {
+
+.product_loafers img {
   object-fit: cover;
-  box-sizing: content-box;
-  width: 100%;
-  height: 100%;
-} */
+}
 .order {
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
@@ -314,6 +316,11 @@ main {
   opacity: 1;
 }
 
+.sweet_location h2 {
+  font-size: 5rem;
+  margin-bottom: 5rem;
+}
+
 .location {
   display: flex;
   align-items: center;
@@ -321,29 +328,64 @@ main {
 }
 
 .location h3 {
-  font-size: 3rem;
+  font-size: 4rem;
   color: #fcf2e8;
+  opacity: 0;
 }
 
 .lc {
-  background-color: red;
   width: 50rem;
   height: 50rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 2rem;
+  border: ridge 2px #f5d7b9b6;
+}
+
+.lc:hover h3 {
+  transition: 2s ease;
+  opacity: 1;
+}
+
+.lc:hover {
+  transform: rotateX(5deg) rotateY(5deg) scale(1.05);
+  transition: 0.4s ease-in-out;
+}
+.lagos {
+  transition: all 0.3s ease-in-out;
+}
+.lagos:hover {
+  background-image: linear-gradient(#160c0265, #160c0265),
+    url(https://cms.forbesafrica.com/wp-content/uploads/2021/12/Forbes-Lagos-State-Supplement-Cover-Image-scaled.jpg);
+  /* transition: 0.1s ease; */
+}
+
+.abuja {
+  transition: all 0.3s ease-in-out;
+}
+.abuja:hover {
+  background-image: linear-gradient(#160c028e, #160c028e),
+    url(https://primeprogressng.com/wp-content/uploads/2025/05/aerial-view-bustling-city-intersection-600nw-2550886673.webp);
+}
+
+.Uyo:hover {
+  transition: all 0.3s ease-in-out;
+}
+.Uyo:hover {
+  background-image: linear-gradient(#0402006e, #0402006e),
+    url(https://www.ibomair.com/wp-content/uploads/2022/01/hl81gtkfqex41.jpg);
 }
 
 .lagos {
-  background-image: linear-gradient(#160c0223, #160c0223),
-    url(https://cms.forbesafrica.com/wp-content/uploads/2021/12/Forbes-Lagos-State-Supplement-Cover-Image-scaled.jpg);
+  background-image: url(https://cms.forbesafrica.com/wp-content/uploads/2021/12/Forbes-Lagos-State-Supplement-Cover-Image-scaled.jpg);
   background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
 }
 
 .abuja {
-  background-image: linear-gradient(#160c024a, #160c024a),
-    url(https://primeprogressng.com/wp-content/uploads/2025/05/aerial-view-bustling-city-intersection-600nw-2550886673.webp);
+  background-image: url(https://primeprogressng.com/wp-content/uploads/2025/05/aerial-view-bustling-city-intersection-600nw-2550886673.webp);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
