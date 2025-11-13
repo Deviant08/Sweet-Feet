@@ -3,10 +3,12 @@
 *::after {
   margin: 0;
   padding: 0;
+  box-sizing: inherit;
 }
 
 html {
   font-size: 62.5%;
+  box-sizing: border-box;
   font-family: "Kumbh Sans", sans-serif;
 }
 
@@ -51,6 +53,7 @@ header {
   border-bottom-right-radius: 3rem;
   border-bottom-left-radius: 3rem;
   padding: 4rem;
+  padding-bottom: 0;
 }
 .logo {
   display: flex;
@@ -106,15 +109,15 @@ header {
 }
 
 .nav_bar {
-  /* position: sticky;
-  top: 0; */
+  /* position: relative;
+  top: 10rem; */
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 4rem;
   /* margin-left: -3rem; */
   /* margin-top: 1rem; */
-  overflow: hidden;
+  /* overflow: hidden; */
   background-color: #fcf2e813;
   padding: 2rem;
   border-radius: 6rem;
@@ -199,6 +202,7 @@ main {
 }
 .intro_uno {
   text-align: initial;
+  position: relative;
   /* margin-left: 5rem; */
   /* position: absolute;
   left: 50%;
@@ -212,6 +216,11 @@ main {
 }
 .intro_dos {
   padding-bottom: 2rem;
+}
+
+.intro_uno p {
+  font-size: 2.3rem;
+  line-height: 1.7;
 }
 .intro_dos h2 {
   font-size: 3.7rem;
@@ -294,3 +303,6 @@ footer {
   width: 5rem;
   height: 5rem;
 }
+
+/* @media (max-width: 760px) {
+} */
