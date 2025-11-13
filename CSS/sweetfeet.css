@@ -17,7 +17,7 @@ body {
   position: relative;
   /* margin: 1rem 4rem; */
   /* padding: 1rem 4rem; */
-  background-color: #f5f4f1;
+  background-color: #fffbf8;
   text-align: center;
   color: #160c02;
   font-weight: 600;
@@ -211,6 +211,7 @@ main {
 }
 .intro_uno h1 {
   font-size: 8rem;
+  letter-spacing: 2.5px;
   margin-bottom: 5rem;
   font-weight: 700;
 }
@@ -310,8 +311,13 @@ footer {
 }
 
 .icon svg {
-  width: 5rem;
-  height: 5rem;
+  width: 6rem;
+  height: 4rem;
+}
+
+.icon a {
+  text-decoration: none;
+  fill: #160c02;
 }
 
 /* @media (max-width: 760px) {
