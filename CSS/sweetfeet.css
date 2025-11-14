@@ -33,16 +33,6 @@ p {
   line-height: 1.5;
 }
 
-span h5 {
-  margin-bottom: 1rem;
-  font-size: 1.7rem;
-  color: #6d6a67;
-}
-span p {
-  margin-top: 0.8rem;
-  font-size: 1.4rem;
-  font-weight: 700;
-}
 header {
   position: relative;
   height: 100vh;
@@ -118,7 +108,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 4rem;
+  margin-bottom: 9rem;
   /* margin-left: -3rem; */
   /* margin-top: 1rem; */
   /* overflow: hidden; */
@@ -164,35 +154,8 @@ header {
   transform: scale(1.05);
 }
 
-.nav a:visited {
-  color: #fff;
-}
-
 main {
   margin: 7rem;
-}
-.btn {
-  text-decoration: none;
-  color: whitesmoke;
-  background-color: #3d3c3b;
-  /* opacity: 0.8; */
-  /* width: 4rem;
-  height: 3rem; */
-  padding: 0.8rem 1.5rem;
-  border-radius: 1rem;
-  border: 2px solid #312102;
-  transition: background-color, opacity 0.5s ease;
-}
-
-.btn:hover {
-  background-color: #151514ca;
-  opacity: 0.8;
-}
-
-.btn:active {
-  border: none;
-  box-shadow: 0.5px 0.5px 0.5px 0.5px #463720ac;
-  transition: 0.8s ease-in-out;
 }
 
 .sweet_intro {
@@ -251,13 +214,13 @@ main {
   padding-bottom: 2rem;
 }
 .intro_dos h2 {
-  font-size: 3.7rem;
+  font-size: 5rem;
   margin-bottom: 1rem;
   font-weight: 600;
 }
 
 .intro_dos p {
-  font-size: 2.2rem;
+  font-size: 2.5rem;
   line-height: 1.5;
 }
 .product {
@@ -271,7 +234,10 @@ main {
   /* flex-direction: column; */
   gap: 1rem;
 }
-
+.pd {
+  width: 100%;
+  height: 100%;
+}
 .product img {
   border: 0.5px ridge #4325063a;
   /* object-fit: fill; */
@@ -279,33 +245,22 @@ main {
   width: 28rem;
   height: 27rem;
   transform-style: preserve-3d;
-  transition: all 0.1s ease;
+  transition: all 0.3s ease-in-out;
 }
 
 .product img:hover {
   transform: rotateX(5deg) rotateY(5deg) scale(1.04);
-  box-shadow: 15px 15px 20px #160c0230;
+  box-shadow: 15px 15px 20px #160c021a;
 }
 /* .product img:active {
   box-shadow: 10px 10px 20px rgba(41, 24, 1, 0.224);
   transform: none;
   transition: 0.1s ease-in-out;
 } */
-/* .product h5 {
-  font-size: 2rem;
-} */
 
-.pd {
-  width: 100%;
-  height: 100%;
-}
-
-.product_loafers img {
-  object-fit: cover;
-}
 .order {
   opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -314,6 +269,45 @@ main {
 }
 .pd:hover .order {
   opacity: 1;
+}
+
+.product_cooperate img {
+  background-color: #fff;
+}
+.product p {
+  margin-top: 1.4rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+.product h5 {
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  color: #6d6a67;
+}
+
+.btn {
+  font-size: 1.2rem;
+  text-decoration: none;
+  color: whitesmoke;
+  background-color: #3d3c3b;
+  /* opacity: 0.8; */
+  /* width: 4rem;
+  height: 3rem; */
+  padding: 0.8rem 1.5rem;
+  border-radius: 1rem;
+  border: 2px solid #312102;
+  transition: background-color, opacity 0.5s ease;
+}
+
+.btn:hover {
+  background-color: #151514ca;
+  opacity: 0.8;
+}
+
+.btn:active {
+  border: none;
+  box-shadow: 0.5px 0.5px 0.5px 0.5px #463720ac;
+  transition: 0.8s ease-in-out;
 }
 
 .sweet_location h2 {
@@ -327,8 +321,9 @@ main {
   justify-content: space-evenly;
 }
 
-.location h3 {
+.location a {
   font-size: 4rem;
+  text-decoration: none;
   color: #fcf2e8;
   opacity: 0;
 }
@@ -339,21 +334,23 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
   border-radius: 2rem;
   border: ridge 2px #f5d7b9b6;
 }
 
-.lc:hover h3 {
-  transition: 2s ease;
+.lc:hover a {
+  transition: 0.5s ease-in-out;
   opacity: 1;
 }
 
 .lc:hover {
-  transform: rotateX(5deg) rotateY(5deg) scale(1.05);
-  transition: 0.4s ease-in-out;
+  transform: rotateX(4deg) rotateY(4deg) scale(1.05);
+  transition: 0.7s ease-in-out;
+  box-shadow: 15px 15px 20px #160c022c;
 }
 .lagos {
-  transition: all 0.3s ease-in-out;
+  transition: all 0.5s ease-in-out;
 }
 .lagos:hover {
   background-image: linear-gradient(#160c0265, #160c0265),
@@ -362,17 +359,17 @@ main {
 }
 
 .abuja {
-  transition: all 0.3s ease-in-out;
+  transition: all 0.5s ease-in-out;
 }
 .abuja:hover {
   background-image: linear-gradient(#160c028e, #160c028e),
     url(https://primeprogressng.com/wp-content/uploads/2025/05/aerial-view-bustling-city-intersection-600nw-2550886673.webp);
 }
 
-.Uyo:hover {
-  transition: all 0.3s ease-in-out;
+.uyo {
+  transition: all 0.5s ease-in-out;
 }
-.Uyo:hover {
+.uyo:hover {
   background-image: linear-gradient(#0402006e, #0402006e),
     url(https://www.ibomair.com/wp-content/uploads/2022/01/hl81gtkfqex41.jpg);
 }
@@ -391,7 +388,7 @@ main {
   background-repeat: no-repeat;
 }
 
-.Uyo {
+.uyo {
   background-image: url(https://www.ibomair.com/wp-content/uploads/2022/01/hl81gtkfqex41.jpg);
   background-size: cover;
   background-position: center;
@@ -404,7 +401,7 @@ footer {
   background-color: #efbc8a;
   font-size: 1.3rem;
   font-weight: 300;
-  /* margin-bottom: 1rem; */
+  /* margin: 0 auto; */
   color: #6d5f49;
   border-top-right-radius: 2rem;
   border-top-left-radius: 2rem;
@@ -412,13 +409,13 @@ footer {
 }
 
 .icon svg {
-  width: 6rem;
-  height: 4rem;
+  width: 10rem;
+  height: 5rem;
 }
 
 .icon a {
   text-decoration: none;
-  fill: #160c02;
+  /* fill: #160c02; */
 }
 
 /* @media (max-width: 760px) {
