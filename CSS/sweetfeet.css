@@ -10,9 +10,6 @@ html {
   font-size: 62.5%;
   box-sizing: border-box;
   font-family: "Kumbh Sans", sans-serif;
-
-  @media max-width(760px) {
-  }
 }
 
 body {
@@ -403,6 +400,7 @@ main {
 footer {
   position: relative;
   height: 20rem;
+  width: 100%;
   background-color: #efbc8a;
   font-weight: 300;
   display: flex;
@@ -422,14 +420,23 @@ footer {
   gap: 1rem;
 }
 
+.footer_logo:hover {
+  transform: rotateX(4deg) rotateY(4deg) scale(1.05);
+  transition: 0.4s ease-in-out;
+}
+
 .footer_img {
+  /* align-self: center; */
   width: 5rem;
   height: 5rem;
 }
 
 .footer_txt {
+  font-weight: 600;
+  text-decoration: none;
   color: #703c0bb5;
   font-size: 3rem;
+  /* align-self: center; */
 }
 
 .footer_links {
@@ -438,6 +445,9 @@ footer {
   grid-template-columns: 1fr 1fr 1fr;
   column-gap: 2rem;
   row-gap: 2rem;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .footer_links a {
@@ -452,11 +462,22 @@ footer {
   transform: scale(1.05);
   transition: 0.2s ease-in-out;
 }
+.link_1 {
+  text-align: left;
+}
+.link_4 {
+  text-align: left;
+}
+
+.link_5 {
+  text-align: left;
+}
 
 .icon {
   display: flex;
   align-items: center;
   justify-content: center;
+  align-content: center;
 }
 .icon svg {
   width: 5rem;
@@ -495,14 +516,16 @@ footer {
   }
 
   body {
-    padding: 3rem;
-    /* width: 100rem; */
+    /* padding: 3rem; */
+    width: 100%;
+    height: 100%;
   }
 
   header {
     width: 100%;
     height: 50%;
-    /* background-image: none; */
+    background-size: cover;
+    background-position: center;
   }
 
   .product {
@@ -510,5 +533,28 @@ footer {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+
+  .location {
+    flex-direction: column;
+    gap: 4rem;
+  }
+
+  footer {
+    /* size: 50%; */
+    /* font-size: 30%; */
+    height: 10rem;
+    align-items: center;
+    justify-content: center;
+    /* flex-direction: column; */
+    gap: 2rem;
+  }
+
+  .footer_links {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .icon {
+    flex-direction: column;
   }
 }
