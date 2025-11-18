@@ -49,6 +49,20 @@ header {
   border-bottom-left-radius: 1.7rem;
   padding: 4rem;
   padding-bottom: 0;
+  animation-name: effects;
+  /* animation-duration: infinite; */
+  animation-name: effects;
+  animation-duration: 10s;
+  animation-timing-function: cubic-bezier(2.25, 2.25, 2.25, 2.25);
+  animation-delay: 2s;
+  animation-iteration-count: infinite;
+  animation-direction: reverse;
+  transition-property: animation-timing-function, animation-duration,
+    animation-delay, animation-iteration-count, animation-direction,
+    animation-name;
+  transition-duration: 4s;
+  transition-timing-function: ease;
+  /* transition: animation-timing-function 2s ease-in-out; */
 }
 .logo {
   display: flex;
@@ -67,6 +81,7 @@ header {
 }
 
 .logo_txt {
+  font-family: Arial, Helvetica, sans-serif;
   align-self: center;
   font-size: 4rem;
   border: ridge 1px rgba(232, 204, 103, 0.182);
@@ -114,7 +129,7 @@ header {
   /* margin-top: 1rem; */
   /* overflow: hidden; */
   background-color: #fcf2e813;
-  padding: 2rem;
+  padding: 0.8em 2em;
   border-radius: 6rem;
   /* transform-style: preserve-3d;
   transition: transform 0.8s ease-in-out; */
@@ -129,8 +144,8 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.9rem;
-  /* padding-right: 5rem; */
+  gap: 2rem;
+  padding-right: 5rem;
 }
 
 .nav a {
@@ -153,6 +168,7 @@ header {
   text-underline-offset: 7px;
   color: #ffffff;
   transform: scale(1.05);
+  transition: all 0.3s ease-in-out;
 }
 
 main {
@@ -184,7 +200,7 @@ main {
 }
 .intro_uno h1 {
   font-size: 8rem;
-  letter-spacing: 2.5px;
+  letter-spacing: 1.5px;
   margin-bottom: 5rem;
   font-weight: 700;
 }
@@ -192,7 +208,7 @@ main {
 .intro_uno p {
   font-size: 2.3rem;
   line-height: 1.9;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   margin-bottom: 4rem;
 }
 
@@ -226,14 +242,14 @@ main {
 }
 .product {
   max-width: 100%;
-  width: 100vw;
+  /* width: 100vws; */
   height: 100%;
   display: flex;
-  align-items: space-between;
-  justify-content: space-evenly;
+  align-items: center;
+  justify-content: center;
   text-align: left;
   /* flex-direction: column; */
-  gap: 1rem;
+  /* gap: 2rem; */
 }
 .pd {
   width: 100%;
@@ -556,5 +572,56 @@ footer {
   }
   .icon {
     flex-direction: column;
+  }
+}
+
+@keyframes effects {
+  0% {
+    background-image: linear-gradient(#160c0277, #160c0277),
+      url(https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg);
+    background-size: cover;
+    background-position: center;
+    /* transform: scale(1.05); */
+    /* opacity: 1; */
+    /* transition: transform 1s ease-in-out; */
+  }
+  25% {
+    background-image: linear-gradient(#160c0277, #160c0277),
+      url(https://i.pinimg.com/1200x/35/bb/81/35bb8193e87d8d57fc5e1b3a980f1fd1.jpg);
+    background-size: cover;
+    background-position: center;
+    /* transform: scale(1.05); */
+    /* opacity: 0.8; */
+    /* transition: transform 1s ease-in-out; */
+  }
+
+  50% {
+    background-image: linear-gradient(#160c0277, #160c0277),
+      url(https://img.freepik.com/premium-photo/smart-running-shoes-stride-analysis-performance-feedback-solid-color-background-4k-ultra-hd_964851-117176.jpg);
+    background-size: cover;
+    background-position: center;
+    /* transform: scale(1.05); */
+    /* opacity: 1; */
+    /* transition: transform 1s ease-in-out; */
+  }
+
+  75% {
+    background-image: linear-gradient(#160c0277, #160c0277),
+      url(https://i.pinimg.com/1200x/35/bb/81/35bb8193e87d8d57fc5e1b3a980f1fd1.jpg);
+    background-size: cover;
+    background-position: center;
+    /* transform: scale(1.05); */
+    /* opacity: 0.8; */
+    /* transition: transform 1s ease-in-out; */
+  }
+
+  100% {
+    background-image: linear-gradient(#160c0277, #160c0277),
+      url(https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg);
+    background-size: cover;
+    background-position: center;
+    /* transform: scale(1.05); */
+    /* opacity: 1; */
+    /* transition: transform 1s ease-in-out; */
   }
 }
