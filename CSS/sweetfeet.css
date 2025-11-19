@@ -40,10 +40,10 @@ header {
   max-width: 100%;
   color: #f7dfb8;
   /* overflow-x: hidden; */
-  background-image: linear-gradient(#160c0277, #160c0277),
+  /* background-image: linear-gradient(#160c0277, #160c0277),
     url(https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg);
   background-size: cover;
-  background-repeat: no-repeat;
+  background-repeat: no-repeat; */
   border-bottom: ridge #f9e4d0 2px;
   border-bottom-right-radius: 1.7rem;
   border-bottom-left-radius: 1.7rem;
@@ -53,15 +53,16 @@ header {
   /* animation-duration: infinite; */
   animation-name: effects;
   animation-duration: 10s;
-  animation-timing-function: cubic-bezier(2.25, 2.25, 2.25, 2.25);
-  animation-delay: 2s;
+  /* animation-timing-function: ease-in-out; */
+  animation-delay: 200ms;
   animation-iteration-count: infinite;
-  animation-direction: reverse;
-  transition-property: animation-timing-function, animation-duration,
+  /* animation-play-state: paused; */
+  /* animation-direction: reverse; */
+  /* transition-property: animation-timing-function, animation-duration,
     animation-delay, animation-iteration-count, animation-direction,
     animation-name;
   transition-duration: 4s;
-  transition-timing-function: ease;
+  transition-timing-function: ease; */
   /* transition: animation-timing-function 2s ease-in-out; */
 }
 .logo {
@@ -75,18 +76,18 @@ header {
   border-radius: 60%;
   border: 1px ridge #d5b074e5;
   align-self: center;
-  width: 8rem;
-  height: 8rem;
+  width: 6rem;
+  height: 6rem;
   box-shadow: 1px 1px 1px 1px #51432e22;
 }
 
 .logo_txt {
   font-family: Arial, Helvetica, sans-serif;
   align-self: center;
-  font-size: 4rem;
+  font-size: 3.7rem;
   border: ridge 1px rgba(232, 204, 103, 0.182);
   border-radius: 4rem;
-  padding: 0.6rem;
+  padding: 0.25em;
   box-shadow: 1px 1px 1px 1px #51432e23;
 }
 
@@ -129,7 +130,7 @@ header {
   /* margin-top: 1rem; */
   /* overflow: hidden; */
   background-color: #fcf2e813;
-  padding: 0.8em 2em;
+  padding: 2em 5em;
   border-radius: 6rem;
   /* transform-style: preserve-3d;
   transition: transform 0.8s ease-in-out; */
@@ -145,7 +146,7 @@ header {
   align-items: center;
   justify-content: space-between;
   gap: 2rem;
-  padding-right: 5rem;
+  /* padding-right: 5rem; */
 }
 
 .nav a {
@@ -182,7 +183,7 @@ main {
 
 .sweet_product {
   margin-top: 4rem;
-  margin-bottom: 10rem;
+  /* margin-bottom: 10rem; */
 }
 
 .sweet_product h2 {
@@ -227,6 +228,11 @@ main {
 :visited {
   color: #fff;
 } */
+
+.sect_uno {
+  height: 100vh;
+}
+
 .intro_dos {
   padding-bottom: 2rem;
 }
@@ -247,7 +253,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: left;
+  /* text-align: left; */
   /* flex-direction: column; */
   /* gap: 2rem; */
 }
@@ -279,6 +285,7 @@ main {
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
   display: flex;
+  text-align: center;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
@@ -307,6 +314,7 @@ main {
   text-decoration: none;
   color: whitesmoke;
   background-color: #3d3c3b;
+  /* text-align: center; */
   /* opacity: 0.8; */
   /* width: 4rem;
   height: 3rem; */
@@ -539,9 +547,13 @@ footer {
 
   header {
     width: 100%;
-    height: 50%;
+    height: auto;
     background-size: cover;
     background-position: center;
+  }
+
+  .sect_uno {
+    height: 100%;
   }
 
   .product {
@@ -577,49 +589,55 @@ footer {
 
 @keyframes effects {
   0% {
-    background-image: linear-gradient(#160c0277, #160c0277),
+    background-image: linear-gradient(#160c0296, #160c0296),
       url(https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg);
     background-size: cover;
     background-position: center;
+    animation-timing-function: ease-out;
     /* transform: scale(1.05); */
     /* opacity: 1; */
-    /* transition: transform 1s ease-in-out; */
+    transition: transform 1s ease-out;
   }
   25% {
-    background-image: linear-gradient(#160c0277, #160c0277),
-      url(https://i.pinimg.com/1200x/35/bb/81/35bb8193e87d8d57fc5e1b3a980f1fd1.jpg);
+    background-image: linear-gradient(#160c0296, #160c0296),
+      url(https://img2.wallspic.com/crops/5/7/4/8/3/138475/138475-person_in_black_pants_and_black_and_white_sneakers-3840x2160.jpg);
+    background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    animation-timing-function: ease-in;
     /* transform: scale(1.05); */
     /* opacity: 0.8; */
-    /* transition: transform 1s ease-in-out; */
+    transition: transform 1s ease-in;
   }
 
   50% {
-    background-image: linear-gradient(#160c0277, #160c0277),
-      url(https://img.freepik.com/premium-photo/smart-running-shoes-stride-analysis-performance-feedback-solid-color-background-4k-ultra-hd_964851-117176.jpg);
+    background-image: linear-gradient(#160c0296, #160c0296),
+      url(https://images.pexels.com/photos/1240892/pexels-photo-1240892.jpeg?cs=srgb&dl=pexels-mstudio-360817-1240892.jpg&fm=jpg);
     background-size: cover;
     background-position: center;
+    animation-timing-function: ease-out;
     /* transform: scale(1.05); */
     /* opacity: 1; */
-    /* transition: transform 1s ease-in-out; */
+    transition: transform 1s ease-out;
   }
 
   75% {
-    background-image: linear-gradient(#160c0277, #160c0277),
-      url(https://i.pinimg.com/1200x/35/bb/81/35bb8193e87d8d57fc5e1b3a980f1fd1.jpg);
+    background-image: linear-gradient(#160c0296, #160c0296),
+      url(https://rare-gallery.com/uploads/posts/376140-4k-wallpaper.jpg);
     background-size: cover;
     background-position: center;
+    animation-timing-function: ease-in-out;
     /* transform: scale(1.05); */
     /* opacity: 0.8; */
-    /* transition: transform 1s ease-in-out; */
+    transition: transform 1s ease-in;
   }
 
   100% {
-    background-image: linear-gradient(#160c0277, #160c0277),
+    background-image: linear-gradient(#160c0296, #160c0296),
       url(https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg);
     background-size: cover;
     background-position: center;
+    animation-timing-function: ease-in-out;
     /* transform: scale(1.05); */
     /* opacity: 1; */
     /* transition: transform 1s ease-in-out; */
