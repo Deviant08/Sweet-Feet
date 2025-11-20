@@ -68,8 +68,16 @@ header {
 .logo {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 1rem;
   justify-content: center;
+  text-decoration: none;
+  color: #f7dfb8;
+  transition: transform 0.4s ease-in-out;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+  color: #fcf2e8;
 }
 
 .logo_img {
@@ -77,18 +85,12 @@ header {
   border: 1px ridge #d5b074e5;
   align-self: center;
   width: 6rem;
-  height: 6rem;
+  height: 5.8rem;
   box-shadow: 1px 1px 1px 1px #51432e22;
 }
 
 .logo_txt {
-  font-family: Arial, Helvetica, sans-serif;
-  align-self: center;
-  font-size: 3.7rem;
-  border: ridge 1px rgba(232, 204, 103, 0.182);
-  border-radius: 4rem;
-  padding: 0.25em;
-  box-shadow: 1px 1px 1px 1px #51432e23;
+  font-size: 3.5rem;
 }
 
 .top_btn {
@@ -167,7 +169,7 @@ header {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 7px;
-  color: #ffffff;
+  color: #fcf2e8;
   transform: scale(1.05);
   transition: all 0.3s ease-in-out;
 }
@@ -179,15 +181,20 @@ main {
 .sweet_intro {
   text-align: left;
   line-height: 1.5;
+  /* margin-top: 4rem; */
 }
 
+.sect_uno {
+  height: 100vh;
+  /* margin-top: 8rem; */
+}
 .sweet_product {
-  margin-top: 4rem;
+  margin-top: 15rem;
   /* margin-bottom: 10rem; */
 }
 
 .sweet_product h2 {
-  font-size: 4.5rem;
+  font-size: 5rem;
   margin-bottom: 5rem;
 }
 .intro_uno {
@@ -229,10 +236,6 @@ main {
   color: #fff;
 } */
 
-.sect_uno {
-  height: 100vh;
-}
-
 .intro_dos {
   padding-bottom: 2rem;
 }
@@ -248,19 +251,19 @@ main {
 }
 .product {
   max-width: 100%;
-  /* width: 100vws; */
+  width: 100vw;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   /* text-align: left; */
   /* flex-direction: column; */
-  /* gap: 2rem; */
+  gap: 8rem;
 }
-.pd {
+/* .pd {
   width: 100%;
   height: 100%;
-}
+} */
 .product img {
   border: 0.5px ridge #4325063a;
   /* object-fit: fill; */
@@ -288,7 +291,7 @@ main {
   text-align: center;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 0.6rem;
 }
 .pd:hover .order {
@@ -307,6 +310,7 @@ main {
   margin-bottom: 1rem;
   font-size: 1.8rem;
   color: #6d6a67;
+  text-align: left;
 }
 
 .btn {
@@ -437,16 +441,17 @@ footer {
   border-top: ridge 3px #f9e4d0;
 }
 
-.footer_logo {
+.footer_logo a {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1rem;
+  text-decoration: none;
+  transition: transform 0.3s ease-in-out;
 }
 
-.footer_logo:hover {
-  transform: rotateX(4deg) rotateY(4deg) scale(1.05);
-  transition: 0.4s ease-in-out;
+.footer_logo a:hover {
+  transform: scale(1.05);
 }
 
 .footer_img {
@@ -457,10 +462,9 @@ footer {
 
 .footer_txt {
   font-weight: 600;
-  text-decoration: none;
   color: #703c0bb5;
   font-size: 3rem;
-  /* align-self: center; */
+  padding-top: 0.3em;
 }
 
 .footer_links {
@@ -526,6 +530,8 @@ footer {
   transform: translate(-50%, -50%);
 }
 
+/* MEDIA QUERY */
+
 @media (max-width: 760px) {
   *,
   *::before,
@@ -587,6 +593,8 @@ footer {
   }
 }
 
+/* ANIMATIONS */
+
 @keyframes effects {
   0% {
     background-image: linear-gradient(#160c0296, #160c0296),
@@ -596,7 +604,7 @@ footer {
     animation-timing-function: ease-out;
     /* transform: scale(1.05); */
     /* opacity: 1; */
-    transition: transform 1s ease-out;
+    transition: background-image 2s ease-out;
   }
   25% {
     background-image: linear-gradient(#160c0296, #160c0296),
@@ -607,7 +615,7 @@ footer {
     animation-timing-function: ease-in;
     /* transform: scale(1.05); */
     /* opacity: 0.8; */
-    transition: transform 1s ease-in;
+    transition: background-image 2s ease-in;
   }
 
   50% {
@@ -618,7 +626,7 @@ footer {
     animation-timing-function: ease-out;
     /* transform: scale(1.05); */
     /* opacity: 1; */
-    transition: transform 1s ease-out;
+    transition: background-image 2s ease-out;
   }
 
   75% {
@@ -629,7 +637,7 @@ footer {
     animation-timing-function: ease-in-out;
     /* transform: scale(1.05); */
     /* opacity: 0.8; */
-    transition: transform 1s ease-in;
+    transition: background-image 2s ease-in;
   }
 
   100% {
@@ -638,6 +646,7 @@ footer {
     background-size: cover;
     background-position: center;
     animation-timing-function: ease-in-out;
+    transition: background-image 2s ease-out;
     /* transform: scale(1.05); */
     /* opacity: 1; */
     /* transition: transform 1s ease-in-out; */
