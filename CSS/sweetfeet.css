@@ -184,13 +184,13 @@ main {
   /* margin-top: 4rem; */
 }
 
-.sect_uno {
+/* .sect_uno {
   height: 100vh;
-  /* margin-top: 8rem; */
-}
+  margin-top: 8rem;
+} */
 .sweet_product {
   margin-top: 15rem;
-  /* margin-bottom: 10rem; */
+  margin-bottom: 10rem;
 }
 
 .sweet_product h2 {
@@ -348,6 +348,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  margin-bottom: 8rem;
 }
 
 .location a {
@@ -424,6 +425,52 @@ main {
   background-repeat: no-repeat;
 }
 
+.test {
+  background-color: #efbc8a;
+  border-radius: 2rem;
+  width: fit-content;
+  height: 35rem;
+  text-align: left;
+  padding: 2em;
+  /* margin: 0 auto; */
+  transition: all 0.5s ease-in-out;
+}
+
+.test:hover {
+  transform: scale(1.05);
+  box-shadow: 10px 10px 15px #160c020c;
+}
+
+.test h4 {
+  font-size: 2rem;
+  margin-top: 1.5rem;
+  color: #806841cd;
+}
+
+.testimonials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4rem;
+}
+
+/* .test_span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} */
+
+.test_head {
+  font-size: 4rem;
+  margin-bottom: 4rem;
+}
+
+.test_img {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  object-fit: fill;
+}
 /* footer */
 footer {
   position: relative;
@@ -563,10 +610,11 @@ footer {
   }
 
   .product {
-    display: flex;
+    /* display: flex; */
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    /* align-items: center; */
+    /* justify-content: center; */
+    margin-bottom: 8rem;
   }
 
   .location {
@@ -574,10 +622,15 @@ footer {
     gap: 4rem;
   }
 
+  .testimonials {
+    flex-direction: column;
+  }
+
   footer {
     /* size: 50%; */
     /* font-size: 30%; */
-    height: 10rem;
+    height: 20rem;
+    width: 100%;
     align-items: center;
     justify-content: center;
     /* flex-direction: column; */
@@ -585,11 +638,16 @@ footer {
   }
 
   .footer_links {
-    flex-direction: column;
-    gap: 0.5rem;
+    /* flex-direction: column; */
+    /* gap: 0.5rem; */
   }
   .icon {
     flex-direction: column;
+  }
+
+  .copy {
+    /* position: relative; */
+    margin-bottom: 2rem;
   }
 }
 
