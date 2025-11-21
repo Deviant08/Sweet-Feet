@@ -637,10 +637,10 @@ footer {
     gap: 2rem;
   }
 
-  .footer_links {
-    /* flex-direction: column; */
-    /* gap: 0.5rem; */
-  }
+  /* .footer_links {
+    flex-direction: column;
+    gap: 0.5rem;
+  } */
   .icon {
     flex-direction: column;
   }
