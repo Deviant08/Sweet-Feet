@@ -481,7 +481,7 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 50rem;
+  gap: 70rem;
   color: #6d5f49;
   border-top-right-radius: 2rem;
   border-top-left-radius: 2rem;
@@ -584,7 +584,7 @@ footer {
   *::before,
   *::after {
     margin: 0;
-    margin: 0;
+    padding: 0;
     box-sizing: inherit;
   }
   html {
@@ -605,9 +605,14 @@ footer {
     background-position: center;
   }
 
-  .sect_uno {
-    height: 100%;
+  .intro_dos p {
+    text-align: left;
+    font-size: 2rem;
+    font-weight: 600;
   }
+  /* .sect_uno {
+    height: 100%;
+  } */
 
   .product {
     /* display: flex; */
