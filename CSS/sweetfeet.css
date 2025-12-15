@@ -51,11 +51,13 @@ header {
   padding-bottom: 0;
   animation-name: effects;
   /* animation-duration: infinite; */
-  animation-name: effects;
   animation-duration: 10s;
   /* animation-timing-function: ease-in-out; */
   animation-delay: 200ms;
   animation-iteration-count: infinite;
+  -webkit-animation: slide-in-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    both;
+  animation: slide-in-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
   /* animation-play-state: paused; */
   /* animation-direction: reverse; */
   /* transition-property: animation-timing-function, animation-duration,
@@ -381,6 +383,9 @@ main {
 }
 .lagos {
   transition: all 0.5s ease-in-out;
+  /* -webkit-animation: slide-in-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    both;
+  animation: slide-in-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; */
 }
 .lagos:hover {
   background-image: linear-gradient(#160c0265, #160c0265),
@@ -391,6 +396,7 @@ main {
 .abuja {
   transition: all 0.5s ease-in-out;
 }
+
 .abuja:hover {
   background-image: linear-gradient(#160c028e, #160c028e),
     url(https://primeprogressng.com/wp-content/uploads/2025/05/aerial-view-bustling-city-intersection-600nw-2550886673.webp);
@@ -658,11 +664,25 @@ footer {
 
 /* ANIMATIONS */
 
-@keyframes effects {
+@keyframes slide-in-right {
   0% {
+    transform: translateX(1000px);
+    opacity: 0;
     background-image: linear-gradient(#160c0296, #160c0296),
       url(https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg);
     background-size: cover;
+  }
+  100% {
+    background-image: linear-gradient(#160c0296, #160c0296),
+      url(https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg);
+    background-size: cover;
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes effects {
+  0% {
     /* background-position: center; */
     animation-timing-function: ease-out;
     /* transform: scale(1.05); */
@@ -697,7 +717,7 @@ footer {
       url(https://rare-gallery.com/uploads/posts/376140-4k-wallpaper.jpg);
     background-size: cover;
     /* background-position: center; */
-    animation-timing-function: ease-in-out;
+    animation-timing-function: ease-out;
     /* transform: scale(1.05); */
     /* opacity: 0.8; */
     transition: background-image 2s ease-in;
