@@ -663,7 +663,7 @@ footer {
     background-image: linear-gradient(#160c0296, #160c0296),
       url(https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg);
     background-size: cover;
-    background-position: center;
+    /* background-position: center; */
     animation-timing-function: ease-out;
     /* transform: scale(1.05); */
     /* opacity: 1; */
@@ -674,7 +674,7 @@ footer {
       url(https://img2.wallspic.com/crops/5/7/4/8/3/138475/138475-person_in_black_pants_and_black_and_white_sneakers-3840x2160.jpg);
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center;
+    /* background-position: center; */
     animation-timing-function: ease-in;
     /* transform: scale(1.05); */
     /* opacity: 0.8; */
@@ -685,7 +685,7 @@ footer {
     background-image: linear-gradient(#160c0296, #160c0296),
       url(https://images.pexels.com/photos/1240892/pexels-photo-1240892.jpeg?cs=srgb&dl=pexels-mstudio-360817-1240892.jpg&fm=jpg);
     background-size: cover;
-    background-position: center;
+    /* background-position: center; */
     animation-timing-function: ease-out;
     /* transform: scale(1.05); */
     /* opacity: 1; */
@@ -696,7 +696,7 @@ footer {
     background-image: linear-gradient(#160c0296, #160c0296),
       url(https://rare-gallery.com/uploads/posts/376140-4k-wallpaper.jpg);
     background-size: cover;
-    background-position: center;
+    /* background-position: center; */
     animation-timing-function: ease-in-out;
     /* transform: scale(1.05); */
     /* opacity: 0.8; */
@@ -707,7 +707,7 @@ footer {
     background-image: linear-gradient(#160c0296, #160c0296),
       url(https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg);
     background-size: cover;
-    background-position: center;
+    /* background-position: center; */
     animation-timing-function: ease-in-out;
     transition: background-image 2s ease-out;
     /* transform: scale(1.05); */
