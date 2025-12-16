@@ -39,17 +39,12 @@ header {
   height: 100vh;
   max-width: 100%;
   color: #f7dfb8;
-  /* overflow-x: hidden; */
-  /* background-image: linear-gradient(#160c0277, #160c0277),
-    url(https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg);
-  background-size: cover;
-  background-repeat: no-repeat; */
   border-bottom: ridge #f9e4d0 2px;
   border-bottom-right-radius: 1.7rem;
   border-bottom-left-radius: 1.7rem;
   padding: 4rem;
   padding-bottom: 0;
-  animation-name: effects;
+  /* animation-name: effects; */
   /* animation-duration: infinite; */
   animation-duration: 10s;
   /* animation-timing-function: ease-in-out; */
@@ -58,14 +53,6 @@ header {
   -webkit-animation: slide-in-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)
     both;
   animation: slide-in-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-  /* animation-play-state: paused; */
-  /* animation-direction: reverse; */
-  /* transition-property: animation-timing-function, animation-duration,
-    animation-delay, animation-iteration-count, animation-direction,
-    animation-name;
-  transition-duration: 4s;
-  transition-timing-function: ease; */
-  /* transition: animation-timing-function 2s ease-in-out; */
 }
 .logo {
   display: flex;
@@ -250,6 +237,7 @@ main {
 .intro_dos p {
   font-size: 2.5rem;
   line-height: 1.5;
+  color: #695d49;
 }
 .product {
   max-width: 100%;
@@ -277,14 +265,14 @@ main {
 }
 
 .product img:hover {
-  transform: rotateX(5deg) rotateY(5deg) scale(1.04);
-  box-shadow: 15px 15px 20px #160c021a;
+  transform: rotateX(5deg) rotateY(5deg) scale(1.05);
+  box-shadow: 15px 15px 20px #29180113;
 }
-/* .product img:active {
-  box-shadow: 10px 10px 20px rgba(41, 24, 1, 0.224);
+.product img:active {
+  box-shadow: 10px 10px 20px #2918010e;
   transform: none;
   transition: 0.1s ease-in-out;
-} */
+}
 
 .order {
   opacity: 0;
@@ -326,7 +314,7 @@ main {
   height: 3rem; */
   padding: 0.8rem 1.5rem;
   border-radius: 1rem;
-  border: 2px solid #312102;
+  border: 1.5px solid #312102;
   transition: background-color, opacity 0.5s ease;
 }
 
@@ -378,7 +366,7 @@ main {
 
 .lc:hover {
   transform: rotateX(4deg) rotateY(4deg) scale(1.05);
-  transition: 0.7s ease-in-out;
+  transition: 0.5s ease-in-out;
   box-shadow: 15px 15px 20px #160c022c;
 }
 .lagos {
@@ -460,15 +448,16 @@ main {
   gap: 4rem;
 }
 
-/* .test_span {
+.test_head {
+  font-size: 5rem;
+}
+
+.test_info {
   display: flex;
   align-items: center;
-  justify-content: center;
-} */
-
-.test_head {
-  font-size: 4rem;
-  margin-bottom: 4rem;
+  /* justify-content: center; */
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .test_img {
@@ -476,7 +465,56 @@ main {
   height: 6rem;
   border-radius: 50%;
   object-fit: fill;
+  margin-top: 1rem;
 }
+
+.Calltoaction {
+  margin-top: 9rem;
+}
+
+.c_head {
+  font-size: 5rem;
+  margin-bottom: 2rem;
+}
+
+.action_button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+.action {
+  text-decoration: none;
+  padding: 1.5em 6em;
+  border-radius: 3rem;
+  color: #fcf2e8;
+  font-size: 1.5rem;
+  transition: 0.3s ease-in-out;
+}
+
+.action:hover {
+  transform: scale(1.05);
+}
+
+.action:active {
+  transform: none;
+}
+
+.sign_up {
+  background-color: #323231;
+}
+
+.sign_up:hover {
+  background-color: #160c02;
+}
+
+.log_in {
+  background-color: #efbc8a;
+}
+.log_in:hover {
+  background-color: #ecae73;
+}
+
 /* footer */
 footer {
   position: relative;
@@ -666,7 +704,7 @@ footer {
 
 @keyframes slide-in-right {
   0% {
-    transform: translateX(1000px);
+    transform: translateX(-1000px);
     opacity: 0;
     background-image: linear-gradient(#160c0296, #160c0296),
       url(https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg);
