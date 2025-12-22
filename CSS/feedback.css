@@ -12,18 +12,26 @@ html {
   font-family: "Kumbh Sans", sans-serif;
 }
 body {
+  /* width: 100%; */
+  height: 100vh;
   background-color: #f2e7d5;
+  background-image: linear-gradient(to right bottom, #040200c1, #2b2317ed),
+    url(https://png.pngtree.com/png-clipart/20250202/original/pngtree-border-ring-abstract-gradient-orange-png-image_6832095.png);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
+
 .logo {
   display: flex;
   align-items: center;
   gap: 1rem;
   text-decoration: none;
-  color: #957b51;
+  color: #d9b882;
   transition: transform 0.4s ease-in-out;
   width: fit-content;
-  padding: 1em;
-  margin: 2rem 0 0 2rem;
+  padding: 3em;
+  /* margin: 2rem 0 0 2 rem; */
 }
 
 .logo:hover {
@@ -33,7 +41,7 @@ body {
 
 .logo_img {
   border-radius: 60%;
-  border: 1px ridge #d5b074e5;
+  border: 1px ridge #d9b882;
   width: 7rem;
   height: 7rem;
   box-shadow: 1px 1px 1px 1px #51432e22;
