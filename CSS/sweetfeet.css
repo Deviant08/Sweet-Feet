@@ -248,7 +248,7 @@ main {
   justify-content: center;
   /* text-align: left; */
   /* flex-direction: column; */
-  gap: 8rem;
+  gap: 10rem;
 }
 /* .pd {
   width: 100%;
@@ -261,7 +261,7 @@ main {
   width: 30rem;
   height: 29rem;
   transform-style: preserve-3d;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.4s ease-in-out;
 }
 
 .product img:hover {
@@ -282,7 +282,7 @@ main {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 0.6rem;
+  gap: 1rem;
 }
 .pd:hover .order {
   opacity: 1;
@@ -293,18 +293,18 @@ main {
 }
 .product p {
   margin-top: 1.4rem;
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: 700;
 }
 .product h5 {
   margin-bottom: 1rem;
-  font-size: 1.8rem;
+  font-size: 2rem;
   color: #6d6a67;
   text-align: left;
 }
 
 .btn {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   text-decoration: none;
   color: whitesmoke;
   background-color: #3d3c3b;
@@ -312,7 +312,7 @@ main {
   /* opacity: 0.8; */
   /* width: 4rem;
   height: 3rem; */
-  padding: 0.8rem 1.5rem;
+  padding: 0.8em 1.5em;
   border-radius: 1rem;
   border: 1.5px solid #312102;
   transition: background-color, opacity 0.5s ease;
@@ -521,7 +521,7 @@ main {
 /* footer */
 footer {
   position: relative;
-  height: 25rem;
+  height: 20vh;
   width: 100%;
   background-color: #efbc8a;
   font-weight: 300;
@@ -608,10 +608,10 @@ footer {
 .icon svg {
   width: 6rem;
   height: 6rem;
+  transition: all 0.5s ease;
 }
 .icon svg:hover {
   transform: scale(1.25);
-  transition: 0.3s ease;
 }
 .icon a {
   text-decoration: none;
@@ -621,11 +621,85 @@ footer {
 .copy {
   position: absolute;
   font-size: 1.4rem;
-  color: #31210241;
+  color: #31210277;
   font-weight: 600;
   bottom: 1%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+/* ANIMATIONS */
+
+@keyframes slide-in-right {
+  0% {
+    transform: translateX(-1000px);
+    opacity: 0;
+    background-image: linear-gradient(#160c0296, #160c0296),
+      url(https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg);
+    background-size: cover;
+  }
+  100% {
+    background-image: linear-gradient(#160c0296, #160c0296),
+      url(https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg);
+    background-size: cover;
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes effects {
+  0% {
+    /* background-position: center; */
+    animation-timing-function: ease-out;
+    /* transform: scale(1.05); */
+    /* opacity: 1; */
+    transition: background-image 2s ease-out;
+  }
+  25% {
+    background-image: linear-gradient(#160c0296, #160c0296),
+      url(https://img2.wallspic.com/crops/5/7/4/8/3/138475/138475-person_in_black_pants_and_black_and_white_sneakers-3840x2160.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* background-position: center; */
+    animation-timing-function: ease-in;
+    /* transform: scale(1.05); */
+    /* opacity: 0.8; */
+    transition: background-image 2s ease-in;
+  }
+
+  50% {
+    background-image: linear-gradient(#160c0296, #160c0296),
+      url(https://images.pexels.com/photos/1240892/pexels-photo-1240892.jpeg?cs=srgb&dl=pexels-mstudio-360817-1240892.jpg&fm=jpg);
+    background-size: cover;
+    /* background-position: center; */
+    animation-timing-function: ease-out;
+    /* transform: scale(1.05); */
+    /* opacity: 1; */
+    transition: background-image 2s ease-out;
+  }
+
+  75% {
+    background-image: linear-gradient(#160c0296, #160c0296),
+      url(https://rare-gallery.com/uploads/posts/376140-4k-wallpaper.jpg);
+    background-size: cover;
+    /* background-position: center; */
+    animation-timing-function: ease-out;
+    /* transform: scale(1.05); */
+    /* opacity: 0.8; */
+    transition: background-image 2s ease-in;
+  }
+
+  100% {
+    background-image: linear-gradient(#160c0296, #160c0296),
+      url(https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg);
+    background-size: cover;
+    /* background-position: center; */
+    animation-timing-function: ease-in-out;
+    transition: background-image 2s ease-out;
+    /* transform: scale(1.05); */
+    /* opacity: 1; */
+    /* transition: transform 1s ease-in-out; */
+  }
 }
 
 /* MEDIA QUERY */
@@ -704,79 +778,5 @@ footer {
   .copy {
     /* position: relative; */
     margin-bottom: 2rem;
-  }
-}
-
-/* ANIMATIONS */
-
-@keyframes slide-in-right {
-  0% {
-    transform: translateX(-1000px);
-    opacity: 0;
-    background-image: linear-gradient(#160c0296, #160c0296),
-      url(https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg);
-    background-size: cover;
-  }
-  100% {
-    background-image: linear-gradient(#160c0296, #160c0296),
-      url(https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg);
-    background-size: cover;
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes effects {
-  0% {
-    /* background-position: center; */
-    animation-timing-function: ease-out;
-    /* transform: scale(1.05); */
-    /* opacity: 1; */
-    transition: background-image 2s ease-out;
-  }
-  25% {
-    background-image: linear-gradient(#160c0296, #160c0296),
-      url(https://img2.wallspic.com/crops/5/7/4/8/3/138475/138475-person_in_black_pants_and_black_and_white_sneakers-3840x2160.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    /* background-position: center; */
-    animation-timing-function: ease-in;
-    /* transform: scale(1.05); */
-    /* opacity: 0.8; */
-    transition: background-image 2s ease-in;
-  }
-
-  50% {
-    background-image: linear-gradient(#160c0296, #160c0296),
-      url(https://images.pexels.com/photos/1240892/pexels-photo-1240892.jpeg?cs=srgb&dl=pexels-mstudio-360817-1240892.jpg&fm=jpg);
-    background-size: cover;
-    /* background-position: center; */
-    animation-timing-function: ease-out;
-    /* transform: scale(1.05); */
-    /* opacity: 1; */
-    transition: background-image 2s ease-out;
-  }
-
-  75% {
-    background-image: linear-gradient(#160c0296, #160c0296),
-      url(https://rare-gallery.com/uploads/posts/376140-4k-wallpaper.jpg);
-    background-size: cover;
-    /* background-position: center; */
-    animation-timing-function: ease-out;
-    /* transform: scale(1.05); */
-    /* opacity: 0.8; */
-    transition: background-image 2s ease-in;
-  }
-
-  100% {
-    background-image: linear-gradient(#160c0296, #160c0296),
-      url(https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg);
-    background-size: cover;
-    /* background-position: center; */
-    animation-timing-function: ease-in-out;
-    transition: background-image 2s ease-out;
-    /* transform: scale(1.05); */
-    /* opacity: 1; */
-    /* transition: transform 1s ease-in-out; */
   }
 }
