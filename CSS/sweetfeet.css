@@ -258,8 +258,8 @@ main {
   border: 0.5px ridge #4325063a;
   /* object-fit: fill; */
   border-radius: 5%;
-  width: 28rem;
-  height: 27rem;
+  width: 30rem;
+  height: 29rem;
   transform-style: preserve-3d;
   transition: all 0.3s ease-in-out;
 }
@@ -342,21 +342,22 @@ main {
 }
 
 .location a {
-  font-size: 4rem;
+  font-size: 4.5rem;
   text-decoration: none;
   color: #fcf2e8;
   opacity: 0;
 }
 
 .lc {
-  width: 50rem;
-  height: 50rem;
+  width: 55rem;
+  height: 55rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   border-radius: 2rem;
   border: ridge 2px #f5d7b9b6;
+  transform-style: preserve-3d;
 }
 
 .lc:hover a {
@@ -450,6 +451,7 @@ main {
 
 .test_head {
   font-size: 5rem;
+  margin-bottom: 4rem;
 }
 
 .test_info {
@@ -469,12 +471,13 @@ main {
 }
 
 .Calltoaction {
-  margin-top: 9rem;
+  margin-top: 15rem;
+  margin-bottom: 15rem;
 }
 
 .c_head {
   font-size: 5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 3.5rem;
 }
 
 .action_button {
@@ -518,7 +521,7 @@ main {
 /* footer */
 footer {
   position: relative;
-  height: 20rem;
+  height: 25rem;
   width: 100%;
   background-color: #efbc8a;
   font-weight: 300;
@@ -546,16 +549,20 @@ footer {
 }
 
 .footer_img {
-  /* align-self: center; */
-  width: 5rem;
-  height: 5rem;
+  width: 7rem;
+  height: 7rem;
+  border: solid 2px #ead8ba71;
+  border-radius: 50%;
 }
 
 .footer_txt {
   font-weight: 600;
-  color: #703c0bb5;
-  font-size: 3rem;
-  padding-top: 0.3em;
+  font-size: 4rem;
+  color: #160c02b2;
+  transition: all 0.3s ease-in-out;
+}
+.footer_txt:hover {
+  color: #703c0b;
 }
 
 .footer_links {
@@ -570,16 +577,16 @@ footer {
 }
 
 .footer_links a {
-  font-size: 1.7rem;
-  font-weight: 600;
+  font-size: 2.1rem;
+  font-weight: 700;
   text-decoration: none;
-  color: #0402006e;
+  color: #160c02;
+  transition: all 0.2s ease-in-out;
 }
 
 .footer_links a:hover {
   color: #432406;
   transform: scale(1.05);
-  transition: 0.2s ease-in-out;
 }
 .link_1 {
   text-align: left;
@@ -599,8 +606,8 @@ footer {
   align-content: center;
 }
 .icon svg {
-  width: 5rem;
-  height: 4rem;
+  width: 6rem;
+  height: 6rem;
 }
 .icon svg:hover {
   transform: scale(1.25);
@@ -613,7 +620,7 @@ footer {
 
 .copy {
   position: absolute;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   color: #31210241;
   font-weight: 600;
   bottom: 1%;
