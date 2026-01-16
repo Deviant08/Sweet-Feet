@@ -19,24 +19,60 @@
 
   header {
     width: 100%;
-    height: auto;
-    background-size: cover;
-    background-position: center;
+    height: 100vh;
+    animation: none;
+    border: none;
+    background-color: #160c02;
   }
 
   .nav_bar {
     flex-direction: column;
     gap: 2rem;
+    padding: 2em 1em;
+    margin-bottom: 6rem;
+    width: 100%;
   }
+
+  .intro_uno {
+    text-align: center;
+  }
+
+  .header_uno {
+    display: none;
+  }
+
+  .header_dos {
+    display: block;
+    font-size: 6.5rem;
+    letter-spacing: 1.5px;
+    margin-bottom: 6rem;
+    font-weight: 700;
+  }
+
+  .para_uno {
+    display: none;
+  }
+  .para_dos {
+    display: block;
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 1.9;
+    letter-spacing: 1px;
+    margin-bottom: 4rem;
+  }
+
+  .top_btn {
+    width: 100%;
+  }
+
+  /* sections */
 
   .intro_dos p {
     text-align: left;
-    font-size: 2rem;
-    font-weight: 600;
+    font-size: 1.7rem;
+    line-height: 1.5;
+    /* font-weight: 600; */
   }
-  /* .sect_uno {
-    height: 100%;
-  } */
 
   .product {
     /* display: flex; */
@@ -51,9 +87,21 @@
     gap: 4rem;
   }
 
+  /* testimonials */
+
   .testimonials {
     flex-direction: column;
   }
+
+  .action_button {
+    flex-direction: column;
+    gap: 3rem;
+  }
+  .action {
+    width: 50%;
+  }
+
+  /* Footer */
 
   footer {
     /* size: 50%; */
@@ -75,11 +123,13 @@
     text-align: center;
   }
   .icon {
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
   }
 
   .copy {
     /* position: relative; */
-    margin-bottom: 2rem;
+    margin-bottom: -1rem;
   }
 }
