@@ -106,12 +106,16 @@
   footer {
     /* size: 50%; */
     /* font-size: 30%; */
-    height: 70rem;
+    height: 50vh;
     width: 100%;
+  }
+
+  .footer {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    gap: 5rem;
+    height: 49vh;
+    gap: 8rem;
   }
 
   .footer_links {
@@ -129,8 +133,39 @@
   }
 
   .copy {
-    /* position: relative; */
     margin-bottom: -1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+  }
+  html {
+    box-sizing: border-box;
+    font-size: 50%;
+  }
+
+  body {
+    width: 100%;
+    height: 100%;
+  }
+
+  header {
+    width: 100%;
+    height: 100vh;
+  }
+
+  .testimonials {
+    flex-direction: column;
+  }
+
+  .footer {
+    gap: 10rem;
   }
 }
 

@@ -519,15 +519,20 @@ footer {
   width: 100%;
   background-color: #efbc8a;
   font-weight: 300;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 70rem;
+
   color: #6d5f49;
   border-top-right-radius: 2rem;
   border-top-left-radius: 2rem;
   border-top: ridge 3px #f9e4d0;
   /* clip-path: polygon(100% 100%, 20% 0, 0 100%); */
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 19vh;
+  gap: 70rem;
 }
 
 .footer_logo a {
