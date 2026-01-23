@@ -126,11 +126,11 @@
   .link {
     text-align: center;
   }
-  .icon {
+  /* .icon {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr;
-  }
+  } */
 
   .copy {
     margin-bottom: -1rem;
