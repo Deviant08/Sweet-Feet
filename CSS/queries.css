@@ -106,16 +106,15 @@
   footer {
     /* size: 50%; */
     /* font-size: 30%; */
-    height: 50vh;
+    height: 40vh;
     width: 100vw;
+    display: none;
   }
 
   .footer {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    height: 49vh;
-    gap: 8rem;
   }
 
   .footer_links {
