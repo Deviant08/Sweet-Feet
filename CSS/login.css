@@ -1,0 +1,151 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 62.5%;
+  box-sizing: border-box;
+  font-family: "Kumbh Sans", sans-serif;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+  color: #f7dfb8;
+  transition: transform 0.4s ease-in-out;
+  width: fit-content;
+  padding: 3em;
+  /* margin: 2rem 0 0 2 rem; */
+}
+
+.logo:hover {
+  transform: scale(1.05);
+  /* color: #fcf2e8; */
+}
+
+.logo_img {
+  border-radius: 60%;
+  border: 1px ridge #d9b882;
+  width: 7rem;
+  height: 7rem;
+  box-shadow: 1px 1px 1px 1px #51432e22;
+}
+
+.logo_txt {
+  font-size: 3.7rem;
+}
+
+body {
+  margin: 0;
+}
+.flex {
+  display: flex;
+}
+.width50 {
+  width: 50vw;
+}
+
+.form_container {
+  background-image: linear-gradient(to right bottom, #facea2, #160c02e0);
+  border-radius: 1rem 0 0 1rem;
+  text-align: center;
+  align-content: center;
+  transform-style: preserve-3d;
+  /* padding: 40px; */
+}
+
+.form {
+  background-color: #fff;
+  border-radius: 1rem;
+  box-shadow: 0px 1px 30px 2px #c9c0b883;
+  padding: 4rem;
+  text-align: left;
+  width: 40rem;
+  margin: auto;
+}
+
+.bolden {
+  font-size: 2.4rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.img_container {
+  background-image: linear-gradient(#160c0296, #160c0296),
+    url(https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 0.5rem;
+  transform-style: preserve-3d;
+}
+
+.height100 {
+  height: 100vh;
+  margin: 0px;
+}
+
+h3 {
+  font-size: 2rem;
+}
+
+.mb_10 {
+  margin-bottom: 2rem;
+}
+
+.inp {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: gray;
+}
+
+/* .inp:active {
+  border: 2px solid #291603c2;
+} */
+
+.border {
+  width: 100%;
+  border-radius: 20px;
+  border: 1px solid rgb(238, 236, 236);
+  padding: 1.7rem;
+}
+
+.btn_login {
+  width: 100%;
+  background-color: #323231;
+  border: none;
+  transition: 1s ease;
+}
+
+.btn_login a {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+}
+
+.btn_login:hover {
+  background-image: linear-gradient(to top left, #efbc8acc, #312102ad);
+}
+
+.btn_login:active {
+  background-image: none;
+  background-color: #efbc8a;
+}
+
+.link_forgot {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: #160c02e0;
+}
+
+.link_forgot:hover {
+  color: #805122;
+}

@@ -3,9 +3,64 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/jpeg"
+      sizes="32x32"
+      href="/assets/20251102_172020.png"
+    />
+    <link rel="stylesheet" href="/CSS/login.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
     <title>Sweet Feet &mdash; Login</title>
   </head>
   <body>
-    Login
+    <div class="flex height100">
+      <div class="width50 img_container">
+        <div>
+          <a class="logo" href="/index.html">
+            <img
+              class="logo_img"
+              src="/assets/images (7).jpeg"
+              alt="Logo of Sweet feets"
+            />
+            <h1 class="logo_txt">Sweet Feet</h1>
+          </a>
+        </div>
+      </div>
+      <div class="width50 form_container">
+        <div class="form">
+          <p class="bolden">Hello!</p>
+          <div class="mb_10">
+            <h3>Sign up to get started !</h3>
+          </div>
+          <form action="">
+            <input
+              class="inp email_inp mb_10 border"
+              type="email"
+              placeholder="Email address"
+              required
+            />
+            <br />
+            <input
+              class="inp mb_10 border"
+              type="password"
+              placeholder="Password"
+              required
+            />
+            <br />
+            <button class="mb_10 border btn_login">
+              <a href=""> Login </a>
+            </button>
+          </form>
+
+          <a href="#" target="_blank" class="link_forgot">Forgot password?</a>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
