@@ -43,3 +43,5 @@ Posted by: Michael T.
 
 I bought my wife the "Wanderlust Sandals" for her birthday after hearing her complain about uncomfortable footwear for years. She is absolutely in love with them and said they're the most supportive sandals she's ever owned. The sizing guide was spot-on, which took the stress out of online shopping. The one thing that would have made the experience perfect is a gift messaging option at checkout. I would have loved to include a personal note to be printed on the receipt or on a small card. It's a small touch, but it makes a gift feel extra special. Fantastic product!
 
+for mobile:
+https://i.pinimg.com/736x/f3/07/df/f307df96d4ec5faa44f8fafb4edffded.jpg
