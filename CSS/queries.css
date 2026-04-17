@@ -22,7 +22,11 @@
     height: 100vh;
     animation: none;
     border: none;
+    border-radius: 0;
     background-color: #160c02;
+    background-image: linear-gradient(#160c0296, #160c0296),
+      url(https://i.pinimg.com/736x/f3/07/df/f307df96d4ec5faa44f8fafb4edffded.jpg);
+    background-size: cover;
   }
 
   .nav_bar {
@@ -90,7 +94,12 @@
   /* testimonials */
 
   .testimonials {
+    font-size: 1.7rem;
     flex-direction: column;
+  }
+
+  .test {
+    padding: 1.5em;
   }
 
   .action_button {
@@ -104,32 +113,36 @@
   /* Footer */
 
   footer {
-    /* size: 50%; */
-    /* font-size: 30%; */
-    height: 40vh;
-    width: 100vw;
-    display: none;
+    height: unset;
+    /* position: relative; */
+    /* height: 40vh; */
+    /* width: 100vw; */
+    /* display: none; */
   }
 
   .footer {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    height: unset;
   }
 
   .footer_links {
-    grid-template-rows: 5, 1fr;
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    /* grid-template-rows: 5, 1fr;
+    grid-template-columns: 1fr; */
     /* gap: 0.5rem; */
   }
   .link {
     text-align: center;
   }
-  /* .icon {
-    display: grid;
+  .icon {
+    display: none;
+    /* display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
-  } */
+    grid-template-rows: 1fr; */
+  }
 
   .copy {
     margin-bottom: -1rem;
