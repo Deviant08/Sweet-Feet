@@ -668,6 +668,15 @@ section {
   transform: translateY(10rem);
 }
 
+.gallary {
+  transform: translateX(-20rem);
+  transition: 3s;
+}
+
+.inverse-gallary {
+  transform: translateX(20rem);
+  transition: 3s;
+}
 /* 
 @keyframes effects {
   0% {

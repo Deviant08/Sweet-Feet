@@ -2,6 +2,7 @@
 
 const sections = document.querySelectorAll("section");
 const aboutUs = document.querySelector(".about_us");
+const product = document.querySelector(".product");
 
 sections.forEach((section) => {
   section.classList.add("section--hidden");
@@ -36,3 +37,17 @@ aboutUs.addEventListener("click", function (e) {
     behavior: "smooth",
   });
 });
+
+let count = 0;
+
+const oneTime = setInterval(() => {
+  count++;
+
+  if (count === 4) {
+    count = 0;
+  } else if (count >= 3) {
+    product.style.transform = `translateX(20rem)`;
+  } else if (count <= 3) {
+    product.style.transform = `translateX(-20rem)`;
+  }
+}, 1000);
