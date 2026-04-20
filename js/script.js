@@ -1,6 +1,7 @@
 "use strict";
 
 const sections = document.querySelectorAll("section");
+const aboutUs = document.querySelector(".about_us");
 
 sections.forEach((section) => {
   section.classList.add("section--hidden");
@@ -28,19 +29,10 @@ sections.forEach(function (section) {
   sectionObserver.observe(section);
 });
 
-const slides = document.querySelectorAll(`.slide`);
-let curSlide = 0;
-const maxSlide = slides.length - 1;
+aboutUs.addEventListener("click", function (e) {
+  e.preventDefault();
 
-slides.forEach((slide, i) => {
-  slide.style.transform = `transformX(${100 * i}%)`;
-});
-
-document.addEventListener("keydown", function (e) {
-  if (e.key == "RightArrow") {
-    curSlide++;
-    slides.forEach((slide, i) => {
-      slide.style.transform = `translateX(${100 * (i - curSlide)}%)`;
-    });
-  }
+  sections[0].scrollIntoView({
+    behavior: "smooth",
+  });
 });
