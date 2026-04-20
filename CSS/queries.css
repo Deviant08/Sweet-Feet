@@ -22,7 +22,7 @@
     height: 100vh;
     animation: none;
     border: none;
-    border-radius: 0;
+    border-radius: unset;
     background-color: #160c02;
     background-image: linear-gradient(#160c0296, #160c0296),
       url(https://i.pinimg.com/736x/f3/07/df/f307df96d4ec5faa44f8fafb4edffded.jpg);
@@ -121,24 +121,27 @@
   }
 
   .footer {
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+    display: block;
+    margin: 0;
     height: unset;
+  }
+
+  .footer_logo {
+    padding-top: 2em;
+    margin-bottom: 6em;
   }
 
   .footer_links {
     display: flex;
     flex-direction: column;
-    /* grid-template-rows: 5, 1fr;
-    grid-template-columns: 1fr; */
-    /* gap: 0.5rem; */
+    margin-bottom: 6em;
   }
   .link {
     text-align: center;
   }
   .icon {
-    display: none;
+    display: flex;
+    padding-bottom: 4em;
     /* display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr; */
