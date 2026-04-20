@@ -28,6 +28,7 @@ const sectionObserver = new IntersectionObserver(sectionCallBack, {
 sections.forEach(function (section) {
   sectionObserver.observe(section);
 });
+<<<<<<< HEAD
 
 aboutUs.addEventListener("click", function (e) {
   e.preventDefault();
@@ -36,3 +37,5 @@ aboutUs.addEventListener("click", function (e) {
     behavior: "smooth",
   });
 });
+=======
+>>>>>>> 0401c27155df70d54a78617413ed53650bfa2a12

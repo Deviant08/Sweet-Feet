@@ -184,6 +184,31 @@
   }
 }
 
+@media (max-width: 960px) {
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+  }
+  html {
+    box-sizing: border-box;
+    font-size: 50%;
+  }
+
+  body {
+    max-width: 960px;
+    width: 100%;
+    height: 100%;
+  }
+
+  .test {
+    display: block;
+    height: unset;
+  }
+}
+
 @media (max-width: 1152px) {
   *,
   *::before,
@@ -227,10 +252,10 @@
   }
 
   .test {
-    height: auto;
+    height: fit-content;
   }
 
-  footer {
+  .footer {
     gap: 30rem;
   }
 }
