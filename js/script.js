@@ -27,20 +27,3 @@ const sectionObserver = new IntersectionObserver(sectionCallBack, {
 sections.forEach(function (section) {
   sectionObserver.observe(section);
 });
-
-const slides = document.querySelectorAll(`.slide`);
-let curSlide = 0;
-const maxSlide = slides.length - 1;
-
-slides.forEach((slide, i) => {
-  slide.style.transform = `transformX(${100 * i}%)`;
-});
-
-document.addEventListener("keydown", function (e) {
-  if (e.key == "RightArrow") {
-    curSlide++;
-    slides.forEach((slide, i) => {
-      slide.style.transform = `translateX(${100 * (i - curSlide)}%)`;
-    });
-  }
-});
