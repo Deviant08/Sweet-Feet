@@ -3,6 +3,10 @@
 const sections = document.querySelectorAll("section");
 const aboutUs = document.querySelector(".about_us");
 const product = document.querySelector(".product");
+const checkOut = document.querySelectorAll(".checkout");
+const loginForm = document.querySelector(".form__container");
+const exitContainer = document.querySelector(".exit");
+const eachProduct = document.querySelectorAll(".pd");
 
 sections.forEach((section) => {
   section.classList.add("section--hidden");
@@ -68,4 +72,28 @@ product.addEventListener("mouseout", function () {
       product.style.transform = `translateX(-20rem)`;
     }
   }, 1000);
+});
+
+function showSignUpForm(e) {
+  e.preventDefault();
+
+  loginForm.classList.remove("hidden");
+  exitContainer.classList.remove("hidden");
+}
+
+function removeSignUpForm(e) {
+  e.preventDefault();
+
+  loginForm.classList.add("hidden");
+  exitContainer.classList.add("hidden");
+}
+
+checkOut.forEach((bnt) => {
+  bnt.addEventListener("click", showSignUpForm);
+});
+
+exitContainer.addEventListener("click", removeSignUpForm);
+
+eachProduct.forEach((pd) => {
+  pd.addEventListener("click", showSignUpForm);
 });

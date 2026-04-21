@@ -23,6 +23,7 @@
   </head>
 
   <body>
+    <div class="exit hidden"></div>
     <header id="header">
       <div class="nav_bar">
         <div>
@@ -101,7 +102,7 @@
                   <h5>10$</h5>
                 </span>
                 <div>
-                  <a class="btn" href="/nav/products.html">Order</a>
+                  <a class="btn checkout" href="/nav/products.html">Order</a>
                 </div>
               </div>
             </div>
@@ -116,7 +117,7 @@
                   <h5>13$</h5>
                 </span>
                 <div>
-                  <a class="btn" href="#">Order</a>
+                  <a class="btn checkout" href="#">Order</a>
                 </div>
               </div>
             </div>
@@ -131,7 +132,7 @@
                   <h5>20$</h5>
                 </span>
                 <div>
-                  <a class="btn" href="#">Order</a>
+                  <a class="btn checkout" href="#">Order</a>
                 </div>
               </div>
             </div>
@@ -146,7 +147,7 @@
                   <h5>15.4$</h5>
                 </span>
                 <div>
-                  <a class="btn" href="#">Order</a>
+                  <a class="btn checkout" href="#">Order</a>
                 </div>
               </div>
             </div>
@@ -161,7 +162,7 @@
                   <h5>9$</h5>
                 </span>
                 <div>
-                  <a class="btn" href="#">Order</a>
+                  <a class="btn checkout" href="#">Order</a>
                 </div>
               </div>
             </div>
@@ -406,5 +407,31 @@
         <p class="copy">&copy; Created by Thee_10th. All rights reserved</p>
       </div>
     </footer>
+
+    <div class="pop__up--login form__container hidden">
+      <form action="#" method="post" class="login__form" id="loginForm">
+        <h1>Log in</h1>
+
+        <label for="username">Username</label>
+        <input
+          id="username"
+          name="username"
+          placeholder="Enter your username"
+          type="text"
+          required
+        />
+
+        <label for="password">Password</label>
+        <input
+          id="password"
+          name="password"
+          placeholder="Enter your password"
+          type="password"
+          required
+        />
+
+        <button type="submit" class="login__btn">Log In</button>
+      </form>
+    </div>
   </body>
 </html>
