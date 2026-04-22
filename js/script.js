@@ -63,6 +63,7 @@ product.addEventListener("mouseover", function () {
 product.addEventListener("mouseout", function () {
   oneTime = setInterval(() => {
     count++;
+    console.log(count);
 
     if (count === 4) {
       count = 0;

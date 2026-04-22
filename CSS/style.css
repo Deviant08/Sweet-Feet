@@ -758,7 +758,7 @@ section {
   position: fixed;
   height: 100vh;
   width: 100vw;
-  background-color: rgba(230, 224, 224, 0);
+  background-color: rgba(61, 59, 59, 0.46);
   z-index: 1;
   /* display: none; */
 }
