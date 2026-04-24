@@ -39,6 +39,7 @@ header {
   height: 100vh;
   max-width: 100%;
   color: #f7dfb8;
+  box-shadow: inset 0px -20px 24px 4px #51432e6c;
   border-bottom: ridge #f9e4d0 2px;
   border-bottom-right-radius: 1.7rem;
   border-bottom-left-radius: 1.7rem;
