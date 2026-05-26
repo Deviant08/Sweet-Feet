@@ -341,9 +341,9 @@ main {
 }
 
 .lc {
-  width: 32rem;
+  width: 30rem;
   /* width: 100%; */
-  height:32rem;
+  height:30rem;
   display: flex;
   align-items: center;
   justify-content: center;
