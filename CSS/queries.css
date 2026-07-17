@@ -323,3 +323,547 @@
     height: 100%;
   }
 }
+/*
+ * ============================================================
+ *  Sweet Feet — Shop Page Media Queries
+ *  File: /nav/CSS/shop-queries.css
+ *  Link this AFTER your main style block in products.html:
+ *  <link rel="stylesheet" href="./CSS/shop-queries.css" />
+ *
+ *  Breakpoints (mobile-first reading order, largest → smallest):
+ *    1024px  Tablet landscape  — sidebar starts squeezing grid
+ *     860px  Tablet portrait   — sidebar collapses to top bar
+ *     640px  Large phone       — single-column layout, tab scroll
+ *     480px  Standard phone    — nav compression, tighter spacing
+ *     360px  Small phone       — minimum viable layout
+ * ============================================================
+ */
+
+
+/* ══════════════════════════════════════════════════════════
+   1024px — Tablet landscape
+   Sidebar is becoming tight; nudge grid and sidebar width.
+   ══════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+
+  /* Narrow the sidebar a little to give the grid more room */
+  .shop_wrapper {
+    grid-template-columns: 210px 1fr;
+  }
+
+  /* Keep sidebar sticky but trim its internal padding */
+  .sidebar {
+    padding: 1.5rem 1.1rem;
+  }
+
+  /* Reduce products area horizontal padding */
+  .products_area {
+    padding: 1.75rem 1.75rem;
+  }
+
+  /* Hero: reduce whitespace slightly */
+  .shop_hero {
+    padding: 2.75rem 2rem 2.5rem;
+  }
+
+  /* Decorative number can start fading sooner */
+  .hero_count {
+    font-size: 3rem;
+    opacity: .18;
+  }
+
+  /* Nav gap shrinks */
+  .nav {
+    gap: 1.2rem;
+  }
+
+  /* Product grid: allow 2 columns instead of trying 3 */
+  .product_grid {
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   860px — Tablet portrait
+   Sidebar moves above the grid as a horizontal filter strip.
+   ══════════════════════════════════════════════════════════ */
+@media (max-width: 860px) {
+
+  /* Stack sidebar above products */
+  .shop_wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  /* Sidebar becomes a horizontal scrollable filter bar */
+  .sidebar {
+    position: static;       /* un-stick it */
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--clr-border);
+    padding: 1.25rem 1.5rem;
+
+    /* Lay filter groups side by side with scroll */
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;          /* Firefox */
+  }
+  .sidebar::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+  /* Each filter group stays compact side-by-side */
+  .filter_group {
+    flex-shrink: 0;
+    margin-bottom: 0;
+    min-width: 160px;
+  }
+
+  /* "Filters" heading becomes a small label above the strip */
+  .sidebar > h3 {
+    display: none; /* hidden; context is clear from the strip itself */
+  }
+
+  /* Products area: comfortable padding */
+  .products_area {
+    padding: 1.5rem 1.5rem;
+  }
+
+  /* Hero: tighten up */
+  .shop_hero {
+    padding: 2.25rem 1.5rem 2rem;
+  }
+  .shop_hero p {
+    font-size: .88rem;
+  }
+
+  /* Hide the decorative number on tablet portrait */
+  .hero_count {
+    display: none;
+  }
+
+  /* Toolbar: wrap cleanly */
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: .85rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .toolbar_left {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Search bar: fill its row */
+  .search_bar {
+    flex: 1;
+  }
+  .search_bar input {
+    width: 100%;
+  }
+
+  /* Sort: full width under toolbar */
+  .sort_select {
+    width: 100%;
+  }
+
+  /* Cart drawer: full width on tablet portrait */
+  .cart_drawer {
+    width: 100%;
+    right: -100%;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   640px — Large phone
+   Single-column cards, scrollable category tabs, tighter nav.
+   ══════════════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+
+  /* Nav: reduce padding and gap */
+  .nav_bar {
+    padding: .85rem 1.25rem;
+  }
+  .nav {
+    gap: .9rem;
+  }
+  .nav a {
+    font-size: .8rem;
+  }
+  .logo_txt {
+    font-size: 1.1rem;
+  }
+
+  /* Hero: single-column, smaller text */
+  .shop_hero {
+    padding: 1.75rem 1.25rem 1.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .75rem;
+  }
+  .shop_hero h1 {
+    font-size: clamp(1.65rem, 7vw, 2.25rem);
+  }
+  .shop_hero p {
+    font-size: .83rem;
+    max-width: 100%;
+    margin-top: .35rem;
+  }
+
+  /* Category tabs: horizontal scroll instead of wrapping */
+  .cat_tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: .25rem;  /* small gap so active ring isn't clipped */
+    gap: .4rem;
+    margin-bottom: 1.1rem;
+  }
+  .cat_tabs::-webkit-scrollbar { display: none; }
+
+  .cat_tab {
+    flex-shrink: 0;         /* tabs must NOT shrink or wrap */
+    padding: .4rem .95rem;
+    font-size: .78rem;
+  }
+
+  /* Product grid: single column */
+  .product_grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* Cards: make image shorter on mobile */
+  .card_img {
+    aspect-ratio: 16 / 9;
+  }
+
+  /* Products area: edge-to-edge feel */
+  .products_area {
+    padding: 1.25rem 1rem;
+  }
+
+  /* Sidebar filter strip: smaller chips */
+  .sidebar {
+    padding: 1rem 1rem;
+    gap: 1.25rem;
+  }
+  .filter_group {
+    min-width: 140px;
+  }
+  .chip {
+    font-size: .72rem;
+    padding: .3rem .65rem;
+  }
+
+  /* Toolbar: search stretches, count moves to its own line */
+  .toolbar {
+    gap: .65rem;
+  }
+  .toolbar_left {
+    flex-direction: column;
+    align-items: stretch;
+    gap: .5rem;
+  }
+  .result_count {
+    font-size: .78rem;
+    text-align: right;
+  }
+
+  /* Toast: lift above the cart FAB so they don't overlap */
+  .toast {
+    bottom: 5.5rem;
+  }
+
+  /* Cart FAB: move it left slightly so it clears scrollbar */
+  .cart_icon_wrap {
+    bottom: 1.5rem;
+    right: 1.25rem;
+  }
+
+  /* Pagination: slightly smaller */
+  .pagination {
+    gap: .35rem;
+    margin-top: 2rem;
+    padding-bottom: 4rem; /* extra bottom room above FAB */
+  }
+  .page_btn {
+    width: 34px;
+    height: 34px;
+    font-size: .78rem;
+  }
+
+  /* Footer: stack vertically */
+  .footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.1rem;
+  }
+  .footer_links {
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   480px — Standard / mid-range phone
+   Nav compression, card layout refinements.
+   ══════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+
+  /* Nav: hide less-critical links, keep Sign Up + Shop */
+  .nav a[href*="login"],
+  .nav a[href*="feedback"] {
+    display: none;
+  }
+  /* Show only Sign Up and the active "Shop" link */
+  .nav {
+    gap: .75rem;
+  }
+  .nav a {
+    font-size: .78rem;
+  }
+
+  /* Shrink nav bar further */
+  .nav_bar {
+    padding: .75rem 1rem;
+  }
+  .logo_img {
+    width: 30px;
+    height: 30px;
+  }
+  .logo_txt {
+    font-size: 1rem;
+  }
+
+  /* Hero: very compact */
+  .shop_hero {
+    padding: 1.5rem 1rem 1.25rem;
+  }
+  .shop_hero h1 {
+    font-size: clamp(1.5rem, 8vw, 2rem);
+  }
+
+  /* Card body: tighten internal spacing */
+  .card_body {
+    padding: .85rem .9rem .9rem;
+    gap: .4rem;
+  }
+  .card_name {
+    font-size: .92rem;
+  }
+  .card_price {
+    font-size: 1.05rem;
+  }
+  .btn_order {
+    font-size: .75rem;
+    padding: .48rem .9rem;
+  }
+
+  /* Size dots: slightly smaller */
+  .size_dot {
+    width: 25px;
+    height: 25px;
+    font-size: .63rem;
+    border-radius: 5px;
+  }
+
+  /* Sidebar: chips even more compact */
+  .chip {
+    font-size: .68rem;
+    padding: .28rem .55rem;
+  }
+  .filter_group h4 {
+    font-size: .78rem;
+  }
+
+  /* Cart drawer footer padding */
+  .drawer_footer {
+    padding: 1rem 1.1rem;
+  }
+  .btn_checkout {
+    font-size: .88rem;
+    padding: .8rem;
+  }
+
+  /* Cart FAB: slightly smaller on small phones */
+  .cart_fab {
+    width: 48px;
+    height: 48px;
+    font-size: 1.1rem;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   360px — Small / budget phone  (minimum viable layout)
+   Prevent overflow, ensure nothing clips or breaks.
+   ══════════════════════════════════════════════════════════ */
+@media (max-width: 360px) {
+
+  /* Absolute floor for nav: logo text hidden, just the image */
+  .logo_txt {
+    display: none;
+  }
+  .logo_img {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* Nav links: only show Sign Up and the active link */
+  .nav a[href*="login"],
+  .nav a[href*="feedback"] {
+    display: none; /* already hidden at 480, belt-and-suspenders */
+  }
+  .nav {
+    gap: .6rem;
+  }
+  .nav a {
+    font-size: .75rem;
+  }
+
+  /* Hero: minimal */
+  .shop_hero {
+    padding: 1.25rem .85rem 1rem;
+  }
+  .shop_hero h1 {
+    font-size: 1.5rem;
+    letter-spacing: -.02em;
+  }
+  .shop_hero p {
+    font-size: .78rem;
+  }
+
+  /* Products area: near-zero horizontal padding */
+  .products_area {
+    padding: 1rem .75rem;
+  }
+
+  /* Product grid: 1 column, cards touch the edges */
+  .product_grid {
+    gap: .85rem;
+  }
+
+  /* Sidebar strip: tightest setting */
+  .sidebar {
+    padding: .85rem .75rem;
+    gap: 1rem;
+  }
+
+  /* Search input: prevent it stretching past viewport */
+  .search_bar input {
+    width: 100%;
+    min-width: 0;
+  }
+  .search_bar {
+    min-width: 0;
+    padding: .35rem .75rem;
+  }
+
+  /* Sort select: full width */
+  .sort_select {
+    font-size: .78rem;
+  }
+
+  /* Cart drawer: full screen takeover */
+  .cart_drawer {
+    border-radius: 0;
+  }
+
+  /* Footer: very tight */
+  .footer {
+    padding: 1.5rem .85rem;
+    gap: .9rem;
+  }
+  .footer_links {
+    gap: .75rem;
+  }
+  .footer_links a {
+    font-size: .75rem;
+  }
+  .copy {
+    font-size: .68rem;
+  }
+
+  /* Toast: prevent overflow on narrow screens */
+  .toast {
+    width: calc(100% - 2rem);
+    text-align: center;
+    white-space: normal;
+    font-size: .78rem;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   Accessibility: Respect reduced-motion preference
+   ══════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .product_card,
+  .btn_order,
+  .cart_fab,
+  .cart_drawer,
+  .drawer_overlay,
+  .toast,
+  .chip,
+  .cat_tab,
+  .page_btn {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  /* Keep transform-based hover for product cards but remove animation */
+  .product_card:hover {
+    transform: none;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   Print: strip decorative elements, show only content
+   ══════════════════════════════════════════════════════════ */
+@media print {
+  .sidebar,
+  .toolbar,
+  .cat_tabs,
+  .cart_icon_wrap,
+  .cart_drawer,
+  .drawer_overlay,
+  .toast,
+  .pagination,
+  footer {
+    display: none !important;
+  }
+
+  .shop_wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .shop_hero {
+    background: #fff;
+    color: #000;
+    border-bottom: 2px solid #000;
+    padding: 1rem 0;
+  }
+  .shop_hero h1 span { color: #000; }
+
+  .product_card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+
+  .btn_order {
+    display: none;
+  }
+
+  .card_price {
+    font-size: 1rem;
+  }
+}

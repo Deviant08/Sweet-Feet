@@ -5,50 +5,192 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="/assets/20251102_172020.png" sizes="32x32" />
     <link rel="stylesheet" href="/CSS/feedback.css" />
+    <link rel="stylesheet" href="/CSS/queries.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght,YOPQ@100..900,300&family=Public+Sans:ital,wght@0,100..900;1,100..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
+    <script src="/js/main.js" defer></script>
     <title>Sweet Feet &mdash; Feedback</title>
   </head>
   <body>
-    <header>
-      <div>
+
+    <!-- Header / Nav -->
+    <header class="fb_header">
+      <div class="nav_bar">
         <a class="logo" href="/index.html">
           <img
             class="logo_img"
             src="/assets/images (7).jpeg"
-            alt="Logo of Sweet feets"
+            alt="Logo of Sweet Feet"
           />
           <h1 class="logo_txt">Sweet Feet</h1>
         </a>
+        <nav class="nav">
+          <a href="/nav/signup.html">Sign Up</a>
+          <a href="/nav/login.html">Login</a>
+          <a href="/nav/products.html">Shop</a>
+          <a href="/nav/feedback.html" class="nav_active">Feedback</a>
+        </nav>
       </div>
     </header>
-    <main class="calltoaction">
-      <h2>
-        Let us know how you feel abouot our products <br />
-        and how we can improve our services.
-      </h2>
-      <form action="">
-        <!-- <label for="name">Name</label> -->
-        <input type="text" placeholder="Name" required />
-        <br />
-        <!-- <label for="email">Email address</label> -->
-        <input type="text" placeholder="Email address" required />
-        <br />
-        <!-- <label for="message">Message</label> -->
-        <textarea
-          name=""
-          placeholder="Type Ypur message here"
-          id="message"
-        ></textarea>
-        <br />
-        <div class="submit">
-          <input type="submit" value="submit" />
+
+    <!-- Main -->
+    <main class="fb_main">
+
+      <!-- Left panel — info side -->
+      <div class="fb_panel_left">
+        <div class="fb_panel_content">
+          <p class="fb_eyebrow">We're listening</p>
+          <h2 class="fb_headline">
+            Tell us what you <span class="fb_accent">think.</span>
+          </h2>
+          <p class="fb_subtext">
+            Your feedback helps us deliver better footwear and a better
+            experience. Every message is read by our team.
+          </p>
+
+          <ul class="fb_perks">
+            <li>
+              <span class="perk_icon">👟</span>
+              <span>Rate any shoe in our collection</span>
+            </li>
+            <li>
+              <span class="perk_icon">✦</span>
+              <span>Suggest new styles or sizes</span>
+            </li>
+            <li>
+              <span class="perk_icon">💬</span>
+              <span>Share your delivery experience</span>
+            </li>
+            <li>
+              <span class="perk_icon">🇳🇬</span>
+              <span>We ship across Nigeria</span>
+            </li>
+          </ul>
         </div>
-      </form>
+      </div>
+
+      <!-- Right panel — form -->
+      <div class="fb_panel_right">
+        <div class="fb_form_card">
+
+          <h3 class="fb_form_title">Send Us a Message</h3>
+          <p class="fb_form_sub">
+            Fill in the form below and we'll get back to you.
+          </p>
+
+          <form class="fb_form" action="#" method="post" id="feedbackForm">
+
+            <!-- Name -->
+            <div class="fb_field">
+              <label for="fb_name">Full Name</label>
+              <input
+                id="fb_name"
+                name="name"
+                type="text"
+                placeholder="e.g. Chidi Okonkwo"
+                required
+              />
+            </div>
+
+            <!-- Email -->
+            <div class="fb_field">
+              <label for="fb_email">Email Address</label>
+              <input
+                id="fb_email"
+                name="email"
+                type="email"
+                placeholder="e.g. chidi@email.com"
+                required
+              />
+            </div>
+
+            <!-- Category -->
+            <div class="fb_field">
+              <label for="fb_category">What is your feedback about?</label>
+              <select id="fb_category" name="category" required>
+                <option value="" disabled selected>Select a category</option>
+                <option value="product">Product Quality</option>
+                <option value="delivery">Delivery &amp; Shipping</option>
+                <option value="website">Website Experience</option>
+                <option value="sizing">Sizing &amp; Fit</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <!-- Star rating -->
+            <div class="fb_field">
+              <label>Overall Experience</label>
+              <div class="star_rating" role="radiogroup" aria-label="Star rating">
+                <input type="radio" id="star5" name="rating" value="5" />
+                <label for="star5" title="5 stars">&#9733;</label>
+                <input type="radio" id="star4" name="rating" value="4" />
+                <label for="star4" title="4 stars">&#9733;</label>
+                <input type="radio" id="star3" name="rating" value="3" />
+                <label for="star3" title="3 stars">&#9733;</label>
+                <input type="radio" id="star2" name="rating" value="2" />
+                <label for="star2" title="2 stars">&#9733;</label>
+                <input type="radio" id="star1" name="rating" value="1" />
+                <label for="star1" title="1 star">&#9733;</label>
+              </div>
+            </div>
+
+            <!-- Message -->
+            <div class="fb_field">
+              <label for="fb_message">Your Message</label>
+              <textarea
+                id="fb_message"
+                name="message"
+                placeholder="Tell us about your experience..."
+                rows="5"
+                required
+              ></textarea>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="fb_submit">
+              Send Feedback &rarr;
+            </button>
+
+          </form>
+
+          <!-- Success message shown by JS after submit -->
+          <div class="fb_success hidden" id="fbSuccess">
+            <span class="success_icon">&#10003;</span>
+            <h4>Thank you!</h4>
+            <p>Your feedback has been received. We'll be in touch soon.</p>
+          </div>
+
+        </div>
+      </div>
     </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer">
+        <div class="footer_logo">
+          <a href="/index.html">
+            <img
+              class="footer_img"
+              src="/assets/20251102_172020.png"
+              alt="Logo of Sweet Feet"
+            />
+            <p class="footer_txt">Sweet Feet</p>
+          </a>
+        </div>
+        <div class="footer_links">
+          <a href="#" class="link">About Us</a>
+          <a href="#" class="link">Privacy Policy</a>
+          <a href="#" class="link">FAQ</a>
+          <a href="#" class="link">Contact Us</a>
+          <a href="#" class="link">Support</a>
+        </div>
+        <p class="copy">&copy; Created by Thee_10th. All rights reserved</p>
+      </div>
+    </footer>
+
   </body>
 </html>
