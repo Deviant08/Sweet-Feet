@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/assets/20251102_172020.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/CSS/retailer.css" />
+  <title>Manage Retailers — Sweet Feet Admin</title>
+</head>
+<body>
+
+<div class="dashboard_wrap">
+
+  <!-- Sidebar -->
+  <nav class="sidebar_nav">
+    <a class="sidebar_logo" href="/index.html">
+      <img src="/assets/images (7).jpeg" alt="Sweet Feet" />
+      <span>Sweet Feet</span>
+    </a>
+    <span class="sidebar_label">Admin</span>
+    <a class="sidebar_link" href="/admin/dashboard.html"><span class="icon">📊</span> Overview</a>
+    <a class="sidebar_link active" href="/admin/retailers.html"><span class="icon">🏪</span> Retailers</a>
+    <div class="sidebar_divider"></div>
+    <span class="sidebar_label">Platform</span>
+    <a class="sidebar_link" href="/index.html" target="_blank"><span class="icon">🌐</span> View Site</a>
+    <a class="sidebar_link" href="#" id="logoutBtn"><span class="icon">🚪</span> Log Out</a>
+  </nav>
+
+  <!-- Main -->
+  <div class="main_content">
+    <div class="page_header">
+      <div>
+        <h1>Retailers</h1>
+        <p>Approve or suspend retailer accounts.</p>
+      </div>
+      <div class="header_actions">
+        <div style="display:flex;gap:.6rem">
+          <button class="btn_sm dark filter_tab active" data-status="all">All</button>
+          <button class="btn_sm outline filter_tab" data-status="pending">Pending</button>
+          <button class="btn_sm outline filter_tab" data-status="approved">Approved</button>
+          <button class="btn_sm outline filter_tab" data-status="suspended">Suspended</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="page_body">
+      <div class="table_wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Business</th>
+              <th>Email</th>
+              <th>Location</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th>Joined</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="retailersBody">
+            <tr><td colspan="7" style="text-align:center;padding:3rem;color:var(--clr-muted)">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Admin login modal -->
+<div class="modal_overlay open" id="loginModal">
+  <div class="modal">
+    <h3>Admin Login</h3>
+    <div class="form_group" style="margin-top:2rem">
+      <label>Email</label>
+      <input type="email" id="adminEmail" placeholder="admin@sweetfeet.com" />
+    </div>
+    <div class="form_group">
+      <label>Password</label>
+      <input type="password" id="adminPassword" />
+    </div>
+    <div class="msg_error" id="loginError"></div>
+    <div class="modal_footer">
+      <button class="btn_sm dark" id="adminLoginBtn" style="width:100%">Log In →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let allRetailers  = [];
+let activeFilter  = 'all';
+
+// ── Admin login ────────────────────────────────────────────
+document.getElementById('adminLoginBtn').addEventListener('click', async () => {
+  const errorEl = document.getElementById('loginError');
+  const btn     = document.getElementById('adminLoginBtn');
+  errorEl.style.display = 'none';
+  btn.textContent = 'Logging in…'; btn.disabled = true;
+
+  try {
+    const res  = await fetch('/sweetfeet/api/admin.php?action=login', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ email: document.getElementById('adminEmail').value.trim(), password: document.getElementById('adminPassword').value })
+    });
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById('loginModal').classList.remove('open');
+      loadRetailers();
+    } else {
+      errorEl.textContent = data.error; errorEl.style.display = 'block';
+    }
+  } catch { errorEl.textContent = 'Network error.'; errorEl.style.display = 'block'; }
+  btn.textContent = 'Log In →'; btn.disabled = false;
+});
+
+// ── Load retailers ─────────────────────────────────────────
+async function loadRetailers() {
+  try {
+    const res  = await fetch('/sweetfeet/api/admin.php?action=retailers');
+    const data = await res.json();
+    if (data.error) { document.getElementById('loginModal').classList.add('open'); return; }
+    allRetailers = data;
+    renderTable();
+  } catch { console.error('Could not load retailers.'); }
+}
+
+// ── Render table ───────────────────────────────────────────
+function renderTable() {
+  const filtered = activeFilter==='all' ? allRetailers : allRetailers.filter(r=>r.status===activeFilter);
+  const tbody    = document.getElementById('retailersBody');
+
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:3rem;color:var(--clr-muted)">No retailers found.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(r => `
+    <tr>
+      <td><strong>${r.business_name}</strong></td>
+      <td>${r.email}</td>
+      <td>${r.location||'—'}</td>
+      <td>${r.phone||'—'}</td>
+      <td><span class="badge ${r.status}">${r.status}</span></td>
+      <td>${fmtDate(r.created_at)}</td>
+      <td>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+          ${r.status!=='approved'
+            ? `<button class="btn_sm success" onclick="updateStatus(${r.id},'approve')">Approve</button>`
+            : ''}
+          ${r.status!=='suspended'
+            ? `<button class="btn_sm danger"  onclick="updateStatus(${r.id},'reject')">Suspend</button>`
+            : ''}
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+// ── Filter tabs ────────────────────────────────────────────
+document.querySelectorAll('.filter_tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.filter_tab').forEach(t => { t.classList.remove('active','dark'); t.classList.add('outline'); });
+    tab.classList.add('active','dark'); tab.classList.remove('outline');
+    activeFilter = tab.dataset.status;
+    renderTable();
+  });
+});
+
+// ── Approve / suspend ──────────────────────────────────────
+async function updateStatus(retailerId, action) {
+  const label = action==='approve' ? 'approve' : 'suspend';
+  if (!confirm(`Are you sure you want to ${label} this retailer?`)) return;
+
+  try {
+    const res  = await fetch(`/sweetfeet/api/admin.php?action=${action}`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ retailer_id: retailerId })
+    });
+    const data = await res.json();
+    if (data.success) loadRetailers();
+    else alert(data.error);
+  } catch { alert('Network error.'); }
+}
+
+// ── Logout ─────────────────────────────────────────────────
+document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+  e.preventDefault();
+  await fetch('/sweetfeet/api/logout.php', { method:'POST' });
+  window.location.reload();
+});
+
+function fmtDate(d) { return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
+
+loadRetailers();
+</script>
+</body>
+</html>

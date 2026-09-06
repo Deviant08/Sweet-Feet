@@ -1,21 +1,217 @@
-@media (max-width: 700px) {
-  *,
-  *::before,
-  *::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: inherit;
-  }
-  html {
-    box-sizing: border-box;
-    font-size: 50%;
+/*
+ * ============================================================
+ *  Sweet Feet v2 — queries.css
+ *  All media queries for the entire project.
+ *  Link this AFTER style.css in every HTML page.
+ *
+ *  Breakpoints (largest to smallest):
+ *    1440px  Large desktop
+ *    1360px  Desktop
+ *    1100px  Small desktop / large tablet
+ *    1024px  Tablet landscape — shop sidebar squeezes
+ *     860px  Tablet portrait  — shop sidebar collapses
+ *     768px  Tablet           — feedback panel collapses
+ *     700px  Large phone      — homepage layout collapses
+ *     640px  Standard phone   — shop single column
+ *     480px  Mid phone        — nav compression
+ *     360px  Small phone      — minimum viable layout
+ *
+ *  Special:
+ *    prefers-reduced-motion
+ *    print
+ * ============================================================
+ */
+
+
+/* ════════════════════════════════════════════
+   1440px — Large desktop
+   ════════════════════════════════════════════ */
+
+@media (max-width: 1440px) {
+  html { font-size: 50%; }
+  body { width: 100%; height: 100%; }
+}
+
+
+/* ════════════════════════════════════════════
+   1360px — Desktop
+   ════════════════════════════════════════════ */
+
+@media (max-width: 1360px) {
+  html { font-size: 50%; }
+
+  header {
+    border-top-right-radius: 0.7rem;
+    border-top-left-radius: 0.7rem;
+    transform-style: preserve-3d;
   }
 
-  body {
-    /* padding: 3rem; */
-    width: 100%;
-    height: 100%;
+  .product img { width: 22rem; height: 22rem; }
+
+  .location { justify-content: center; gap: 6rem; }
+
+  .lc { width: 45rem; height: 45rem; }
+
+  .test   { height: 43rem; }
+  .test p { font-size: 1.8rem; }
+
+  .footer { gap: 20rem; }
+}
+
+
+/* ════════════════════════════════════════════
+   1100px — Small desktop / large tablet
+   ════════════════════════════════════════════ */
+
+@media (max-width: 1100px) {
+  html { font-size: 50%; }
+
+  header {
+    background-position: center;
+    border-top-right-radius: 0.5rem;
+    border-top-left-radius: 0.5rem;
+    transform-style: preserve-3d;
   }
+
+  .product { gap: 7.5rem; }
+  .product img { width: 25rem; height: 25rem; transform-style: preserve-3d; }
+
+  .lc { width: 50rem; height: 50rem; }
+
+  .testimonials { flex-direction: column; }
+  .test p { font-size: 2rem; }
+
+  .footer { gap: 25rem; }
+}
+
+
+/* ════════════════════════════════════════════
+   1024px — Tablet landscape
+   Shop sidebar starts squeezing.
+   ════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+
+  /* Shop sidebar: narrower to give grid more room */
+  .shop_wrapper { grid-template-columns: 210px 1fr; }
+  .sidebar      { padding: 1.5rem 1.1rem; }
+  .products_area { padding: 1.75rem 1.75rem; }
+
+  /* Shop hero */
+  .shop_hero { padding: 2.75rem 2rem 2.5rem; }
+  .hero_count { font-size: 3rem; opacity: .18; }
+
+  /* Product grid: allow 2 columns */
+  .product_grid { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); }
+
+  /* Feedback page */
+  .fb_headline  { font-size: 4rem; }
+  .fb_panel_left { padding: 5rem 3.5rem; }
+  .fb_form_card  { padding: 3.5rem; }
+}
+
+
+/* ════════════════════════════════════════════
+   860px — Tablet portrait
+   Shop sidebar collapses to horizontal strip.
+   ════════════════════════════════════════════ */
+
+@media (max-width: 860px) {
+
+  /* Shop: stack sidebar above products */
+  .shop_wrapper { grid-template-columns: 1fr; }
+
+  /* Sidebar becomes horizontal scrollable bar */
+  .sidebar {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--clr-border);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .sidebar::-webkit-scrollbar { display: none; }
+  .sidebar h3 { display: none; }
+
+  .filter_group {
+    flex-shrink: 0;
+    margin-bottom: 0;
+    min-width: 160px;
+  }
+
+  .products_area { padding: 1.5rem 1rem; }
+
+  .shop_hero { padding: 2.5rem 1.5rem 2rem; }
+
+  /* Toolbar: stack vertically */
+  .toolbar { flex-direction: column; margin-bottom: 1.25rem; }
+  .toolbar_left { flex-direction: row; justify-content: space-between; align-items: center; }
+
+  .search_bar { flex: 1; }
+  .search_bar input { width: 100%; }
+  .sort_select { width: 100%; }
+
+  /* Cart drawer: full width on tablet portrait */
+  .cart_drawer { width: 100%; right: -100%; }
+  .cart_drawer.open { right: 0; }
+}
+
+
+/* ════════════════════════════════════════════
+   768px — Tablet
+   Feedback panel collapses. Login/signup stack.
+   ════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  html { font-size: 50%; }
+
+  header { width: 100%; height: 100vh; }
+
+  .location    { flex-direction: column; }
+  .testimonials { flex-direction: column; }
+  .test        { height: unset; }
+  .footer      { gap: 5rem; }
+
+  /* Login / Signup pages */
+  .flex            { flex-direction: column; }
+  .width50         { width: 100%; height: 50vh; }
+  .img_container   { border-radius: 0; }
+  .form_container  { border-radius: 0; }
+  .form            { width: 90%; padding: 3rem 2rem; }
+
+  /* Feedback page — THE KEY FIX
+     fb_main must collapse to single column.
+     The left panel shrinks to a banner. */
+  .fb_main { grid-template-columns: 1fr; }
+
+  .fb_panel_left {
+    padding: 4rem 3rem;
+    min-height: 36vh;
+  }
+
+  .fb_headline { font-size: 3.5rem; }
+
+  .fb_panel_right { padding: 4rem 2rem; }
+  .fb_form_card   { padding: 3rem 2.5rem; }
+  .fb_header      { padding: 0 2rem; }
+
+  body.fb_page footer { padding: 2.5rem 2rem; }
+  body.fb_page .footer { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+}
+
+
+/* ════════════════════════════════════════════
+   700px — Large phone
+   Homepage layout collapses fully.
+   ════════════════════════════════════════════ */
+
+@media (max-width: 700px) {
+  html { font-size: 50%; }
 
   header {
     width: 100%;
@@ -29,6 +225,7 @@
     background-size: cover;
   }
 
+  /* Homepage nav collapses — hamburger shown by JS */
   .nav_bar {
     flex-direction: column;
     gap: 2rem;
@@ -37,14 +234,13 @@
     width: 100%;
   }
 
-  .intro_uno {
-    text-align: center;
-  }
+  /* Show hamburger, hide regular nav */
+  .menu_toggle { display: flex; }
+  .nav         { display: none; }
 
-  .header_uno {
-    display: none;
-  }
+  .intro_uno { text-align: center; }
 
+  .header_uno { display: none; }
   .header_dos {
     display: block;
     font-size: 5rem;
@@ -53,9 +249,7 @@
     font-weight: 700;
   }
 
-  .para_uno {
-    display: none;
-  }
+  .para_uno { display: none; }
   .para_dos {
     display: block;
     font-size: 1.7rem;
@@ -65,746 +259,205 @@
     margin-bottom: 4rem;
   }
 
-  .top_btn {
-    width: 100%;
-  }
+  .top_btn { width: 100%; }
 
-  /* sections */
+  .intro_dos p { text-align: left; font-size: 1.5rem; line-height: 1.5; }
 
-  .intro_dos p {
-    text-align: left;
-    font-size: 1.5rem;
-    line-height: 1.5;
-    /* font-weight: 600; */
-  }
+  .product { flex-direction: column; margin-bottom: 8rem; }
 
-  .product {
-    /* display: flex; */
-    flex-direction: column;
-    /* align-items: center; */
-    /* justify-content: center; */
-    margin-bottom: 8rem;
-  }
+  .location { flex-direction: column; gap: 4rem; }
 
-  .location {
-    flex-direction: column;
-    gap: 4rem;
-  }
+  .testimonials { font-size: 1.7rem; flex-direction: column; }
+  .test         { padding: 1.5em; }
 
-
-  /* testimonials */
-
-  .testimonials {
-    font-size: 1.7rem;
-    flex-direction: column;
-  }
-
-  .test {
-    padding: 1.5em;
-  }
-
-  .action_button {
-    flex-direction: column;
-    gap: 3rem;
-  }
-  .action {
-    width: 50%;
-  }
+  .action_button { flex-direction: column; gap: 3rem; }
+  .action        { width: 50%; }
 
   /* Footer */
-
-  footer {
-    height: unset;
-    /* position: relative; */
-    /* height: 40vh; */
-    /* width: 100vw; */
-    /* display: none; */
-  }
-
-  .footer {
-    display: block;
-    margin: 0;
-    height: unset;
-  }
-
-  .footer_logo {
-    padding-top: 3em;
-    margin-bottom: 6em;
-  }
-
-  .footer_links {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 6em;
-  }
-  .link {
-    text-align: center;
-  }
-  .icon {
-    display: flex;
-    padding-bottom: 4em;
-    /* display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr; */
-  }
-    /* LOG IN AND SIGN UP PAGE */
-/* 
-    .flex{
-      flex-direction: column;
-    } */
-
-}
-
-@media (max-width: 768px) {
-  *,
-  *::before,
-  *::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: inherit;
-  }
-  html {
-    box-sizing: border-box;
-    font-size: 50%;
-  }
-
-  body {
-    width: 100%;
-    height: 100%;
-  }
-
-  header {
-    width: 100%;
-    height: 100vh;font: 500;
-  }
-
-  .location{
-    flex-direction: column;
-  }
-
-  .testimonials {
-    flex-direction: column;
-  }
-
-.test{
-  height: unset;
-}
-
-  .footer {
-    gap: 5rem;
-  }
-}
-
-@media (max-width: 1100px) {
-  *,
-  *::before,
-  *::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: inherit;
-  }
-  html {
-    box-sizing: border-box;
-    font-size: 50%;
-  }
-
-  body {
-    width: 100%;
-    height: 100%;
-  }
-
-  header {
-    width: 100%;
-    height: 100vh;
-    background-position: center;
-    border-top-right-radius: 0.5rem;
-    border-top-left-radius: 0.5rem;
-    transform-style: preserve-3d;
-  }
-
-  .product {
-    gap: 7.5rem;
-  }
-
-  .product img {
-    width: 25rem;
-    height: 25rem;
-    transform-style: preserve-3d;
-  }
-
-  .lc {
-    width: 50rem;
-    height: 50rem;
-  }
-
-  .testimonials {
-    flex-direction: column;
-  }
-
-  .test p {
-    font-size: 2rem;
-    /* flex-direction: column; */
-    /* height: 70rem; */
-  }
-
-  .footer {
-    gap: 25rem;
-  }
-}
-
-@media (max-width: 1360px) {
-  *,
-  *::before,
-  *::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: inherit;
-  }
-  html {
-    box-sizing: border-box;
-    font-size: 50%;
-  }
-
-  body {
-    width: 100%;
-    height: 100%;
-  }
-
-  header {
-    transform-style: preserve-3d;
-    border-top-right-radius: 0.7rem;
-    border-top-left-radius: 0.7rem;
-  }
-
-  .product img {
-    width: 22rem;
-    height: 22rem;
-  }
-
-  .location {
-    justify-content: center;
-    gap: 6rem;
-  }
-
-  .lc {
-    width: 45rem;
-    height: 45rem;
-  }
-
-  .test {
-    height: 43rem;
-  }
-
-  .test p {
-    font-size: 1.8rem;
-  }
-
-  .footer {
-    gap: 20rem;
-  }
-}
-
-@media (max-width: 1440px) {
-  *,
-  *::before,
-  *::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: inherit;
-  }
-  html {
-    box-sizing: border-box;
-    font-size: 50%;
-  }
-
-  body {
-    /* padding: 3rem; */
-    width: 100%;
-    height: 100%;
-  }
-}
-/*
- * ============================================================
- *  Sweet Feet — Shop Page Media Queries
- *  File: /nav/CSS/shop-queries.css
- *  Link this AFTER your main style block in products.html:
- *  <link rel="stylesheet" href="./CSS/shop-queries.css" />
- *
- *  Breakpoints (mobile-first reading order, largest → smallest):
- *    1024px  Tablet landscape  — sidebar starts squeezing grid
- *     860px  Tablet portrait   — sidebar collapses to top bar
- *     640px  Large phone       — single-column layout, tab scroll
- *     480px  Standard phone    — nav compression, tighter spacing
- *     360px  Small phone       — minimum viable layout
- * ============================================================
- */
-
-
-/* ══════════════════════════════════════════════════════════
-   1024px — Tablet landscape
-   Sidebar is becoming tight; nudge grid and sidebar width.
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 1024px) {
-
-  /* Narrow the sidebar a little to give the grid more room */
-  .shop_wrapper {
-    grid-template-columns: 210px 1fr;
-  }
-
-  /* Keep sidebar sticky but trim its internal padding */
-  .sidebar {
-    padding: 1.5rem 1.1rem;
-  }
-
-  /* Reduce products area horizontal padding */
-  .products_area {
-    padding: 1.75rem 1.75rem;
-  }
-
-  /* Hero: reduce whitespace slightly */
-  .shop_hero {
-    padding: 2.75rem 2rem 2.5rem;
-  }
-
-  /* Decorative number can start fading sooner */
-  .hero_count {
-    font-size: 3rem;
-    opacity: .18;
-  }
-
-  /* Nav gap shrinks */
-  .nav {
-    gap: 1.2rem;
-  }
-
-  /* Product grid: allow 2 columns instead of trying 3 */
-  .product_grid {
-    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-  }
+  footer  { height: unset; }
+  .footer { display: block; margin: 0; height: unset; }
+  .footer_logo   { padding-top: 3em; margin-bottom: 6em; }
+  .footer_links  { display: flex; flex-direction: column; margin-bottom: 6em; }
+  .link          { text-align: center; }
+  .icon          { display: flex; padding-bottom: 4em; }
 }
 
 
-/* ══════════════════════════════════════════════════════════
-   860px — Tablet portrait
-   Sidebar moves above the grid as a horizontal filter strip.
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 860px) {
+/* ════════════════════════════════════════════
+   640px — Standard phone
+   Shop: single column, scrollable tabs.
+   ════════════════════════════════════════════ */
 
-  /* Stack sidebar above products */
-  .shop_wrapper {
-    grid-template-columns: 1fr;
-  }
-
-  /* Sidebar becomes a horizontal scrollable filter bar */
-  .sidebar {
-    position: static;       /* un-stick it */
-    height: auto;
-    border-right: none;
-    border-bottom: 1px solid var(--clr-border);
-    padding: 1.25rem 1.5rem;
-
-    /* Lay filter groups side by side with scroll */
-    display: flex;
-    flex-direction: row;
-    gap: 1.5rem;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;          /* Firefox */
-  }
-  .sidebar::-webkit-scrollbar { display: none; } /* Chrome/Safari */
-
-  /* Each filter group stays compact side-by-side */
-  .filter_group {
-    flex-shrink: 0;
-    margin-bottom: 0;
-    min-width: 160px;
-  }
-
-  /* "Filters" heading becomes a small label above the strip */
-  .sidebar > h3 {
-    display: none; /* hidden; context is clear from the strip itself */
-  }
-
-  /* Products area: comfortable padding */
-  .products_area {
-    padding: 1.5rem 1.5rem;
-  }
-
-  /* Hero: tighten up */
-  .shop_hero {
-    padding: 2.25rem 1.5rem 2rem;
-  }
-  .shop_hero p {
-    font-size: .88rem;
-  }
-
-  /* Hide the decorative number on tablet portrait */
-  .hero_count {
-    display: none;
-  }
-
-  /* Toolbar: wrap cleanly */
-  .toolbar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: .85rem;
-    margin-bottom: 1.25rem;
-  }
-
-  .toolbar_left {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  /* Search bar: fill its row */
-  .search_bar {
-    flex: 1;
-  }
-  .search_bar input {
-    width: 100%;
-  }
-
-  /* Sort: full width under toolbar */
-  .sort_select {
-    width: 100%;
-  }
-
-  /* Cart drawer: full width on tablet portrait */
-  .cart_drawer {
-    width: 100%;
-    right: -100%;
-  }
-}
-
-
-/* ══════════════════════════════════════════════════════════
-   640px — Large phone
-   Single-column cards, scrollable category tabs, tighter nav.
-   ══════════════════════════════════════════════════════════ */
 @media (max-width: 640px) {
 
-  /* Nav: reduce padding and gap */
-  .nav_bar {
-    padding: .85rem 1.25rem;
-  }
-  .nav {
-    gap: .9rem;
-  }
-  .nav a {
-    font-size: .8rem;
-  }
-  .logo_txt {
-    font-size: 1.1rem;
-  }
+  /* Shop nav */
+  .nav_bar { padding: .85rem 1.25rem; }
+  .nav     { gap: .9rem; }
+  .nav a   { font-size: .8rem; }
+  .logo_txt { font-size: 1.1rem; }
 
-  /* Hero: single-column, smaller text */
+  /* Shop hero */
   .shop_hero {
     padding: 1.75rem 1.25rem 1.5rem;
     flex-direction: column;
     align-items: flex-start;
     gap: .75rem;
   }
-  .shop_hero h1 {
-    font-size: clamp(1.65rem, 7vw, 2.25rem);
-  }
-  .shop_hero p {
-    font-size: .83rem;
-    max-width: 100%;
-    margin-top: .35rem;
-  }
+  .shop_hero h1 { font-size: clamp(1.65rem, 7vw, 2.25rem); }
+  .shop_hero p  { font-size: .83rem; max-width: 100%; margin-top: .35rem; }
 
-  /* Category tabs: horizontal scroll instead of wrapping */
+  /* Category tabs: horizontal scroll */
   .cat_tabs {
     flex-wrap: nowrap;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding-bottom: .25rem;  /* small gap so active ring isn't clipped */
+    padding-bottom: .25rem;
     gap: .4rem;
     margin-bottom: 1.1rem;
   }
   .cat_tabs::-webkit-scrollbar { display: none; }
+  .cat_tab { flex-shrink: 0; padding: .4rem .95rem; font-size: .78rem; }
 
-  .cat_tab {
-    flex-shrink: 0;         /* tabs must NOT shrink or wrap */
-    padding: .4rem .95rem;
-    font-size: .78rem;
-  }
+  /* Single column product grid */
+  .product_grid { grid-template-columns: 1fr; gap: 1rem; }
 
-  /* Product grid: single column */
-  .product_grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
+  /* Shorter card images on phone */
+  .card_img { aspect-ratio: 16 / 9; }
 
-  /* Cards: make image shorter on mobile */
-  .card_img {
-    aspect-ratio: 16 / 9;
-  }
+  .products_area { padding: 1.25rem 1rem; }
 
-  /* Products area: edge-to-edge feel */
-  .products_area {
-    padding: 1.25rem 1rem;
-  }
+  /* Sidebar: smaller chips */
+  .sidebar      { padding: 1rem; gap: 1.25rem; }
+  .filter_group { min-width: 140px; }
+  .chip         { font-size: .72rem; padding: .3rem .65rem; }
 
-  /* Sidebar filter strip: smaller chips */
-  .sidebar {
-    padding: 1rem 1rem;
-    gap: 1.25rem;
-  }
-  .filter_group {
-    min-width: 140px;
-  }
-  .chip {
-    font-size: .72rem;
-    padding: .3rem .65rem;
-  }
+  /* Toolbar */
+  .toolbar { gap: .65rem; }
+  .toolbar_left { flex-direction: column; align-items: stretch; gap: .5rem; }
+  .result_count { font-size: .78rem; text-align: right; }
 
-  /* Toolbar: search stretches, count moves to its own line */
-  .toolbar {
-    gap: .65rem;
-  }
-  .toolbar_left {
-    flex-direction: column;
-    align-items: stretch;
-    gap: .5rem;
-  }
-  .result_count {
-    font-size: .78rem;
-    text-align: right;
-  }
+  /* Toast: lift above cart FAB */
+  .toast { bottom: 5.5rem; }
 
-  /* Toast: lift above the cart FAB so they don't overlap */
-  .toast {
-    bottom: 5.5rem;
-  }
+  /* Cart FAB */
+  .cart_icon_wrap { bottom: 1.5rem; right: 1.25rem; }
 
-  /* Cart FAB: move it left slightly so it clears scrollbar */
-  .cart_icon_wrap {
-    bottom: 1.5rem;
-    right: 1.25rem;
-  }
+  /* Footer */
+  .footer { flex-direction: column; align-items: flex-start; gap: 1.1rem; }
+  .footer_links { gap: 1rem; flex-wrap: wrap; }
 
-  /* Pagination: slightly smaller */
-  .pagination {
-    gap: .35rem;
-    margin-top: 2rem;
-    padding-bottom: 4rem; /* extra bottom room above FAB */
-  }
-  .page_btn {
-    width: 34px;
-    height: 34px;
-    font-size: .78rem;
-  }
-
-  /* Footer: stack vertically */
-  .footer {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1.1rem;
-  }
-  .footer_links {
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
+  /* Feedback page */
+  .fb_panel_left { padding: 4rem 2rem; min-height: 30vh; }
+  .fb_headline   { font-size: 3rem; }
+  .fb_perks      { gap: 1.2rem; }
+  .fb_perks li   { font-size: 1.3rem; }
+  .fb_panel_right { padding: 3rem 1.2rem; }
+  .fb_form_card   { padding: 2.5rem 1.8rem; border-radius: 1rem; }
+  .fb_form_title  { font-size: 2.2rem; }
+  .fb_submit      { font-size: 1.35rem; padding: 1.3rem 2rem; }
+  body.fb_page .footer_links { gap: 1.2rem; }
+  .fb_header .nav a { font-size: 1.1rem; }
 }
 
 
-/* ══════════════════════════════════════════════════════════
-   480px — Standard / mid-range phone
-   Nav compression, card layout refinements.
-   ══════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════
+   480px — Mid-range phone
+   Nav compression, tighter spacing.
+   ════════════════════════════════════════════ */
+
 @media (max-width: 480px) {
 
-  /* Nav: hide less-critical links, keep Sign Up + Shop */
-  .nav a[href*="login"],
-  .nav a[href*="feedback"] {
-    display: none;
-  }
-  /* Show only Sign Up and the active "Shop" link */
-  .nav {
-    gap: .75rem;
-  }
-  .nav a {
-    font-size: .78rem;
-  }
+  /* Hide less critical nav links on shop page */
+  body.shop_page .nav a[href*="login"],
+  body.shop_page .nav a[href*="feedback"] { display: none; }
 
-  /* Shrink nav bar further */
-  .nav_bar {
-    padding: .75rem 1rem;
-  }
-  .logo_img {
-    width: 30px;
-    height: 30px;
-  }
-  .logo_txt {
-    font-size: 1rem;
-  }
+  .nav     { gap: .75rem; }
+  .nav a   { font-size: .78rem; }
+  .nav_bar { padding: .75rem 1rem; }
+  .logo_img { width: 30px; height: 30px; }
+  .logo_txt { font-size: 1rem; }
 
-  /* Hero: very compact */
-  .shop_hero {
-    padding: 1.5rem 1rem 1.25rem;
-  }
-  .shop_hero h1 {
-    font-size: clamp(1.5rem, 8vw, 2rem);
-  }
+  /* Shop hero */
+  .shop_hero    { padding: 1.5rem 1rem 1.25rem; }
+  .shop_hero h1 { font-size: clamp(1.5rem, 8vw, 2rem); }
 
-  /* Card body: tighten internal spacing */
-  .card_body {
-    padding: .85rem .9rem .9rem;
-    gap: .4rem;
-  }
-  .card_name {
-    font-size: .92rem;
-  }
-  .card_price {
-    font-size: 1.05rem;
-  }
-  .btn_order {
-    font-size: .75rem;
-    padding: .48rem .9rem;
-  }
+  /* Card tweaks */
+  .card_body  { padding: .85rem .9rem .9rem; gap: .4rem; }
+  .card_name  { font-size: .92rem; }
+  .card_price { font-size: 1.05rem; }
+  .btn_order  { font-size: .75rem; padding: .48rem .9rem; }
+  .size_dot   { width: 25px; height: 25px; font-size: .63rem; border-radius: 5px; }
 
-  /* Size dots: slightly smaller */
-  .size_dot {
-    width: 25px;
-    height: 25px;
-    font-size: .63rem;
-    border-radius: 5px;
-  }
+  /* Chips */
+  .chip { font-size: .68rem; padding: .28rem .55rem; }
+  .filter_group h4 { font-size: .78rem; }
 
-  /* Sidebar: chips even more compact */
-  .chip {
-    font-size: .68rem;
-    padding: .28rem .55rem;
-  }
-  .filter_group h4 {
-    font-size: .78rem;
-  }
+  /* Cart drawer footer */
+  .drawer_footer { padding: 1rem 1.1rem; }
+  .btn_checkout  { font-size: .88rem; padding: .8rem; }
 
-  /* Cart drawer footer padding */
-  .drawer_footer {
-    padding: 1rem 1.1rem;
-  }
-  .btn_checkout {
-    font-size: .88rem;
-    padding: .8rem;
-  }
+  /* Cart FAB */
+  .cart_fab { width: 48px; height: 48px; font-size: 1.1rem; }
 
-  /* Cart FAB: slightly smaller on small phones */
-  .cart_fab {
-    width: 48px;
-    height: 48px;
-    font-size: 1.1rem;
-  }
+  /* Login / signup */
+  .form   { width: 95%; padding: 2.5rem 1.5rem; }
+  .bolden { font-size: 1.8rem; }
 }
 
 
-/* ══════════════════════════════════════════════════════════
-   360px — Small / budget phone  (minimum viable layout)
-   Prevent overflow, ensure nothing clips or breaks.
-   ══════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════
+   360px — Small phone (minimum viable layout)
+   ════════════════════════════════════════════ */
+
 @media (max-width: 360px) {
 
-  /* Absolute floor for nav: logo text hidden, just the image */
-  .logo_txt {
-    display: none;
-  }
-  .logo_img {
-    width: 28px;
-    height: 28px;
-  }
+  /* Logo: text hidden, only image */
+  .logo_txt { display: none; }
+  .logo_img { width: 28px; height: 28px; }
 
-  /* Nav links: only show Sign Up and the active link */
-  .nav a[href*="login"],
-  .nav a[href*="feedback"] {
-    display: none; /* already hidden at 480, belt-and-suspenders */
-  }
-  .nav {
-    gap: .6rem;
-  }
-  .nav a {
-    font-size: .75rem;
-  }
+  /* Nav */
+  .nav   { gap: .6rem; }
+  .nav a { font-size: .75rem; }
+  body.shop_page .nav a[href*="login"],
+  body.shop_page .nav a[href*="feedback"] { display: none; }
 
-  /* Hero: minimal */
-  .shop_hero {
-    padding: 1.25rem .85rem 1rem;
-  }
-  .shop_hero h1 {
-    font-size: 1.5rem;
-    letter-spacing: -.02em;
-  }
-  .shop_hero p {
-    font-size: .78rem;
-  }
+  /* Shop hero */
+  .shop_hero    { padding: 1.25rem .85rem 1rem; }
+  .shop_hero h1 { font-size: 1.5rem; letter-spacing: -.02em; }
+  .shop_hero p  { font-size: .78rem; }
 
-  /* Products area: near-zero horizontal padding */
-  .products_area {
-    padding: 1rem .75rem;
-  }
+  /* Products area */
+  .products_area { padding: 1rem .75rem; }
+  .product_grid  { gap: .85rem; }
 
-  /* Product grid: 1 column, cards touch the edges */
-  .product_grid {
-    gap: .85rem;
-  }
+  /* Sidebar */
+  .sidebar { padding: .85rem .75rem; gap: 1rem; }
 
-  /* Sidebar strip: tightest setting */
-  .sidebar {
-    padding: .85rem .75rem;
-    gap: 1rem;
-  }
+  /* Search */
+  .search_bar { min-width: 0; padding: .35rem .75rem; }
+  .search_bar input { width: 100%; min-width: 0; }
+  .sort_select { font-size: .78rem; }
 
-  /* Search input: prevent it stretching past viewport */
-  .search_bar input {
-    width: 100%;
-    min-width: 0;
-  }
-  .search_bar {
-    min-width: 0;
-    padding: .35rem .75rem;
-  }
+  /* Cart drawer: full screen */
+  .cart_drawer { border-radius: 0; }
 
-  /* Sort select: full width */
-  .sort_select {
-    font-size: .78rem;
-  }
+  /* Footer */
+  .footer_links { gap: .75rem; }
+  .footer_links a { font-size: .75rem; }
+  .copy { font-size: .68rem; }
 
-  /* Cart drawer: full screen takeover */
-  .cart_drawer {
-    border-radius: 0;
-  }
-
-  /* Footer: very tight */
-  .footer {
-    padding: 1.5rem .85rem;
-    gap: .9rem;
-  }
-  .footer_links {
-    gap: .75rem;
-  }
-  .footer_links a {
-    font-size: .75rem;
-  }
-  .copy {
-    font-size: .68rem;
-  }
-
-  /* Toast: prevent overflow on narrow screens */
-  .toast {
-    width: calc(100% - 2rem);
-    text-align: center;
-    white-space: normal;
-    font-size: .78rem;
-  }
+  /* Toast */
+  .toast { width: calc(100% - 2rem); text-align: center; white-space: normal; font-size: .78rem; }
 }
 
 
-/* ══════════════════════════════════════════════════════════
-   Accessibility: Respect reduced-motion preference
-   ══════════════════════════════════════════════════════════ */
-@media (prefers-reduced-motion: reduce) {
+/* ════════════════════════════════════════════
+   Reduced motion
+   ════════════════════════════════════════════ */
+
+/* @media (prefers-reduced-motion: reduce) {
+  .product img,
   .product_card,
   .btn_order,
   .cart_fab,
@@ -813,21 +466,21 @@
   .toast,
   .chip,
   .cat_tab,
-  .page_btn {
+  .nav_sidebar {
     transition: none !important;
     animation: none !important;
   }
 
-  /* Keep transform-based hover for product cards but remove animation */
-  .product_card:hover {
-    transform: none;
-  }
+  .product_card:hover { transform: none; }
+  .lc:hover          { transform: none; }
+  .product img:hover { transform: none; }
 }
+ */
 
+/* ════════════════════════════════════════════
+   Print
+   ════════════════════════════════════════════ */
 
-/* ══════════════════════════════════════════════════════════
-   Print: strip decorative elements, show only content
-   ══════════════════════════════════════════════════════════ */
 @media print {
   .sidebar,
   .toolbar,
@@ -836,14 +489,11 @@
   .cart_drawer,
   .drawer_overlay,
   .toast,
-  .pagination,
-  footer {
-    display: none !important;
-  }
+  .nav_sidebar,
+  .menu_toggle,
+  footer { display: none !important; }
 
-  .shop_wrapper {
-    grid-template-columns: 1fr;
-  }
+  .shop_wrapper { grid-template-columns: 1fr; }
 
   .shop_hero {
     background: #fff;
@@ -853,17 +503,7 @@
   }
   .shop_hero h1 span { color: #000; }
 
-  .product_card {
-    break-inside: avoid;
-    box-shadow: none;
-    border: 1px solid #ccc;
-  }
-
-  .btn_order {
-    display: none;
-  }
-
-  .card_price {
-    font-size: 1rem;
-  }
+  .product_card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+  .btn_order    { display: none; }
+  .card_price   { font-size: 1rem; }
 }

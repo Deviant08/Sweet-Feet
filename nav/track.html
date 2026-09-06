@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/assets/20251102_172020.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/CSS/retailer.css" />
+  <title>Track My Order — Sweet Feet</title>
+  <style>
+    body { min-height: 100vh; display: flex; flex-direction: column; }
+
+    .track_nav {
+      background: #160c02;
+      padding: 0 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 6.4rem;
+      flex-shrink: 0;
+    }
+    .track_logo {
+      display: flex; align-items: center; gap: 1rem;
+      text-decoration: none; color: #f7dfb8;
+    }
+    .track_logo img { width: 3.8rem; height: 3.8rem; border-radius: 50%; object-fit: cover; }
+    .track_logo span { font-family: var(--ff-display); font-size: 1.8rem; font-weight: 700; }
+    .track_nav_links { display: flex; gap: 2rem; }
+    .track_nav_links a {
+      text-decoration: none; color: #ece3bd;
+      font-size: 1.3rem; font-weight: 600; transition: color .2s;
+    }
+    .track_nav_links a:hover,
+    .track_nav_links a.active { color: #efbc8a; }
+
+    .track_main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 5rem 2rem;
+      background: var(--clr-bg);
+    }
+
+    .track_hero {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .track_hero h1 {
+      font-family: var(--ff-display);
+      font-size: clamp(2.8rem, 5vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      color: var(--clr-dark);
+      margin-bottom: 1rem;
+    }
+    .track_hero p {
+      font-size: 1.4rem;
+      color: var(--clr-muted);
+      max-width: 44rem;
+      line-height: 1.6;
+    }
+
+    .track_form_card {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius);
+      padding: 3.5rem;
+      width: 100%;
+      max-width: 54rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 3rem;
+    }
+
+    .track_input_row {
+      display: flex;
+      gap: 1rem;
+      align-items: stretch;
+    }
+    .track_input_row input {
+      flex: 1;
+      font-family: var(--ff-ui);
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: var(--clr-dark);
+      background: var(--clr-bg);
+      border: 1.5px solid var(--clr-border);
+      border-radius: 10px;
+      padding: 1.2rem 1.6rem;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      letter-spacing: .05em;
+    }
+    .track_input_row input:focus {
+      border-color: var(--clr-accent);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(200,68,12,.1);
+    }
+    .track_input_row button {
+      font-family: var(--ff-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      padding: 1.2rem 2.4rem;
+      background: var(--clr-dark);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background .2s;
+      flex-shrink: 0;
+    }
+    .track_input_row button:hover { background: var(--clr-accent); }
+
+    /* Results area */
+    .track_results {
+      width: 100%;
+      max-width: 54rem;
+      display: none;
+    }
+    .track_results.visible { display: block; }
+
+    .order_summary {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius);
+      padding: 2rem 2.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .order_ref_label {
+      font-size: 1.2rem;
+      color: var(--clr-muted);
+      margin-bottom: .3rem;
+    }
+    .order_ref_value {
+      font-family: monospace;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--clr-dark);
+    }
+    .order_total {
+      font-family: var(--ff-display);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--clr-accent);
+    }
+
+    /* Item tracking card */
+    .track_item_card {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    .track_item_header {
+      padding: 1.8rem 2.5rem;
+      border-bottom: 1px solid var(--clr-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .track_item_name {
+      font-family: var(--ff-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+    .track_item_meta {
+      font-size: 1.2rem;
+      color: var(--clr-muted);
+      margin-top: .3rem;
+    }
+    .track_item_body { padding: 2.5rem; }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 3rem;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: .95rem;
+      top: 1rem;
+      bottom: 1rem;
+      width: 2px;
+      background: var(--clr-border);
+    }
+    .timeline_event {
+      position: relative;
+      padding: 0 0 2.5rem 2rem;
+    }
+    .timeline_event:last-child { padding-bottom: 0; }
+    .timeline_event::before {
+      content: '';
+      position: absolute;
+      left: -2.1rem;
+      top: .45rem;
+      width: 1.2rem; height: 1.2rem;
+      border-radius: 50%;
+      background: var(--clr-border);
+      border: 2.5px solid var(--clr-surface);
+    }
+    .timeline_event.ev_latest::before  { background: var(--clr-accent); }
+    .timeline_event.ev_delivered::before { background: var(--clr-success); }
+
+    .ev_status {
+      font-weight: 700;
+      font-size: 1.35rem;
+      text-transform: capitalize;
+      margin-bottom: .35rem;
+      color: var(--clr-dark);
+    }
+    .ev_note { font-size: 1.25rem; color: var(--clr-muted); line-height: 1.5; }
+    .ev_time { font-size: 1.1rem; color: #b8a898; margin-top: .35rem; }
+
+    /* Error / not found */
+    .track_msg_error {
+      background: #fdf0f0;
+      border: 1px solid #f5a8a8;
+      color: var(--clr-danger);
+      border-radius: 10px;
+      padding: 1.2rem 1.8rem;
+      font-size: 1.3rem;
+      margin-top: 1.5rem;
+      display: none;
+    }
+    .track_msg_error.visible { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<div class="track_nav">
+  <a class="track_logo" href="/index.html">
+    <img src="/assets/images (7).jpeg" alt="Sweet Feet" />
+    <span>Sweet Feet</span>
+  </a>
+  <div class="track_nav_links">
+    <a href="/nav/products.html">Shop</a>
+    <a href="/nav/track.html" class="active">Track Order</a>
+    <a href="/nav/chat.html">Messages</a>
+    <a href="/nav/feedback.html">Feedback</a>
+  </div>
+</div>
+
+<!-- Main -->
+<main class="track_main">
+
+  <div class="track_hero">
+    <h1>Track Your Order</h1>
+    <p>Enter your order reference number to see real-time updates on your delivery.</p>
+  </div>
+
+  <!-- Search form -->
+  <div class="track_form_card">
+    <label style="font-size:1.25rem;font-weight:700;display:block;margin-bottom:1.2rem;">Order Reference Number</label>
+    <div class="track_input_row">
+      <input type="text" id="refInput" placeholder="e.g. SF_A3B4C5D6_1234567890" />
+      <button id="trackBtn">Track →</button>
+    </div>
+    <div class="track_msg_error" id="trackError"></div>
+  </div>
+
+  <!-- Results -->
+  <div class="track_results" id="trackResults"></div>
+
+</main>
+
+<script>
+// Pre-fill reference from URL if redirected from order_success page
+const urlParams = new URLSearchParams(window.location.search);
+const preRef    = urlParams.get('ref');
+if (preRef) {
+  document.getElementById('refInput').value = preRef;
+  // Auto-track after a short delay so UI is visible first
+  setTimeout(doTrack, 300);
+}
+
+document.getElementById('trackBtn').addEventListener('click', doTrack);
+document.getElementById('refInput').addEventListener('keydown', (e) => { if (e.key==='Enter') doTrack(); });
+
+async function doTrack() {
+  const ref     = document.getElementById('refInput').value.trim();
+  const errorEl = document.getElementById('trackError');
+  const btn     = document.getElementById('trackBtn');
+  const results = document.getElementById('trackResults');
+
+  errorEl.classList.remove('visible');
+  results.classList.remove('visible');
+
+  if (!ref) { errorEl.textContent = 'Please enter your order reference number.'; errorEl.classList.add('visible'); return; }
+
+  btn.textContent = 'Searching…';
+  btn.disabled    = true;
+
+  try {
+    const res  = await fetch(`/sweetfeet/api/tracking.php?order_ref=${encodeURIComponent(ref)}`);
+    const data = await res.json();
+
+    if (!data.found) {
+      errorEl.textContent = data.error || 'Order not found.';
+      errorEl.classList.add('visible');
+      btn.textContent = 'Track →'; btn.disabled = false;
+      return;
+    }
+
+    if (!data.paid) {
+      errorEl.textContent = data.message;
+      errorEl.classList.add('visible');
+      btn.textContent = 'Track →'; btn.disabled = false;
+      return;
+    }
+
+    renderResults(data);
+    results.classList.add('visible');
+
+  } catch {
+    errorEl.textContent = 'Network error. Please check your connection.';
+    errorEl.classList.add('visible');
+  }
+
+  btn.textContent = 'Track →';
+  btn.disabled    = false;
+}
+
+function renderResults(data) {
+  const el = document.getElementById('trackResults');
+
+  const summaryHtml = `
+    <div class="order_summary">
+      <div>
+        <div class="order_ref_label">Order Reference</div>
+        <div class="order_ref_value">${data.order_ref}</div>
+        <div style="font-size:1.2rem;color:var(--clr-muted);margin-top:.4rem">Placed on ${fmtDate(data.ordered_at)}</div>
+      </div>
+      <div class="order_total">₦${parseFloat(data.total).toFixed(2)}</div>
+    </div>`;
+
+  const itemsHtml = data.items.map(item => {
+    const history    = item.tracking_history || [];
+    const latestIdx  = history.length - 1;
+
+    const timelineHtml = history.length
+      ? history.map((ev, i) => `
+          <div class="timeline_event ${i===latestIdx ? (ev.status==='delivered'?'ev_delivered':'ev_latest') : ''}">
+            <div class="ev_status">${ev.status}</div>
+            <div class="ev_note">${ev.note || ''}</div>
+            <div class="ev_time">${fmtDateTime(ev.created_at)}</div>
+          </div>`).join('')
+      : '<p style="color:var(--clr-muted);font-size:1.3rem">No tracking updates yet.</p>';
+
+    const currentStatus = item.status;
+
+    return `
+      <div class="track_item_card">
+        <div class="track_item_header">
+          <div>
+            <div class="track_item_name">${item.product_name}</div>
+            <div class="track_item_meta">
+              Qty: ${item.quantity} · Size: ${item.size||'—'} · ₦${parseFloat(item.subtotal).toFixed(2)}
+            </div>
+            <div class="track_item_meta" style="margin-top:.3rem">
+              Sold by <strong>${item.retailer_name}</strong> · ${item.retailer_location}
+              ${item.retailer_phone ? `· <a href="tel:${item.retailer_phone}" style="color:var(--clr-accent)">${item.retailer_phone}</a>` : ''}
+            </div>
+          </div>
+          <span class="badge ${currentStatus}">${currentStatus}</span>
+        </div>
+        <div class="track_item_body">
+          <div class="timeline">${timelineHtml}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  el.innerHTML = summaryHtml + itemsHtml;
+}
+
+function fmtDate(d)     { return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'}); }
+function fmtDateTime(d) { return new Date(d).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/assets/20251102_172020.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/CSS/retailer.css" />
+  <title>Become a Retailer — Sweet Feet</title>
+</head>
+<body>
+<div class="auth_wrap">
+  <div class="auth_panel_left">
+    <a class="auth_logo" href="/index.html">
+      <img src="/assets/images (7).jpeg" alt="Sweet Feet" />
+      <span>Sweet Feet</span>
+    </a>
+    <h2 class="auth_headline">Sell your shoes<br /><span>to thousands.</span></h2>
+    <p class="auth_sub">Join the Sweet Feet marketplace and reach customers across Nigeria. List your products, chat with buyers, and track every order from your own retailer dashboard.</p>
+  </div>
+  <div class="auth_panel_right">
+    <div class="auth_card">
+      <h2>Retailer Registration</h2>
+      <p class="auth_card_sub">Fill in your business details. Once submitted, your account will be reviewed and approved by our team within 24 hours.</p>
+      <div class="msg_error"   id="msgError"></div>
+      <div class="msg_success" id="msgSuccess"></div>
+      <form id="retailerSignupForm">
+        <div class="form_group">
+          <label for="business_name">Business Name</label>
+          <input id="business_name" type="text" placeholder="e.g. Lagos Kicks" required />
+        </div>
+        <div class="form_group">
+          <label for="email">Business Email</label>
+          <input id="email" type="email" placeholder="e.g. info@lagoskicks.com" required />
+        </div>
+        <div class="form_group">
+          <label for="password">Password</label>
+          <input id="password" type="password" placeholder="Minimum 6 characters" required />
+        </div>
+        <div class="form_group">
+          <label for="phone">Phone Number</label>
+          <input id="phone" type="tel" placeholder="e.g. 08012345678" required />
+        </div>
+        <div class="form_group">
+          <label for="location">Business Location</label>
+          <input id="location" type="text" placeholder="e.g. Ikeja, Lagos" required />
+        </div>
+        <div class="form_group">
+          <label for="bio">Store Description</label>
+          <textarea id="bio" placeholder="Tell customers about your store and the shoes you sell…"></textarea>
+        </div>
+        <button type="submit" class="btn_primary" id="submitBtn">Submit Registration →</button>
+      </form>
+      <p class="auth_footer_link">Already approved? <a href="/retailer/login.html">Log in here</a></p>
+    </div>
+  </div>
+</div>
+<script>
+const form = document.getElementById('retailerSignupForm');
+const errorEl = document.getElementById('msgError');
+const successEl = document.getElementById('msgSuccess');
+const submitBtn = document.getElementById('submitBtn');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  errorEl.style.display = successEl.style.display = 'none';
+  submitBtn.textContent = 'Submitting…';
+  submitBtn.disabled = true;
+
+  const payload = {
+    business_name: document.getElementById('business_name').value.trim(),
+    email:    document.getElementById('email').value.trim(),
+    password: document.getElementById('password').value,
+    phone:    document.getElementById('phone').value.trim(),
+    location: document.getElementById('location').value.trim(),
+    bio:      document.getElementById('bio').value.trim(),
+  };
+
+  try {
+    const res  = await fetch('/sweetfeet/api/retailer_signup.php', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+    const data = await res.json();
+    if (data.success) {
+      form.style.display = 'none';
+      successEl.textContent = data.message;
+      successEl.style.display = 'block';
+    } else {
+      errorEl.textContent = data.error;
+      errorEl.style.display = 'block';
+      submitBtn.textContent = 'Submit Registration →';
+      submitBtn.disabled = false;
+    }
+  } catch {
+    errorEl.textContent = 'Network error. Please check your connection.';
+    errorEl.style.display = 'block';
+    submitBtn.textContent = 'Submit Registration →';
+    submitBtn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>

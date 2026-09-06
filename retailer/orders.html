@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/assets/20251102_172020.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/CSS/retailer.css" />
+  <title>Orders — Sweet Feet Retailer</title>
+</head>
+<body>
+
+<div class="dashboard_wrap">
+
+  <!-- Sidebar -->
+  <nav class="sidebar_nav">
+    <a class="sidebar_logo" href="/index.html">
+      <img src="/assets/images (7).jpeg" alt="Sweet Feet" />
+      <span>Sweet Feet</span>
+    </a>
+    <span class="sidebar_label">Main</span>
+    <a class="sidebar_link" href="/retailer/dashboard.html"><span class="icon">📊</span> Dashboard</a>
+    <a class="sidebar_link" href="/retailer/products.html"><span class="icon">👟</span> My Products</a>
+    <a class="sidebar_link active" href="/retailer/orders.html"><span class="icon">📦</span> Orders</a>
+    <a class="sidebar_link" href="/retailer/chat.html"><span class="icon">💬</span> Messages</a>
+    <div class="sidebar_divider"></div>
+    <span class="sidebar_label">Account</span>
+    <a class="sidebar_link" href="/index.html" target="_blank"><span class="icon">🌐</span> View Store</a>
+    <a class="sidebar_link" href="#" id="logoutBtn"><span class="icon">🚪</span> Log Out</a>
+  </nav>
+
+  <!-- Main -->
+  <div class="main_content">
+    <div class="page_header">
+      <div>
+        <h1>Orders</h1>
+        <p>View all incoming orders and update their delivery status.</p>
+      </div>
+    </div>
+
+    <div class="page_body">
+
+      <!-- Filter tabs -->
+      <div style="display:flex;gap:.6rem;margin-bottom:2rem;flex-wrap:wrap;">
+        <button class="btn_sm dark filter_tab active" data-status="all">All</button>
+        <button class="btn_sm outline filter_tab" data-status="placed">Placed</button>
+        <button class="btn_sm outline filter_tab" data-status="confirmed">Confirmed</button>
+        <button class="btn_sm outline filter_tab" data-status="packed">Packed</button>
+        <button class="btn_sm outline filter_tab" data-status="dispatched">Dispatched</button>
+        <button class="btn_sm outline filter_tab" data-status="delivered">Delivered</button>
+      </div>
+
+      <div class="table_wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Order Ref</th>
+              <th>Customer</th>
+              <th>Product</th>
+              <th>Qty · Size</th>
+              <th>Subtotal</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="ordersBody">
+            <tr><td colspan="8" style="text-align:center;padding:3rem;color:var(--clr-muted)">Loading orders…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Update status modal -->
+<div class="modal_overlay" id="statusModal">
+  <div class="modal">
+    <h3>Update Order Status</h3>
+    <p style="font-size:1.2rem;color:var(--clr-muted);margin-bottom:2rem" id="statusModalMeta"></p>
+
+    <div class="form_group">
+      <label>New Status</label>
+      <select id="newStatusSelect">
+        <option value="confirmed">Confirmed</option>
+        <option value="packed">Packed</option>
+        <option value="dispatched">Dispatched</option>
+        <option value="delivered">Delivered</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+    </div>
+
+    <div class="form_group">
+      <label>Note to Customer (optional)</label>
+      <textarea id="statusNote" placeholder="e.g. Your package has been picked up by GIG Logistics…"></textarea>
+    </div>
+
+    <div class="msg_error" id="statusError"></div>
+
+    <div class="modal_footer">
+      <button class="btn_sm outline" id="statusCancelBtn">Cancel</button>
+      <button class="btn_sm dark" id="statusSaveBtn">Update Status</button>
+    </div>
+  </div>
+</div>
+
+<script>
+if (!localStorage.getItem('sf_retailer_name')) window.location.href = '/retailer/login.html';
+
+let allOrders   = [];
+let currentItemId = null;
+let activeFilter  = 'all';
+
+function fmtDate(d) { return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
+
+// ── Load orders ────────────────────────────────────────────
+async function loadOrders() {
+  try {
+    const res  = await fetch('/sweetfeet/api/tracking.php?retailer_orders=1');
+    allOrders  = await res.json();
+    renderTable();
+  } catch { document.getElementById('ordersBody').innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--clr-muted)">Could not load orders.</td></tr>'; }
+}
+
+// ── Render table ───────────────────────────────────────────
+function renderTable() {
+  const filtered = activeFilter === 'all' ? allOrders : allOrders.filter(o => o.status === activeFilter);
+  const tbody    = document.getElementById('ordersBody');
+
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:3rem;color:var(--clr-muted)">No orders found.</td></tr>';
+    return;
+  }
+
+  // Next allowed status labels
+  const nextStatus = { placed:'confirmed', confirmed:'packed', packed:'dispatched', dispatched:'delivered' };
+
+  tbody.innerHTML = filtered.map(o => {
+    const canUpdate = !['delivered','cancelled'].includes(o.status);
+    return `<tr>
+      <td style="font-family:monospace;font-size:1.1rem">${o.paystack_ref || '—'}</td>
+      <td>
+        <div style="font-weight:600">${o.customer_name || 'Guest'}</div>
+        <div style="font-size:1.1rem;color:var(--clr-muted)">${o.customer_phone || ''}</div>
+      </td>
+      <td>${o.product_name}</td>
+      <td>${o.quantity} · ${o.size || '—'}</td>
+      <td>₦${parseFloat(o.subtotal).toFixed(2)}</td>
+      <td><span class="badge ${o.status}">${o.status}</span></td>
+      <td>${fmtDate(o.ordered_at)}</td>
+      <td>
+        ${canUpdate
+          ? `<button class="btn_sm dark" onclick="openStatusModal(${o.id},'${o.status}','${o.product_name}','${o.customer_name||'Guest'}')">Update →</button>`
+          : `<span style="font-size:1.1rem;color:var(--clr-muted)">${o.status==='delivered'?'✓ Done':'Cancelled'}</span>`
+        }
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ── Filter tabs ────────────────────────────────────────────
+document.querySelectorAll('.filter_tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.filter_tab').forEach(t => { t.classList.remove('active','dark'); t.classList.add('outline'); });
+    tab.classList.add('active','dark'); tab.classList.remove('outline');
+    activeFilter = tab.dataset.status;
+    renderTable();
+  });
+});
+
+// ── Status modal ───────────────────────────────────────────
+const statusFlow = { placed:'confirmed', confirmed:'packed', packed:'dispatched', dispatched:'delivered' };
+
+function openStatusModal(itemId, currentStatus, productName, customerName) {
+  currentItemId = itemId;
+  document.getElementById('statusModalMeta').textContent = `${productName} — ordered by ${customerName}`;
+
+  const select = document.getElementById('newStatusSelect');
+  const next   = statusFlow[currentStatus];
+  Array.from(select.options).forEach(opt => {
+    opt.selected = opt.value === next;
+  });
+
+  document.getElementById('statusNote').value  = '';
+  document.getElementById('statusError').style.display = 'none';
+  document.getElementById('statusModal').classList.add('open');
+}
+
+document.getElementById('statusCancelBtn').addEventListener('click', () => document.getElementById('statusModal').classList.remove('open'));
+document.getElementById('statusModal').addEventListener('click', (e) => { if (e.target===document.getElementById('statusModal')) document.getElementById('statusModal').classList.remove('open'); });
+
+document.getElementById('statusSaveBtn').addEventListener('click', async () => {
+  const saveBtn  = document.getElementById('statusSaveBtn');
+  const errorEl  = document.getElementById('statusError');
+  const newStatus = document.getElementById('newStatusSelect').value;
+  const note      = document.getElementById('statusNote').value.trim();
+
+  errorEl.style.display = 'none';
+  saveBtn.textContent   = 'Updating…';
+  saveBtn.disabled      = true;
+
+  try {
+    const res  = await fetch('/sweetfeet/api/tracking.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ order_item_id: currentItemId, status: newStatus, note })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      document.getElementById('statusModal').classList.remove('open');
+      loadOrders();
+    } else {
+      errorEl.textContent = data.error;
+      errorEl.style.display = 'block';
+    }
+  } catch {
+    errorEl.textContent = 'Network error. Please try again.';
+    errorEl.style.display = 'block';
+  }
+
+  saveBtn.textContent = 'Update Status';
+  saveBtn.disabled    = false;
+});
+
+// ── Logout ─────────────────────────────────────────────────
+document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+  e.preventDefault();
+  await fetch('/sweetfeet/api/logout.php', { method: 'POST' });
+  localStorage.removeItem('sf_retailer_id');
+  localStorage.removeItem('sf_retailer_name');
+  window.location.href = '/sweetfeet/retailer/login.html';
+});
+
+loadOrders();
+</script>
+</body>
+</html>
