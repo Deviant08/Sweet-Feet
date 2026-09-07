@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/assets/20251102_172020.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/CSS/retailer.css" />
+  <title>My Products — Sweet Feet Retailer</title>
+</head>
+<body>
+
+<div class="dashboard_wrap">
+
+  <!-- Sidebar -->
+  <nav class="sidebar_nav">
+    <a class="sidebar_logo" href="/index.html">
+      <img src="/assets/images (7).jpeg" alt="Sweet Feet" />
+      <span>Sweet Feet</span>
+    </a>
+    <span class="sidebar_label">Main</span>
+    <a class="sidebar_link" href="/retailer/dashboard.html"><span class="icon">📊</span> Dashboard</a>
+    <a class="sidebar_link active" href="/retailer/products.html"><span class="icon">👟</span> My Products</a>
+    <a class="sidebar_link" href="/retailer/orders.html"><span class="icon">📦</span> Orders</a>
+    <a class="sidebar_link" href="/retailer/chat.html"><span class="icon">💬</span> Messages</a>
+    <div class="sidebar_divider"></div>
+    <span class="sidebar_label">Account</span>
+    <a class="sidebar_link" href="/index.html" target="_blank"><span class="icon">🌐</span> View Store</a>
+    <a class="sidebar_link" href="#" id="logoutBtn"><span class="icon">🚪</span> Log Out</a>
+  </nav>
+
+  <!-- Main -->
+  <div class="main_content">
+    <div class="page_header">
+      <div>
+        <h1>My Products</h1>
+        <p>Manage your shoe listings. Add, edit, or remove products from your store.</p>
+      </div>
+      <div class="header_actions">
+        <button class="btn_sm dark" id="addProductBtn">+ Add Product</button>
+      </div>
+    </div>
+
+    <div class="page_body">
+      <div class="product_manage_grid" id="productGrid">
+        <div class="empty_state">
+          <div class="empty_icon">⏳</div>
+          <p>Loading your products…</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add / Edit Modal -->
+<div class="modal_overlay" id="productModal">
+  <div class="modal">
+    <h3 id="modalTitle">Add New Product</h3>
+    <input type="hidden" id="editProductId" value="" />
+
+    <div class="form_group">
+      <label>Product Name</label>
+      <input type="text" id="pName" placeholder="e.g. Pro Grip Trainers" required />
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div class="form_group">
+        <label>Category</label>
+        <select id="pCategory">
+          <option value="trainers">Trainers</option>
+          <option value="casual">Casual</option>
+          <option value="corporate">Corporate</option>
+          <option value="loafers">Loafers</option>
+          <option value="runners">Runners</option>
+          <option value="sandals">Sandals</option>
+          <option value="boots">Boots</option>
+        </select>
+      </div>
+      <div class="form_group">
+        <label>Gender</label>
+        <select id="pGender">
+          <option value="unisex">Unisex</option>
+          <option value="men">Men</option>
+          <option value="women">Women</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div class="form_group">
+        <label>Price (₦)</label>
+        <input type="number" id="pPrice" placeholder="e.g. 12000" min="0" step="0.01" required />
+      </div>
+      <div class="form_group">
+        <label>Old Price (₦) — optional</label>
+        <input type="number" id="pOldPrice" placeholder="e.g. 15000" min="0" step="0.01" />
+      </div>
+    </div>
+    <div class="form_group">
+      <label>Colour</label>
+      <select id="pColor">
+        <option value="black">Black</option>
+        <option value="white">White</option>
+        <option value="brown">Brown</option>
+        <option value="multi">Multi</option>
+      </select>
+    </div>
+    <div class="form_group">
+      <label>Available Sizes (comma separated)</label>
+      <input type="text" id="pSizes" placeholder="e.g. 39,40,41,42,43" required />
+    </div>
+    <div class="form_group">
+      <label>Product Image URL</label>
+      <input type="url" id="pImg" placeholder="https://example.com/shoe.jpg" required />
+    </div>
+
+    <div class="msg_error" id="modalError"></div>
+
+    <div class="modal_footer">
+      <button class="btn_sm outline" id="modalCancelBtn">Cancel</button>
+      <button class="btn_sm dark" id="modalSaveBtn">Save Product</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Auth guard
+const retailerName = localStorage.getItem('sf_retailer_name');
+if (!retailerName) window.location.href = '/retailer/login.html';
+
+const grid       = document.getElementById('productGrid');
+const modal      = document.getElementById('productModal');
+const modalError = document.getElementById('modalError');
+
+// ── Load products ──────────────────────────────────────────
+async function loadProducts() {
+  try {
+    const res  = await fetch('/sweetfeet/api/products.php?retailer=1');
+    const data = await res.json();
+    if (!data.length) {
+      grid.innerHTML = `<div class="empty_state"><div class="empty_icon">👟</div><p>You have no products listed yet.</p><small>Click "+ Add Product" to get started.</small></div>`;
+      return;
+    }
+    grid.innerHTML = data.map(p => `
+      <div class="product_manage_card">
+        <img src="${p.img}" alt="${p.name}" />
+        <div class="card_info">
+          <h4>${p.name}</h4>
+          <p class="card_meta">${p.category} · ${p.gender} · ₦${parseFloat(p.price).toFixed(2)}</p>
+          <p class="card_meta">Sizes: ${p.sizes.join(', ')}</p>
+          <p class="card_meta">Status: <span class="badge ${p.is_active?'approved':'cancelled'}">${p.is_active?'Active':'Hidden'}</span></p>
+          <div class="card_actions">
+            <button class="btn_sm outline" onclick="openEdit(${JSON.stringify(p).replace(/"/g,'&quot;')})">Edit</button>
+            <button class="btn_sm ${p.is_active?'danger':'success'}" onclick="toggleActive(${p.id},${p.is_active})">${p.is_active?'Hide':'Show'}</button>
+          </div>
+        </div>
+      </div>`).join('');
+  } catch (err) {
+    grid.innerHTML = '<div class="empty_state"><p>Could not load products.</p></div>';
+  }
+}
+
+// ── Open add modal ─────────────────────────────────────────
+document.getElementById('addProductBtn').addEventListener('click', () => {
+  document.getElementById('editProductId').value = '';
+  document.getElementById('modalTitle').textContent = 'Add New Product';
+  document.getElementById('pName').value = '';
+  document.getElementById('pPrice').value = '';
+  document.getElementById('pOldPrice').value = '';
+  document.getElementById('pSizes').value = '';
+  document.getElementById('pImg').value = '';
+  modalError.style.display = 'none';
+  modal.classList.add('open');
+});
+
+// ── Open edit modal ────────────────────────────────────────
+function openEdit(p) {
+  document.getElementById('editProductId').value  = p.id;
+  document.getElementById('modalTitle').textContent = 'Edit Product';
+  document.getElementById('pName').value     = p.name;
+  document.getElementById('pCategory').value = p.category;
+  document.getElementById('pGender').value   = p.gender;
+  document.getElementById('pPrice').value    = p.price;
+  document.getElementById('pOldPrice').value = p.old_price || '';
+  document.getElementById('pColor').value    = p.color;
+  document.getElementById('pSizes').value    = p.sizes.join(',');
+  document.getElementById('pImg').value      = p.img;
+  modalError.style.display = 'none';
+  modal.classList.add('open');
+}
+
+// ── Close modal ────────────────────────────────────────────
+document.getElementById('modalCancelBtn').addEventListener('click', () => modal.classList.remove('open'));
+modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('open'); });
+
+// ── Save product ───────────────────────────────────────────
+document.getElementById('modalSaveBtn').addEventListener('click', async () => {
+  const editId   = document.getElementById('editProductId').value;
+  const saveBtn  = document.getElementById('modalSaveBtn');
+  modalError.style.display = 'none';
+  saveBtn.textContent = 'Saving…';
+  saveBtn.disabled = true;
+
+  const payload = {
+    name:      document.getElementById('pName').value.trim(),
+    category:  document.getElementById('pCategory').value,
+    gender:    document.getElementById('pGender').value,
+    price:     parseFloat(document.getElementById('pPrice').value),
+    old_price: document.getElementById('pOldPrice').value ? parseFloat(document.getElementById('pOldPrice').value) : null,
+    color:     document.getElementById('pColor').value,
+    sizes:     document.getElementById('pSizes').value.split(',').map(s=>s.trim()).filter(Boolean),
+    img:       document.getElementById('pImg').value.trim(),
+  };
+  if (editId) payload.id = parseInt(editId);
+
+  try {
+    const res  = await fetch('/sweetfeet/api/products.php', { method: editId ? 'PUT' : 'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+    const data = await res.json();
+    if (data.success) {
+      modal.classList.remove('open');
+      loadProducts();
+    } else {
+      modalError.textContent = data.error;
+      modalError.style.display = 'block';
+    }
+  } catch { modalError.textContent = 'Network error.'; modalError.style.display = 'block'; }
+  saveBtn.textContent = 'Save Product';
+  saveBtn.disabled = false;
+});
+
+// ── Toggle active ──────────────────────────────────────────
+async function toggleActive(id, currentlyActive) {
+  try {
+    const res  = await fetch('/sweetfeet/api/products.php', { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id, is_active: currentlyActive ? 0 : 1}) });
+    const data = await res.json();
+    if (data.success) loadProducts();
+    else alert(data.error);
+  } catch { alert('Network error.'); }
+}
+
+// ── Logout ─────────────────────────────────────────────────
+document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+  e.preventDefault();
+  await fetch('/sweetfeet/api/logout.php', {method:'POST'});
+  localStorage.removeItem('sf_retailer_id');
+  localStorage.removeItem('sf_retailer_name');
+  window.location.href = '/sweetfeet/retailer/login.html';
+});
+
+loadProducts();
+</script>
+</body>
+</html>

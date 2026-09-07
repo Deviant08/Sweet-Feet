@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/assets/20251102_172020.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/CSS/retailer.css" />
+  <title>Admin Dashboard — Sweet Feet</title>
+</head>
+<body>
+
+<div class="dashboard_wrap">
+
+  <!-- Sidebar -->
+  <nav class="sidebar_nav">
+    <a class="sidebar_logo" href="/index.html">
+      <img src="/assets/images (7).jpeg" alt="Sweet Feet" />
+      <span>Sweet Feet</span>
+    </a>
+    <span class="sidebar_label">Admin</span>
+    <a class="sidebar_link active" href="/admin/dashboard.html"><span class="icon">📊</span> Overview</a>
+    <a class="sidebar_link" href="/admin/retailers.html"><span class="icon">🏪</span> Retailers <span class="badge pending" id="pendingBadge" style="margin-left:auto;display:none"></span></a>
+    <div class="sidebar_divider"></div>
+    <span class="sidebar_label">Platform</span>
+    <a class="sidebar_link" href="/index.html" target="_blank"><span class="icon">🌐</span> View Site</a>
+    <a class="sidebar_link" href="#" id="logoutBtn"><span class="icon">🚪</span> Log Out</a>
+  </nav>
+
+  <!-- Main -->
+  <div class="main_content">
+    <div class="page_header">
+      <div>
+        <h1>Platform Overview</h1>
+        <p>Sweet Feet marketplace at a glance.</p>
+      </div>
+    </div>
+
+    <div class="page_body">
+
+      <!-- Stats -->
+      <div class="stats_grid" id="statsGrid">
+        <div class="stat_card"><div class="stat_icon">⏳</div><div class="stat_value">—</div><div class="stat_label">Loading…</div></div>
+      </div>
+
+      <!-- Recent orders -->
+      <div class="table_wrap">
+        <div class="table_header">
+          <h3>Recent Orders</h3>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Reference</th>
+              <th>Customer</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="ordersBody">
+            <tr><td colspan="5" style="text-align:center;padding:3rem;color:var(--clr-muted)">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Login modal (shown if not authenticated) -->
+<div class="modal_overlay open" id="loginModal">
+  <div class="modal">
+    <h3>Admin Login</h3>
+    <div class="form_group" style="margin-top:2rem">
+      <label>Email</label>
+      <input type="email" id="adminEmail" placeholder="admin@sweetfeet.com" />
+    </div>
+    <div class="form_group">
+      <label>Password</label>
+      <input type="password" id="adminPassword" placeholder="Admin password" />
+    </div>
+    <div class="msg_error" id="loginError"></div>
+    <div class="modal_footer">
+      <button class="btn_sm dark" id="adminLoginBtn" style="width:100%">Log In →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let isAdminLoggedIn = false;
+
+// ── Admin login ────────────────────────────────────────────
+document.getElementById('adminLoginBtn').addEventListener('click', async () => {
+  const errorEl = document.getElementById('loginError');
+  const btn     = document.getElementById('adminLoginBtn');
+  errorEl.style.display = 'none';
+  btn.textContent = 'Logging in…'; btn.disabled = true;
+
+  try {
+    const res  = await fetch('/sweetfeet/api/admin.php?action=login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email:    document.getElementById('adminEmail').value.trim(),
+        password: document.getElementById('adminPassword').value
+      })
+    });
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById('loginModal').classList.remove('open');
+      isAdminLoggedIn = true;
+      loadDashboard();
+    } else {
+      errorEl.textContent = data.error;
+      errorEl.style.display = 'block';
+    }
+  } catch {
+    errorEl.textContent = 'Network error.';
+    errorEl.style.display = 'block';
+  }
+  btn.textContent = 'Log In →'; btn.disabled = false;
+});
+
+// ── Load dashboard ─────────────────────────────────────────
+async function loadDashboard() {
+  try {
+    // Stats
+    const sRes  = await fetch('/sweetfeet/api/admin.php?action=stats');
+    const stats = await sRes.json();
+
+    if (stats.error) {
+      // Session expired — show login again
+      document.getElementById('loginModal').classList.add('open');
+      return;
+    }
+
+    // Show pending badge on sidebar
+    if (stats.pending_retailers > 0) {
+      const badge = document.getElementById('pendingBadge');
+      badge.textContent = stats.pending_retailers;
+      badge.style.display = 'inline-flex';
+    }
+
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat_card"><div class="stat_icon">🏪</div><div class="stat_value">${stats.total_retailers}</div><div class="stat_label">Approved Retailers</div></div>
+      <div class="stat_card"><div class="stat_icon">⏳</div><div class="stat_value">${stats.pending_retailers}</div><div class="stat_label">Pending Approvals</div></div>
+      <div class="stat_card"><div class="stat_icon">👥</div><div class="stat_value">${stats.total_customers}</div><div class="stat_label">Customers</div></div>
+      <div class="stat_card"><div class="stat_icon">📦</div><div class="stat_value">${stats.total_orders}</div><div class="stat_label">Total Orders</div></div>
+      <div class="stat_card"><div class="stat_icon">💰</div><div class="stat_value">₦${parseFloat(stats.total_revenue).toLocaleString('en-NG',{minimumFractionDigits:2})}</div><div class="stat_label">Total Revenue</div></div>
+      <div class="stat_card"><div class="stat_icon">👟</div><div class="stat_value">${stats.total_products}</div><div class="stat_label">Active Listings</div></div>
+      <div class="stat_card"><div class="stat_icon">💬</div><div class="stat_value">${stats.total_messages}</div><div class="stat_label">Messages Sent</div></div>
+    `;
+
+    // Orders
+    const oRes   = await fetch('/sweetfeet/api/admin.php?action=orders');
+    const orders = await oRes.json();
+    const tbody  = document.getElementById('ordersBody');
+
+    if (!orders.length) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:3rem;color:var(--clr-muted)">No orders yet.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = orders.map(o => `
+      <tr>
+        <td style="font-family:monospace;font-size:1.1rem">${o.paystack_ref||'—'}</td>
+        <td>${o.customer_name||'Guest'}<br><small style="color:var(--clr-muted)">${o.customer_email||''}</small></td>
+        <td>₦${parseFloat(o.total).toFixed(2)}</td>
+        <td><span class="badge ${o.status}">${o.status}</span></td>
+        <td>${fmtDate(o.ordered_at)}</td>
+      </tr>`).join('');
+
+  } catch (err) { console.error(err); }
+}
+
+// ── Logout ─────────────────────────────────────────────────
+document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+  e.preventDefault();
+  await fetch('/sweetfeet/api/logout.php', { method:'POST' });
+  window.location.reload();
+});
+
+function fmtDate(d) { return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
+
+// Try loading dashboard — if session expired the server will
+// return an error and we'll show the login modal
+loadDashboard();
+</script>
+</body>
+</html>

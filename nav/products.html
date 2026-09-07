@@ -3,9 +3,504 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sweet Feet | Shop</title>
+    <link rel="icon" type="image/jpeg" sizes="32x32" href="/assets/20251102_172020.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght,YOPQ@100..900,300&family=Public+Sans:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/CSS/products.css">
+    <link rel="stylesheet" href="/CSS/queries.css">
+    <title>Shop &mdash; Sweet Feet</title>
+
+   
   </head>
+
   <body>
-    shop
+
+    <!-- ── Nav ── -->
+    <header>
+      <div class="nav_bar">
+        <a class="logo" href="/index.html">
+          <img class="logo_img" src="/assets/images (7).jpeg" alt="Sweet Feet logo" />
+          <h1 class="logo_txt">Sweet Feet</h1>
+        </a>
+        <nav class="nav">
+          <a href="/nav/signup.html">Sign Up</a>
+          <a href="/nav/login.html">Login</a>
+          <a href="/nav/products.html" class="active">Shop</a>
+          <a href="/nav/feedback.html">Feedback</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- ── Shop hero ── -->
+    <section class="shop_hero">
+      <div>
+        <h1>Find your <span>perfect pair.</span></h1>
+        <p>Browse our full collection — quality footwear for every stride, every style, every price point.</p>
+      </div>
+      <div class="hero_count" aria-hidden="true">20+</div>
+    </section>
+
+    <!-- ── Main shop layout ── -->
+    <div class="shop_wrapper">
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <h3>Filters</h3>
+
+        <div class="filter_group">
+          <h4>Gender</h4>
+          <div class="filter_chips">
+            <button class="chip active" data-filter="gender" data-value="all">All</button>
+            <button class="chip" data-filter="gender" data-value="men">Men</button>
+            <button class="chip" data-filter="gender" data-value="women">Women</button>
+            <button class="chip" data-filter="gender" data-value="unisex">Unisex</button>
+          </div>
+        </div>
+
+        <div class="filter_group">
+          <h4>Price Range</h4>
+          <div class="price_range">
+            <input type="range" min="0" max="50" value="50" id="priceSlider" />
+            <div class="price_labels">
+              <span>₦0</span>
+              <span id="priceLabel">Up to ₦50</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="filter_group">
+          <h4>Colour</h4>
+          <div class="filter_chips">
+            <button class="chip active" data-filter="color" data-value="all">All</button>
+            <button class="chip" data-filter="color" data-value="black">Black</button>
+            <button class="chip" data-filter="color" data-value="white">White</button>
+            <button class="chip" data-filter="color" data-value="brown">Brown</button>
+            <button class="chip" data-filter="color" data-value="multi">Multi</button>
+          </div>
+        </div>
+
+        <div class="filter_group">
+          <h4>Rating</h4>
+          <div class="filter_chips">
+            <button class="chip active" data-filter="rating" data-value="all">All</button>
+            <button class="chip" data-filter="rating" data-value="4">4★ & up</button>
+            <button class="chip" data-filter="rating" data-value="4.5">4.5★ & up</button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Products area -->
+      <section class="products_area">
+        <div class="toolbar">
+          <div class="toolbar_left">
+            <div class="search_bar">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="color:var(--clr-muted)">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+              <input type="text" id="searchInput" placeholder="Search shoes…" />
+            </div>
+            <span class="result_count" id="resultCount">20 products</span>
+          </div>
+          <select class="sort_select" id="sortSelect">
+            <option value="default">Sort: Featured</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
+            <option value="rating">Top Rated</option>
+            <option value="name">Name A–Z</option>
+          </select>
+        </div>
+
+        <!-- Category tabs -->
+        <div class="cat_tabs" role="tablist">
+          <button class="cat_tab active" data-cat="all">All</button>
+          <button class="cat_tab" data-cat="trainers">Trainers</button>
+          <button class="cat_tab" data-cat="casual">Casual</button>
+          <button class="cat_tab" data-cat="corporate">Corporate</button>
+          <button class="cat_tab" data-cat="loafers">Loafers</button>
+          <button class="cat_tab" data-cat="runners">Runners</button>
+          <button class="cat_tab" data-cat="sandals">Sandals</button>
+          <button class="cat_tab" data-cat="boots">Boots</button>
+        </div>
+
+        <!-- Product grid -->
+        <div class="product_grid" id="productGrid">
+
+          <!-- Cards are injected by JS below -->
+
+        </div>
+
+        <div class="empty_state" id="emptyState">
+          <div style="font-size:2rem">👟</div>
+          <p>No shoes match your filters.</p>
+          <p style="font-size:.85rem;margin-top:.25rem">Try adjusting your search or filters.</p>
+        </div>
+
+        <div class="pagination" id="pagination">
+          <button class="page_btn active">1</button>
+          <button class="page_btn">2</button>
+          <button class="page_btn">3</button>
+          <button class="page_btn">›</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- Cart FAB -->
+    <div class="cart_icon_wrap">
+      <button class="cart_fab" id="cartFab" aria-label="Open cart">
+        🛒
+        <span class="cart_count hidden" id="cartCount">0</span>
+      </button>
+    </div>
+
+    <!-- Cart drawer -->
+    <div class="drawer_overlay" id="drawerOverlay"></div>
+    <div class="cart_drawer" id="cartDrawer">
+      <div class="drawer_header">
+        <h2>Your Cart</h2>
+        <button class="drawer_close" id="drawerClose">✕</button>
+      </div>
+      <div class="drawer_items" id="drawerItems">
+        <div class="drawer_empty" id="drawerEmpty">
+          <span class="empty_icon">🛒</span>
+          <p>Your cart is empty.</p>
+          <p style="font-size:.8rem;color:var(--clr-muted)">Add a pair to get started.</p>
+        </div>
+      </div>
+      <div class="drawer_footer">
+        <div class="subtotal_row">
+          <span>Subtotal</span>
+          <span class="subtotal_amount" id="subtotalAmount">₦0</span>
+        </div>
+        <button class="btn_checkout" onclick="alert('Proceeding to checkout — connect your payment gateway here.')">
+          Proceed to Checkout →
+        </button>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- ── Footer ── -->
+    <footer>
+      <div class="footer">
+        <div class="footer_logo">
+          <a href="/index.html">
+            <img class="footer_img" src="/assets/20251102_172020.png" alt="Sweet Feet logo" />
+            <p class="footer_txt">Sweet Feet</p>
+          </a>
+        </div>
+        <div class="footer_links">
+          <a href="#">About Us</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">FAQ</a>
+          <a href="#">Contact Us</a>
+          <a href="#">Support</a>
+        </div>
+        <p class="copy">&copy; Created by Thee_10th. All rights reserved</p>
+      </div>
+    </footer>
+
+    <script>
+      // ── Product data ────────────────────────────────────
+      const products = [
+        {
+          id: 1, name: "Pro Grip Trainers", category: "trainers", gender: "unisex",
+          price: 10, oldPrice: null, rating: 4.3, ratingCount: 128, color: "white",
+          badge: "top", badgeLabel: "Top Pick",
+          img: "https://i.pinimg.com/1200x/a2/44/58/a2445825e5f5617fd76606d0151897fc.jpg",
+          sizes: [40, 41, 42, 43, 44]
+        },
+        {
+          id: 2, name: "Urban Casual Sneakers", category: "casual", gender: "men",
+          price: 13, oldPrice: 18, rating: 4.6, ratingCount: 214, color: "white",
+          badge: "sale", badgeLabel: "Sale",
+          img: "https://i.pinimg.com/1200x/95/d5/e1/95d5e18c05b0269621143c82adc57342.jpg",
+          sizes: [39, 40, 41, 42, 43]
+        },
+        {
+          id: 3, name: "Classic Oxford", category: "corporate", gender: "men",
+          price: 20, oldPrice: null, rating: 4.8, ratingCount: 87, color: "brown",
+          badge: null,
+          img: "https://png.pngtree.com/png-vector/20240910/ourmid/pngtree-mens-classic-brown-leather-dress-shoes-with-white-background-png-image_13804868.png",
+          sizes: [40, 41, 42, 43, 44, 45]
+        },
+        {
+          id: 4, name: "EverDay Loafers", category: "loafers", gender: "unisex",
+          price: 15.4, oldPrice: null, rating: 4.7, ratingCount: 302, color: "black",
+          badge: "top", badgeLabel: "Best Seller",
+          img: "https://www.shutterstock.com/image-photo/glossy-black-leather-loafers-casual-600nw-2508631511.jpg",
+          sizes: [38, 39, 40, 41, 42, 43]
+        },
+        {
+          id: 5, name: "Swift Runners", category: "runners", gender: "unisex",
+          price: 9, oldPrice: 14, rating: 4.2, ratingCount: 176, color: "multi",
+          badge: "sale", badgeLabel: "Sale",
+          img: "https://media.istockphoto.com/id/1249496770/photo/running-shoes.jpg?s=612x612&w=0&k=20&c=b4MahNlk4LH6H1ksJApfnlQ5ZPM3KGhI5i_yqhGD9c4=",
+          sizes: [39, 40, 41, 42, 43, 44]
+        },
+        {
+          id: 6, name: "Slide Comfort Sandals", category: "sandals", gender: "women",
+          price: 7.5, oldPrice: null, rating: 4.4, ratingCount: 94, color: "brown",
+          badge: "new", badgeLabel: "New",
+          img: "https://images.unsplash.com/photo-1603487742131-4160ec999306?w=600&auto=format",
+          sizes: [36, 37, 38, 39, 40]
+        },
+        {
+          id: 7, name: "Ankle Boot – Midnight", category: "boots", gender: "women",
+          price: 24, oldPrice: 30, rating: 4.9, ratingCount: 59, color: "black",
+          badge: "sale", badgeLabel: "Sale",
+          img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format",
+          sizes: [36, 37, 38, 39, 40, 41]
+        },
+        {
+          id: 8, name: "Canvas Low-Top", category: "casual", gender: "unisex",
+          price: 11, oldPrice: null, rating: 4.1, ratingCount: 245, color: "white",
+          badge: null,
+          img: "https://images.unsplash.com/photo-1463100099107-aa0980c362e6?w=600&auto=format",
+          sizes: [39, 40, 41, 42, 43]
+        },
+        {
+          id: 9, name: "Derby Brogue", category: "corporate", gender: "men",
+          price: 22, oldPrice: null, rating: 4.6, ratingCount: 43, color: "brown",
+          badge: "new", badgeLabel: "New",
+          img: "https://images.unsplash.com/photo-1582897085656-c636d006a246?w=600&auto=format",
+          sizes: [40, 41, 42, 43, 44]
+        },
+        {
+          id: 10, name: "Foam Runner", category: "runners", gender: "unisex",
+          price: 12, oldPrice: null, rating: 4.3, ratingCount: 190, color: "multi",
+          badge: null,
+          img: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&auto=format",
+          sizes: [39, 40, 41, 42, 43, 44]
+        },
+        {
+          id: 11, name: "Espadrille Mule", category: "sandals", gender: "women",
+          price: 8, oldPrice: 12, rating: 4.0, ratingCount: 77, color: "brown",
+          badge: "sale", badgeLabel: "Sale",
+          img: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format",
+          sizes: [36, 37, 38, 39, 40]
+        },
+        {
+          id: 12, name: "Chelsea Boot – Tan", category: "boots", gender: "men",
+          price: 26, oldPrice: null, rating: 4.8, ratingCount: 31, color: "brown",
+          badge: "new", badgeLabel: "New",
+          img: "https://images.unsplash.com/photo-1591086793610-5fa21aa7e4a5?w=600&auto=format",
+          sizes: [40, 41, 42, 43, 44, 45]
+        },
+      ];
+
+      // ── State ────────────────────────────────────────────
+      let state = {
+        cat: "all",
+        search: "",
+        sort: "default",
+        maxPrice: 50,
+        gender: "all",
+        color: "all",
+        rating: "all",
+        cart: []
+      };
+
+      // ── Render helpers ───────────────────────────────────
+      function stars(r) {
+        const full = Math.floor(r);
+        const half = r - full >= 0.5 ? 1 : 0;
+        return "★".repeat(full) + (half ? "☆" : "") + "☆".repeat(5 - full - half);
+      }
+
+      function formatPrice(p) { return `₦${p.toFixed(2)}`; }
+
+      function renderCard(p) {
+        return `
+          <article class="product_card" data-id="${p.id}">
+            ${p.badge ? `<span class="card_badge badge_${p.badge}">${p.badgeLabel}</span>` : ""}
+            <button class="card_wishlist" title="Save for later">♡</button>
+            <img class="card_img" src="${p.img}" alt="${p.name}" loading="lazy" />
+            <div class="card_body">
+              <span class="card_category">${p.category} · ${p.gender}</span>
+              <h2 class="card_name">${p.name}</h2>
+              <div class="card_rating">
+                <span class="stars">${stars(p.rating)}</span>
+                <span>${p.rating} (${p.ratingCount})</span>
+              </div>
+              <div class="card_sizes">
+                ${p.sizes.map(s => `<span class="size_dot">${s}</span>`).join("")}
+              </div>
+              <div class="card_footer">
+                <div class="card_price">
+                  ${formatPrice(p.price)}
+                  ${p.oldPrice ? `<span class="old_price">${formatPrice(p.oldPrice)}</span>` : ""}
+                </div>
+                <button class="btn_order" data-id="${p.id}">Add to cart</button>
+              </div>
+            </div>
+          </article>`;
+      }
+
+      function getFiltered() {
+        let list = [...products];
+        if (state.cat !== "all") list = list.filter(p => p.category === state.cat);
+        if (state.gender !== "all") list = list.filter(p => p.gender === state.gender || p.gender === "unisex");
+        if (state.color !== "all") list = list.filter(p => p.color === state.color);
+        if (state.rating !== "all") list = list.filter(p => p.rating >= parseFloat(state.rating));
+        list = list.filter(p => p.price <= state.maxPrice);
+        if (state.search) list = list.filter(p => p.name.toLowerCase().includes(state.search.toLowerCase()) || p.category.toLowerCase().includes(state.search.toLowerCase()));
+        if (state.sort === "price_asc") list.sort((a, b) => a.price - b.price);
+        else if (state.sort === "price_desc") list.sort((a, b) => b.price - a.price);
+        else if (state.sort === "rating") list.sort((a, b) => b.rating - a.rating);
+        else if (state.sort === "name") list.sort((a, b) => a.name.localeCompare(b.name));
+        return list;
+      }
+
+      function renderGrid() {
+        const list = getFiltered();
+        const grid = document.getElementById("productGrid");
+        const empty = document.getElementById("emptyState");
+        const count = document.getElementById("resultCount");
+        count.textContent = `${list.length} product${list.length !== 1 ? "s" : ""}`;
+        if (list.length === 0) {
+          grid.innerHTML = "";
+          empty.classList.add("visible");
+        } else {
+          empty.classList.remove("visible");
+          grid.innerHTML = list.map(renderCard).join("");
+          // attach add-to-cart
+          grid.querySelectorAll(".btn_order").forEach(btn => {
+            btn.addEventListener("click", () => addToCart(parseInt(btn.dataset.id)));
+          });
+        }
+      }
+
+      // ── Cart ─────────────────────────────────────────────
+      function addToCart(id) {
+        const product = products.find(p => p.id === id);
+        const existing = state.cart.find(i => i.id === id);
+        if (existing) { existing.qty += 1; }
+        else { state.cart.push({ ...product, qty: 1 }); }
+        updateCartUI();
+        showToast(`${product.name} added to cart`);
+      }
+
+      function removeFromCart(id) {
+        state.cart = state.cart.filter(i => i.id !== id);
+        updateCartUI();
+      }
+
+      function updateQty(id, delta) {
+        const item = state.cart.find(i => i.id === id);
+        if (!item) return;
+        item.qty += delta;
+        if (item.qty < 1) { removeFromCart(id); return; }
+        updateCartUI();
+      }
+
+      function updateCartUI() {
+        const total = state.cart.reduce((s, i) => s + i.qty, 0);
+        const subtotal = state.cart.reduce((s, i) => s + i.price * i.qty, 0);
+        const countEl = document.getElementById("cartCount");
+        const subtotalEl = document.getElementById("subtotalAmount");
+        const itemsEl = document.getElementById("drawerItems");
+        const emptyEl = document.getElementById("drawerEmpty");
+
+        countEl.textContent = total;
+        countEl.classList.toggle("hidden", total === 0);
+        subtotalEl.textContent = formatPrice(subtotal);
+
+        if (state.cart.length === 0) {
+          itemsEl.innerHTML = "";
+          itemsEl.appendChild(emptyEl);
+          emptyEl.style.display = "flex";
+        } else {
+          emptyEl.style.display = "none";
+          const cartHTML = state.cart.map(item => `
+            <div class="cart_item">
+              <img src="${item.img}" alt="${item.name}" />
+              <div class="cart_item_info">
+                <div class="cart_item_name">${item.name}</div>
+                <div class="cart_item_meta">${item.category}</div>
+                <div class="qty_control">
+                  <button class="qty_btn" data-id="${item.id}" data-delta="-1">−</button>
+                  <span class="qty_num">${item.qty}</span>
+                  <button class="qty_btn" data-id="${item.id}" data-delta="1">+</button>
+                </div>
+                <button class="cart_remove" data-id="${item.id}">Remove</button>
+              </div>
+              <div class="cart_item_price">${formatPrice(item.price * item.qty)}</div>
+            </div>`).join("");
+          itemsEl.innerHTML = cartHTML;
+          itemsEl.querySelectorAll(".qty_btn").forEach(b => {
+            b.addEventListener("click", () => updateQty(parseInt(b.dataset.id), parseInt(b.dataset.delta)));
+          });
+          itemsEl.querySelectorAll(".cart_remove").forEach(b => {
+            b.addEventListener("click", () => removeFromCart(parseInt(b.dataset.id)));
+          });
+        }
+      }
+
+      // ── Toast ────────────────────────────────────────────
+      function showToast(msg) {
+        const t = document.getElementById("toast");
+        t.textContent = msg;
+        t.classList.add("visible");
+        setTimeout(() => t.classList.remove("visible"), 2200);
+      }
+
+      // ── Event wiring ─────────────────────────────────────
+      document.getElementById("searchInput").addEventListener("input", e => {
+        state.search = e.target.value;
+        renderGrid();
+      });
+
+      document.getElementById("sortSelect").addEventListener("change", e => {
+        state.sort = e.target.value;
+        renderGrid();
+      });
+
+      document.querySelectorAll(".cat_tab").forEach(tab => {
+        tab.addEventListener("click", () => {
+          document.querySelectorAll(".cat_tab").forEach(t => t.classList.remove("active"));
+          tab.classList.add("active");
+          state.cat = tab.dataset.cat;
+          renderGrid();
+        });
+      });
+
+      document.querySelectorAll(".chip").forEach(chip => {
+        chip.addEventListener("click", () => {
+          const filter = chip.dataset.filter;
+          document.querySelectorAll(`.chip[data-filter="${filter}"]`).forEach(c => c.classList.remove("active"));
+          chip.classList.add("active");
+          state[filter] = chip.dataset.value;
+          renderGrid();
+        });
+      });
+
+      const priceSlider = document.getElementById("priceSlider");
+      priceSlider.addEventListener("input", () => {
+        state.maxPrice = parseFloat(priceSlider.value);
+        document.getElementById("priceLabel").textContent = `Up to ₦${priceSlider.value}`;
+        renderGrid();
+      });
+
+      // Cart drawer
+      document.getElementById("cartFab").addEventListener("click", () => {
+        document.getElementById("cartDrawer").classList.add("open");
+        document.getElementById("drawerOverlay").classList.add("visible");
+      });
+      function closeDrawer() {
+        document.getElementById("cartDrawer").classList.remove("open");
+        document.getElementById("drawerOverlay").classList.remove("visible");
+      }
+      document.getElementById("drawerClose").addEventListener("click", closeDrawer);
+      document.getElementById("drawerOverlay").addEventListener("click", closeDrawer);
+
+      // ── Init ─────────────────────────────────────────────
+      renderGrid();
+      updateCartUI();
+    </script>
   </body>
 </html>

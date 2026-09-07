@@ -28,7 +28,7 @@ body::-webkit-scrollbar {
 }
 
 p {
-  font-size: 2rem;
+  font-size: 1.4rem;
   font-weight: 500;
   line-height: 1.5;
 }
@@ -39,6 +39,11 @@ header {
   height: 100vh;
   max-width: 100%;
   color: #f7dfb8;
+    /* background-image: linear-gradient(#160c0296, #160c0296),
+    url("https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat; */
   box-shadow: inset 0px -20px 24px 4px #51432e6c;
   border-bottom: ridge #f9e4d0 2px;
   border-bottom-right-radius: 1.7rem;
@@ -47,12 +52,12 @@ header {
   padding-bottom: 0;
   /* animation-name: effects; */
   /* animation-duration: infinite; */
-  animation-duration: 10s;
+  /* animation-duration: 10s; */
   /* animation-timing-function: ease-in-out; */
-  animation-delay: 200ms;
-  animation-iteration-count: infinite;
-  /* -webkit-animation: slide-in-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)
-    both; */
+  /* animation-delay: 200ms; */
+  /* animation-iteration-count: infinite; */
+  -webkit-animation: slide-in-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    both;
   animation: slide-in-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 .logo {
@@ -74,42 +79,16 @@ header {
   border-radius: 60%;
   border: 1px ridge #d5b074e5;
   align-self: center;
-  width: 6rem;
-  height: 5.8rem;
+  width: 5rem;
+  height: 4.8rem;
   box-shadow: 1px 1px 1px 1px #51432e22;
 }
 
 .logo_txt {
-  font-size: 3.5rem;
+  font-size: 3rem;
 }
 
-.top_btn {
-  box-sizing: border-box;
-  width: 25rem;
-  height: 6.5rem;
-  background-color: #efbc8a;
-  color: #160c02;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  margin-top: 3rem;
-  border-radius: 1.5rem;
-  font-size: 1.7rem;
-  text-decoration: none;
-  transition: background-color 0.5s ease;
-  box-shadow: 0.5px 0.5px 0.5px 0.5px #51432e85;
-}
 
-.top_btn:hover {
-  background-color: #f7dfb8;
-}
-
-.top_btn:active {
-  box-shadow: none;
-  background-color: #ecae73;
-  border: solid #47260635 1px;
-}
 
 .nav_bar {
   display: flex;
@@ -118,7 +97,7 @@ header {
   margin-bottom: 9rem;
   background-color: #fcf2e813;
   box-shadow: 1px 1px 15px 1px #3e342624;
-  padding: 2.5em 6em;
+  padding: 1.7em 4em;
   border-radius: 6rem;
 }
 
@@ -133,7 +112,8 @@ header {
 .nav a {
   text-decoration: none;
   color: #ece3bd;
-  font-size: 1.7rem;
+  font-size: 1.3rem;
+  font-weight: 600;
   transition: all 0.1s ease-in-out;
   border-right: ridge #ece3bd 2px;
   padding-right: 1rem;
@@ -163,19 +143,7 @@ main {
   /* margin-top: 4rem; */
 }
 
-/* .sect_uno {
-  height: 100vh;
-  margin-top: 8rem;
-} */
-.sweet_product {
-  margin-top: 15rem;
-  margin-bottom: 10rem;
-}
 
-.sweet_product h2 {
-  font-size: 5rem;
-  margin-bottom: 5rem;
-}
 .intro_uno {
   text-align: initial;
   position: relative;
@@ -186,9 +154,9 @@ main {
   transform: translate(-50%, -50%); */
 }
 .header_uno {
-  font-size: 8rem;
+  font-size: 5.5rem;
   letter-spacing: 1.5px;
-  margin-bottom: 5rem;
+  margin-bottom: 4rem;
   font-weight: 700;
 }
 
@@ -197,7 +165,7 @@ main {
 }
 
 .para_uno {
-  font-size: 2.3rem;
+  font-size: 1.5rem;
   line-height: 1.9;
   letter-spacing: 1px;
   margin-bottom: 4rem;
@@ -219,19 +187,54 @@ main {
   transition: 0.5s ease-in-out;
 }
 
-.intro_dos {
-  padding-bottom: 2rem;
+.top_btn {
+  box-sizing: border-box;
+  width: 18rem;
+  height: 4.7rem;
+  background-color: #efbc8a;
+  color: #160c02;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  margin-top: 2.5rem;
+  border-radius: 1.5rem;
+  font-size: 1.3rem;
+  text-decoration: none;
+  transition: background-color 0.5s ease;
+  box-shadow: 0px 0px 20px 5px #51432eba;
 }
+
+.top_btn:hover {
+  background-color: #f7dfb8;
+}
+
+.top_btn:active {
+  box-shadow: none;
+  background-color: #ecae73;
+  border: solid #47260635 1px;
+}
+
 .intro_dos h2 {
-  font-size: 5rem;
+  font-size: 4.5rem;
   margin-bottom: 1rem;
   font-weight: 600;
 }
 
 .intro_dos p {
-  font-size: 2.5rem;
-  line-height: 1.5;
+  font-size: 1.7rem;
+  line-height: 2;
   color: #695d49;
+}
+
+.sweet_product {
+  margin-top: 15rem;
+  margin-bottom: 10rem;
+}
+
+.sweet_product h2 {
+  font-size: 4rem;
+  margin-bottom: 5rem;
 }
 .product {
   max-width: 100%;
@@ -252,8 +255,8 @@ main {
   border: 0.5px ridge #4325063a;
   /* object-fit: fill; */
   border-radius: 5%;
-  width: 30rem;
-  height: 29rem;
+  width: 20rem;
+  height: 20rem;
   transform-style: preserve-3d;
   transition: all 0.4s ease-in-out;
 }
@@ -286,19 +289,19 @@ main {
   background-color: #fff;
 }
 .product p {
-  margin-top: 1.4rem;
-  font-size: 2rem;
+  margin-top: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 700;
 }
 .product h5 {
-  margin-bottom: 1rem;
-  font-size: 2rem;
+  /* margin-bottom: 1rem; */
+  font-size: 1.2rem;
   color: #6d6a67;
   text-align: left;
 }
 
 .btn {
-  font-size: 1.3rem;
+  font-size: 1rem;
   text-decoration: none;
   color: whitesmoke;
   background-color: #3d3c3b;
@@ -306,8 +309,8 @@ main {
   /* opacity: 0.8; */
   /* width: 4rem;
   height: 3rem; */
-  padding: 0.8em 1.5em;
-  border-radius: 1rem;
+  padding: 0.5em 1.2em;
+  border-radius: 1.5rem;
   border: 1.5px solid #312102;
   transition:
     background-color,
@@ -326,7 +329,7 @@ main {
 }
 
 .sweet_location h2 {
-  font-size: 5rem;
+  font-size: 4rem;
   margin-bottom: 5rem;
 }
 
@@ -338,19 +341,20 @@ main {
 }
 
 .location a {
-  font-size: 4.5rem;
+  font-size: 3.5rem;
   text-decoration: none;
   color: #fcf2e8;
   opacity: 0;
 }
 
 .lc {
-  width: 55rem;
+  width: 30rem;
   /* width: 100%; */
-  height: 55rem;
+  height:30rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  object-fit: contain;
   cursor: pointer;
   border-radius: 2rem;
   border: ridge 2px #f5d7b9b6;
@@ -422,9 +426,10 @@ main {
 
 .test {
   background-color: #efbc8a;
-  border-radius: 2rem;
+  border-radius: 3rem;
+  border-top-left-radius: 0;
   width: fit-content;
-  height: 35rem;
+  height: 30rem;
   text-align: left;
   padding: 2em;
   /* margin: 0 auto; */
@@ -437,8 +442,8 @@ main {
 }
 
 .test h4 {
-  font-size: 2rem;
-  margin-top: 1.5rem;
+  font-size: 1.3rem;
+  /* margin-top: 1rem; */
   color: #806841cd;
 }
 
@@ -450,7 +455,7 @@ main {
 }
 
 .test_head {
-  font-size: 5rem;
+  font-size: 4rem;
   margin-bottom: 4rem;
 }
 
@@ -462,9 +467,15 @@ main {
   margin-bottom: 1.5rem;
 }
 
+.test_info h2{
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+  margin-top: 1.1rem;
+}
+
 .test_img {
-  width: 6rem;
-  height: 6rem;
+  width: 4rem;
+  height: 4rem;
   border-radius: 50%;
   object-fit: fill;
   margin-top: 1rem;
@@ -476,7 +487,7 @@ main {
 }
 
 .c_head {
-  font-size: 5rem;
+  font-size: 4rem;
   margin-bottom: 3.5rem;
 }
 
@@ -488,10 +499,10 @@ main {
 }
 .action {
   text-decoration: none;
-  padding: 1.5em 6em;
+  padding: 1.2em 4.5em;
   border-radius: 3rem;
   color: #faf3ec;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 700;
   transition: 0.3s ease-in-out;
 }
@@ -523,7 +534,7 @@ main {
 /* footer */
 footer {
   position: relative;
-  height: 20vh;
+  height: 21vh;
   width: 100%;
   background-color: #efbc8a;
   font-weight: 300;
@@ -539,8 +550,8 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 19vh;
-  gap: 70rem;
+  height: 20vh;
+  gap: 30rem;
 }
 
 .footer_logo a {
@@ -552,21 +563,23 @@ footer {
   transition: transform 0.4s ease-in-out;
 }
 
-.footer_logo a:hover .footer_txt {
+.footer_logo a:hover {
   transform: scale(1.05);
   color: #703c0b;
 }
 
 .footer_img {
-  width: 7rem;
-  height: 7rem;
-  border: solid 2px #ead8ba71;
+  width: 5rem;
+  height: 5rem;
+  border: ridge 2px #ead8bab4;
+  transform-style: preserve-3d;
+  object-fit: cover;
   border-radius: 50%;
 }
 
 .footer_txt {
   font-weight: 600;
-  font-size: 4rem;
+  font-size: 3rem;
   color: #160c02b2;
   transition: all 0.4s ease-in-out;
 }
@@ -585,7 +598,7 @@ footer {
 }
 
 .footer_links a {
-  font-size: 2.1rem;
+  font-size: 1.3rem;
   font-weight: 700;
   text-decoration: none;
   color: #160c02;
@@ -612,10 +625,11 @@ footer {
   align-items: center;
   justify-content: center;
   align-content: center;
+  gap: 0.5rem;
 }
 .icon svg {
-  width: 6rem;
-  height: 6rem;
+  width: 4rem;
+  height: 4rem;
   transition: all 0.5s ease;
 }
 .icon svg:hover {
@@ -628,10 +642,10 @@ footer {
 
 .copy {
   position: absolute;
-  font-size: 1.4rem;
-  color: #31210277;
+  font-size: 1rem;
+  color: #31210254;
   font-weight: 600;
-  bottom: 1%;
+  bottom: 0%;
   left: 50%;
   transform: translate(-50%, -50%);
 }

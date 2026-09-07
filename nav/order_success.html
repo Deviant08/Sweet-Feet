@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Confirmed — Sweet Feet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700;800&family=Kumbh+Sans:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Kumbh Sans', sans-serif;
+      background: #fdfaf6;
+      color: #160c02;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+    }
+    .icon {
+      font-size: 4rem;
+      width: 8rem; height: 8rem;
+      background: #edf7f0;
+      border: 2px solid #a8d5b5;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 2rem;
+    }
+    h1 {
+      font-family: 'Work Sans', sans-serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      margin-bottom: 1rem;
+      color: #160c02;
+    }
+    p { font-size: 1rem; color: #7a6555; line-height: 1.6; max-width: 420px; margin: 0 auto .5rem; }
+    .ref { font-size: .85rem; color: #b8a898; margin-top: .5rem; font-family: monospace; }
+    .btn {
+      display: inline-block;
+      margin-top: 2.5rem;
+      padding: 1rem 2.5rem;
+      background: #160c02;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 10px;
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: background .2s;
+    }
+    .btn:hover { background: #c8440c; }
+  </style>
+</head>
+<body>
+  <div class="icon">✓</div>
+  <h1>Payment Confirmed!</h1>
+  <p>Thank you for shopping with Sweet Feet. Your order has been received and is being processed.</p>
+  <p>You will receive a confirmation shortly.</p>
+  <p class="ref" id="refDisplay"></p>
+  <a href="/sweetfeet/nav/products.html" class="btn">Continue Shopping →</a>
+
+  <script>
+    // Show the order reference from the URL
+    const ref = new URLSearchParams(window.location.search).get('ref');
+    if (ref) {
+      document.getElementById('refDisplay').textContent = 'Order Reference: ' + ref;
+    }
+  </script>
+</body>
+</html>
