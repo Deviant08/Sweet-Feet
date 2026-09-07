@@ -95,6 +95,26 @@ h3 {
   font-size: 1.7rem;
 }
 
+.message{
+   color: #f7dfb8;
+   padding: 3rem;
+}
+
+.message h1 {
+    font-size: 5rem;
+  /* letter-spacing: 1.5px; */
+  margin: 4rem 0;
+  font-weight: 700;
+  text-align: left;
+}
+
+.message p{
+    font-size: 1.5rem;
+  line-height: 1.9;
+  letter-spacing: 1px;
+  /* margin-bottom: 4rem; */
+}
+
 .mb_10 {
   margin-bottom: 2rem;
 }
