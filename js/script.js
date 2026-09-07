@@ -42,39 +42,6 @@ aboutUs.addEventListener("click", function (e) {
   });
 });
 
-let count = 0;
-
-let oneTime = setInterval(() => {
-  count++;
-
-  if (count === 4) {
-    count = 0;
-  } else if (count >= 3) {
-    product.style.transform = `translateX(20rem)`;
-  } else if (count <= 3) {
-    product.style.transform = `translateX(-20rem)`;
-  }
-}, 1000);
-
-product.addEventListener("mouseover", function () {
-  clearInterval(oneTime);
-});
-
-product.addEventListener("mouseout", function () {
-  oneTime = setInterval(() => {
-    count++;
-    console.log(count);
-
-    if (count === 4) {
-      count = 0;
-    } else if (count >= 3) {
-      product.style.transform = `translateX(20rem)`;
-    } else if (count <= 3) {
-      product.style.transform = `translateX(-20rem)`;
-    }
-  }, 1000);
-});
-
 function showSignUpForm(e) {
   e.preventDefault();
 
