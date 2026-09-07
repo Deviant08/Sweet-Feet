@@ -17,7 +17,7 @@ html {
   align-items: center;
   gap: 1rem;
   text-decoration: none;
-  color: #f7dfb8;
+  /* color: #f7dfb8; */
   transition: transform 0.4s ease-in-out;
   width: fit-content;
   padding: 3em;
@@ -30,16 +30,19 @@ html {
 }
 
 .logo_img {
-  border-radius: 60%;
-  border: 1px ridge #d9b882;
-  width: 5.4rem;
-  height: 5.4rem;
+  border-radius: 1rem;
+  border: 0.5px ridge #d9b882;
+  width: 30rem;
+  height: 10rem;
   box-shadow: 1px 1px 1px 1px #51432e22;
+  /* object-fit: cover; */
+  /* background-color: #ffe3c413; */
+  padding: 1rem;
 }
 
-.logo_txt {
+/* .logo_txt {
   font-size: 3rem;
-}
+} */
 
 body {
   margin: 0;
