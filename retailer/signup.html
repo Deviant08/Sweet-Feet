@@ -57,47 +57,6 @@
     </div>
   </div>
 </div>
-<script>
-const form = document.getElementById('retailerSignupForm');
-const errorEl = document.getElementById('msgError');
-const successEl = document.getElementById('msgSuccess');
-const submitBtn = document.getElementById('submitBtn');
-
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  errorEl.style.display = successEl.style.display = 'none';
-  submitBtn.textContent = 'Submitting…';
-  submitBtn.disabled = true;
-
-  const payload = {
-    business_name: document.getElementById('business_name').value.trim(),
-    email:    document.getElementById('email').value.trim(),
-    password: document.getElementById('password').value,
-    phone:    document.getElementById('phone').value.trim(),
-    location: document.getElementById('location').value.trim(),
-    bio:      document.getElementById('bio').value.trim(),
-  };
-
-  try {
-    const res  = await fetch('/sweetfeet/api/retailer_signup.php', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
-    const data = await res.json();
-    if (data.success) {
-      form.style.display = 'none';
-      successEl.textContent = data.message;
-      successEl.style.display = 'block';
-    } else {
-      errorEl.textContent = data.error;
-      errorEl.style.display = 'block';
-      submitBtn.textContent = 'Submit Registration →';
-      submitBtn.disabled = false;
-    }
-  } catch {
-    errorEl.textContent = 'Network error. Please check your connection.';
-    errorEl.style.display = 'block';
-    submitBtn.textContent = 'Submit Registration →';
-    submitBtn.disabled = false;
-  }
-});
-</script>
+<script type="module" src="/js/main.js"></script>
 </body>
 </html>
