@@ -12,10 +12,25 @@
  * Local default: sweet-feet-backend on port 5000.
  * Production: set window.SF_API_BASE before this module loads, e.g.
  *   <script>window.SF_API_BASE = "https://your-api-host/api/v1";</script>
+ * Optional: window.SF_WS_URL = "wss://your-api-host/ws/chat"
  */
 export const API_BASE =
   (typeof window !== "undefined" && window.SF_API_BASE) ||
   "http://localhost:5000/api/v1";
+
+export function getWsUrl() {
+  if (typeof window !== "undefined" && window.SF_WS_URL) return window.SF_WS_URL;
+  try {
+    const u = new URL(API_BASE);
+    u.protocol = u.protocol === "https:" ? "wss:" : "ws:";
+    u.pathname = "/ws/chat";
+    u.search = "";
+    u.hash = "";
+    return u.toString();
+  } catch {
+    return "ws://localhost:5000/ws/chat";
+  }
+}
 
 const TOKEN_KEY = "sf_token";
 const USER_KEY = "sf_user";
