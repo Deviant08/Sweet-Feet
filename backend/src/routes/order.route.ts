@@ -4,6 +4,7 @@ import { protect, protectRetailer } from "../middlewares/auth.middleware";
 import {
   createOrder,
   verifyPayment,
+  paystackWebhook,
   getMyOrders,
   getRetailerOrders,
   updateItemStatus,
@@ -12,8 +13,11 @@ import {
 
 const orderRouter = Router();
 
+// Webhook must stay public (Paystack calls it). Signature is verified inside the controller.
+orderRouter.post("/webhook", catchAsync(paystackWebhook));
+
 orderRouter.post("/", protect, catchAsync(createOrder));
-orderRouter.post("/verify", catchAsync(verifyPayment));
+orderRouter.post("/verify", protect, catchAsync(verifyPayment)); // now requires auth + ownership
 orderRouter.get("/mine", protect, catchAsync(getMyOrders));
 orderRouter.get("/retailer", protectRetailer, catchAsync(getRetailerOrders));
 orderRouter.patch("/item-status", protectRetailer, catchAsync(updateItemStatus));

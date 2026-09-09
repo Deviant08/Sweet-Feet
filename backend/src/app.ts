@@ -33,12 +33,42 @@ app.options("*", cors());
 app.use(helmet());
 app.use(morgan("dev"));
 
+// Global API rate limit
 const limiter = rateLimit({
   max: 200,
   windowMs: 60 * 60 * 1000,
   message: "Too many requests from this IP, try again later",
 });
 app.use("/api", limiter);
+
+// Stricter limit on auth endpoints (brute-force protection)
+const authLimiter = rateLimit({
+  max: 20,
+  windowMs: 15 * 60 * 1000,
+  message: "Too many login attempts, try again later",
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use("/api/v1/auth", authLimiter);
+
+// Paystack webhook needs raw body for signature verification.
+// Mount a raw parser only on that path before the global JSON parser.
+app.use(
+  "/api/v1/orders/webhook",
+  express.raw({ type: "application/json" }),
+  (req, _res, next) => {
+    // Keep a copy of the raw buffer for HMAC; also parse JSON for convenience.
+    (req as any).rawBody = req.body;
+    try {
+      if (Buffer.isBuffer(req.body)) {
+        req.body = JSON.parse(req.body.toString("utf8"));
+      }
+    } catch {
+      // leave as-is; controller will reject
+    }
+    next();
+  }
+);
 
 app.use(express.json({ limit: "10kb" }));
 app.use(cookieParser());
@@ -48,7 +78,7 @@ app.use(hpp());
 app.use(compression());
 
 app.get("/", (_req, res) =>
-  res.status(200).json({ message: "Welcome to Sweet Feet API", version: "1.0" })
+  res.status(200).json({ message: "Welcome to Sweet Feet API", version: "1.1" })
 );
 
 app.use("/api/v1/auth", authRouter);

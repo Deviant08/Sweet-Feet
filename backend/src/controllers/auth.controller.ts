@@ -5,6 +5,7 @@ import Retailer from "../models/retailer.model";
 import { AppError } from "../middlewares/handleAppError.middleware";
 import { createSendToken } from "../middlewares/auth.middleware";
 import { UserRole } from "../interface/user.interface";
+import { RetailerStatus } from "../interface/retailer.interface";
 
 // Customer signup
 export const signUp = async (req: Request, res: Response, next: NextFunction) => {
@@ -88,7 +89,7 @@ export const retailerSignUp = async (req: Request, res: Response, next: NextFunc
   );
 };
 
-// Retailer login
+// Retailer login — block pending / suspended accounts
 export const retailerLogin = async (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body;
   if (!email || !password || !validator.isEmail(email)) {
@@ -98,6 +99,14 @@ export const retailerLogin = async (req: Request, res: Response, next: NextFunct
   if (!retailer || !(await retailer.comparePasswords(password, retailer.password))) {
     return next(new AppError("Invalid login credentials", 401));
   }
+
+  if (retailer.status === RetailerStatus.pending) {
+    return next(new AppError("Your retailer account is still pending approval", 403));
+  }
+  if (retailer.status === RetailerStatus.suspended) {
+    return next(new AppError("Your retailer account has been suspended", 403));
+  }
+
   createSendToken(
     {
       id: retailer._id,

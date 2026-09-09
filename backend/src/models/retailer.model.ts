@@ -83,7 +83,8 @@ retailerSchema.methods.changedPasswordAfter = function (jwtTimestamp: number) {
 };
 
 retailerSchema.methods.createPasswordResetToken = function () {
-  const resetToken = crypto.randomBytes(3).toString("hex");
+  // 32 bytes → 64 hex chars (was 3 bytes / easily brute-forced)
+  const resetToken = crypto.randomBytes(32).toString("hex");
   this.passwordResetToken = crypto.createHash("sha256").update(resetToken).digest("hex");
   this.passwordResetTokenExpires = moment().add(10, "minutes").toDate();
   return resetToken;

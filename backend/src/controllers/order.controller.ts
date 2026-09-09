@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import axios from "axios";
 import { Request, Response, NextFunction } from "express";
 import Order from "../models/order.model";
@@ -71,6 +72,10 @@ export const createOrder = async (req: Request, res: Response, next: NextFunctio
   res.status(201).json({ status: "Success", data: { order } });
 };
 
+/**
+ * Client-side verify (fallback / UX). Requires auth + ownership.
+ * The authoritative path is the Paystack webhook.
+ */
 export const verifyPayment = async (req: Request, res: Response, next: NextFunction) => {
   const { reference } = req.body;
   if (!reference) return next(new AppError("Payment reference required", 400));
@@ -91,13 +96,67 @@ export const verifyPayment = async (req: Request, res: Response, next: NextFunct
     const order = await Order.findOne({ paystackRef: reference });
     if (!order) return next(new AppError("Order not found for this reference", 404));
 
+    // Ownership check
+    if (String(order.user) !== String(req.user!.id)) {
+      return next(new AppError("You do not own this order", 403));
+    }
+
+    if (order.status === OrderStatus.paid) {
+      return res.status(200).json({ status: "Success", data: order, message: "Already paid" });
+    }
+
     order.status = OrderStatus.paid;
+    order.items.forEach((item: any) => {
+      if (item.status === ItemStatus.placed) item.status = ItemStatus.confirmed;
+    });
     await order.save();
 
     res.status(200).json({ status: "Success", data: order });
   } catch (err: any) {
     return next(new AppError(`Verify failed: ${err.response?.data?.message || err.message}`, 502));
   }
+};
+
+/**
+ * Paystack webhook — source of truth for payment confirmation.
+ * Signature is verified with the raw body (see app.ts).
+ */
+export const paystackWebhook = async (req: Request, res: Response) => {
+  const secret = process.env.PAYSTACK_SECRET_KEY;
+  if (!secret) {
+    return res.status(500).send("Paystack not configured");
+  }
+
+  const signature = req.headers["x-paystack-signature"] as string | undefined;
+  const raw = (req as any).rawBody as Buffer | undefined;
+
+  if (!signature || !raw) {
+    return res.status(401).send("Missing signature or body");
+  }
+
+  const hash = crypto.createHmac("sha512", secret).update(raw).digest("hex");
+  if (hash !== signature) {
+    return res.status(401).send("Invalid signature");
+  }
+
+  const event = req.body;
+  if (event?.event === "charge.success") {
+    const reference = event.data?.reference;
+    if (reference) {
+      const order = await Order.findOne({ paystackRef: reference });
+      if (order && order.status !== OrderStatus.paid) {
+        order.status = OrderStatus.paid;
+        order.items.forEach((item: any) => {
+          if (item.status === ItemStatus.placed) item.status = ItemStatus.confirmed;
+        });
+        await order.save();
+        // TODO: notify retailers (email / push)
+      }
+    }
+  }
+
+  // Always 200 so Paystack does not retry
+  res.status(200).send("OK");
 };
 
 export const getMyOrders = async (req: Request, res: Response) => {
@@ -137,5 +196,16 @@ export const updateItemStatus = async (req: Request, res: Response, next: NextFu
 export const getOrder = async (req: Request, res: Response, next: NextFunction) => {
   const order = await Order.findById(req.params.id);
   if (!order) return next(new AppError("Order not found", 404));
+
+  // Customer can only see own orders; retailers can see orders that contain their items
+  const isOwner = req.user && String(order.user) === String(req.user.id);
+  const isRetailerOnOrder =
+    req.retailer &&
+    order.items.some((item: any) => String(item.retailer) === String(req.retailer!.id));
+
+  if (!isOwner && !isRetailerOnOrder) {
+    return next(new AppError("You do not have access to this order", 403));
+  }
+
   res.status(200).json({ status: "Success", data: order });
 };

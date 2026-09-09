@@ -8,6 +8,15 @@ process.on("uncaughtException", (err) => {
   process.exit(1);
 });
 
+// Fail fast on missing critical env vars
+const requiredEnv = ["DATABASE_HOSTED", "JWT_SECRET"];
+for (const key of requiredEnv) {
+  if (!process.env[key]) {
+    console.error(`Missing required env var: ${key}`);
+    process.exit(1);
+  }
+}
+
 const port = process.env.PORT || 5000;
 const { DATABASE_HOSTED, HOST } = process.env;
 
