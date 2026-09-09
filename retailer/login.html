@@ -41,37 +41,6 @@
     </div>
   </div>
 </div>
-<script>
-const form = document.getElementById('retailerLoginForm');
-const errorEl = document.getElementById('msgError');
-const submitBtn = document.getElementById('submitBtn');
-
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  errorEl.style.display = 'none';
-  submitBtn.textContent = 'Logging in…';
-  submitBtn.disabled = true;
-
-  try {
-    const res  = await fetch('/sweetfeet/api/retailer_login.php', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ email: document.getElementById('email').value.trim(), password: document.getElementById('password').value }) });
-    const data = await res.json();
-    if (data.success) {
-      localStorage.setItem('sf_retailer_id',   data.retailer_id);
-      localStorage.setItem('sf_retailer_name', data.business_name);
-      window.location.href = '/retailer/dashboard.html';
-    } else {
-      errorEl.textContent = data.error;
-      errorEl.style.display = 'block';
-      submitBtn.textContent = 'Log In →';
-      submitBtn.disabled = false;
-    }
-  } catch {
-    errorEl.textContent = 'Network error. Please try again.';
-    errorEl.style.display = 'block';
-    submitBtn.textContent = 'Log In →';
-    submitBtn.disabled = false;
-  }
-});
-</script>
+<script type="module" src="/js/main.js"></script>
 </body>
 </html>
