@@ -3,20 +3,21 @@
  *  Sweet Feet — js/api.js
  *  Single client for the standalone backend:
  *  https://github.com/Deviant08/sweet-feet-backend
+ *  Live: https://sweet-feet-backend.onrender.com/api/v1
  *  All requests go to /api/v1 (never the legacy PHP /API folder).
  * ============================================================
  */
 
 /**
  * Backend base URL.
- * Local default: sweet-feet-backend on port 5000.
- * Production: set window.SF_API_BASE before this module loads, e.g.
- *   <script>window.SF_API_BASE = "https://your-api-host/api/v1";</script>
- * Optional: window.SF_WS_URL = "wss://your-api-host/ws/chat"
+ * Default: production Render API.
+ * Local override (optional):
+ *   <script>window.SF_API_BASE = "http://localhost:5000/api/v1";</script>
+ * Optional WebSocket: window.SF_WS_URL = "wss://sweet-feet-backend.onrender.com/ws/chat"
  */
 export const API_BASE =
   (typeof window !== "undefined" && window.SF_API_BASE) ||
-  "http://localhost:5000/api/v1";
+  "https://sweet-feet-backend.onrender.com/api/v1";
 
 export function getWsUrl() {
   if (typeof window !== "undefined" && window.SF_WS_URL) return window.SF_WS_URL;
@@ -28,7 +29,7 @@ export function getWsUrl() {
     u.hash = "";
     return u.toString();
   } catch {
-    return "ws://localhost:5000/ws/chat";
+    return "wss://sweet-feet-backend.onrender.com/ws/chat";
   }
 }
 
