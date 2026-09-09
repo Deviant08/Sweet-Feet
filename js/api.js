@@ -1,13 +1,18 @@
 /*
  * ============================================================
  *  Sweet Feet — js/api.js
- *  Single place for backend base URL + authenticated fetch.
- *  Frontend is disconnected from the legacy PHP /API folder.
- *  All calls go to the TypeScript Express API under /api/v1.
+ *  Single client for the standalone backend:
+ *  https://github.com/Deviant08/sweet-feet-backend
+ *  All requests go to /api/v1 (never the legacy PHP /API folder).
  * ============================================================
  */
 
-/** Live API host. Override via window.SF_API_BASE before this loads. */
+/**
+ * Backend base URL.
+ * Local default: sweet-feet-backend on port 5000.
+ * Production: set window.SF_API_BASE before this module loads, e.g.
+ *   <script>window.SF_API_BASE = "https://your-api-host/api/v1";</script>
+ */
 export const API_BASE =
   (typeof window !== "undefined" && window.SF_API_BASE) ||
   "http://localhost:5000/api/v1";
@@ -35,9 +40,16 @@ export function setSession(token, data, type = "user") {
 }
 
 export function clearSession() {
-  [TOKEN_KEY, USER_KEY, RETAILER_KEY, "sf_user_id", "sf_user_email", "sf_user_name", "sf_retailer_id", "sf_retailer_name"].forEach(
-    (k) => localStorage.removeItem(k)
-  );
+  [
+    TOKEN_KEY,
+    USER_KEY,
+    RETAILER_KEY,
+    "sf_user_id",
+    "sf_user_email",
+    "sf_user_name",
+    "sf_retailer_id",
+    "sf_retailer_name",
+  ].forEach((k) => localStorage.removeItem(k));
 }
 
 export function getUser() {
@@ -57,12 +69,13 @@ export function getRetailer() {
 }
 
 /**
- * Fetch helper for the TypeScript API.
  * @param {string} path - path after /api/v1 (e.g. "/products")
  * @param {object} opts - fetch options; body may be a plain object
  */
 export async function api(path, opts = {}) {
-  const url = path.startsWith("http") ? path : `${API_BASE}${path.startsWith("/") ? path : "/" + path}`;
+  const url = path.startsWith("http")
+    ? path
+    : `${API_BASE}${path.startsWith("/") ? path : "/" + path}`;
   const headers = {
     "Content-Type": "application/json",
     ...(opts.headers || {}),
@@ -84,14 +97,16 @@ export async function api(path, opts = {}) {
   try {
     json = await res.json();
   } catch {
-    /* empty */
+    /* empty body */
   }
 
   if (!res.ok) {
     const msg =
       json.message ||
       json.error ||
-      (typeof json.status === "string" && json.status !== "Success" ? json.status : null) ||
+      (typeof json.status === "string" && json.status !== "Success"
+        ? json.status
+        : null) ||
       `Request failed (${res.status})`;
     const err = new Error(msg);
     err.status = res.status;
