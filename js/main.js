@@ -11,13 +11,11 @@ import { initRetailer } from "./retailer.js";
 import { initChat } from "./chat.js";
 import { getUser, getToken, clearSession, avatarUrl, api } from "./api.js";
 
-// Critical UI styles (sidebar was unstyled → blue links at page bottom)
 (function injectCoreStyles() {
   if (document.getElementById("sf-core-styles")) return;
   const s = document.createElement("style");
   s.id = "sf-core-styles";
   s.textContent = `
-    /* Mobile menu button */
     .menu_toggle {
       display: none;
       flex-direction: column;
@@ -44,7 +42,6 @@ import { getUser, getToken, clearSession, avatarUrl, api } from "./api.js";
     .menu_toggle.open span:nth-child(2) { opacity: 0; }
     .menu_toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-    /* Off-canvas sidebar — MUST stay fixed / hidden when closed */
     .nav_overlay {
       position: fixed;
       inset: 0;
@@ -120,7 +117,6 @@ import { getUser, getToken, clearSession, avatarUrl, api } from "./api.js";
       .nav_sidebar, .nav_overlay { display: none !important; }
     }
 
-    /* Featured products: keep labels readable under each card */
     .sweet_product .product {
       display: flex;
       flex-wrap: wrap;
@@ -136,7 +132,6 @@ import { getUser, getToken, clearSession, avatarUrl, api } from "./api.js";
       display: flex;
       flex-direction: column;
       align-items: center;
-      width:  steadi;
       width: 200px;
       flex: 0 0 auto;
     }
@@ -148,12 +143,16 @@ import { getUser, getToken, clearSession, avatarUrl, api } from "./api.js";
       background: #fff;
     }
     .sweet_product .order {
-      opacity: 1 !important;
       position: static !important;
       margin-top: 0.75rem;
       width: 100%;
       align-items: center;
       text-align: center;
+    }
+    .sweet_product .order span,
+    .sweet_product .order p,
+    .sweet_product .order h5 {
+      opacity: 1 !important;
     }
     .sweet_product .order p {
       margin: 0;
@@ -176,7 +175,6 @@ import { getUser, getToken, clearSession, avatarUrl, api } from "./api.js";
       font-size: 0.9rem;
     }
 
-    /* Shop seller row */
     .card_seller{display:flex;align-items:center;gap:.55rem;margin-top:.75rem;text-decoration:none;color:inherit;}
     .card_seller_avatar{width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;}
     .card_seller_text{display:flex;flex-direction:column;line-height:1.2;}
@@ -186,12 +184,10 @@ import { getUser, getToken, clearSession, avatarUrl, api } from "./api.js";
     .nav_user_chip{display:inline-flex;align-items:center;gap:.5rem;}
     .nav_user_avatar{width:28px;height:28px;border-radius:50%;object-fit:cover;}
     .nav_logout_btn{cursor:pointer;border:1px solid currentColor;background:transparent;color:inherit;padding:.35rem .75rem;border-radius:8px;font:inherit;}
-  `.
-    replace("width:  steadi;", "");
+  `;
   document.head.appendChild(s);
 })();
 
-// ── Scroll reveal ───────────────────────────────────────────
 const sections = document.querySelectorAll("section");
 if (sections.length > 0) {
   sections.forEach((s) => s.classList.add("section--hidden"));
@@ -304,7 +300,6 @@ function applyAuthToPageNav() {
   });
 }
 
-// ── Mobile nav sidebar ──────────────────────────────────────
 const navBar = document.querySelector(".nav_bar");
 if (navBar) {
   const menuToggle = document.createElement("button");
@@ -359,7 +354,6 @@ if (navBar) {
 
 applyAuthToPageNav();
 
-// Stop legacy home carousel from shoving product cards off-screen
 const productStrip = document.querySelector(".sweet_product .product");
 if (productStrip) {
   productStrip.style.transform = "none";
