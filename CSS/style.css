@@ -239,14 +239,6 @@ main {
   transition: 0.1s ease-in-out;
 }
 
-.pd {
-  transition: opacity 0.35s ease-in-out, transform 0.35s ease-in-out;
-  opacity: 0.92;
-}
-.pd:hover {
-  opacity: 1;
-  transform: translateY(-4px);
-}
 .order {
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
@@ -256,14 +248,9 @@ main {
   align-items: flex-start;
   justify-content: flex-start;
   gap: 1rem;
-  pointer-events: none;
 }
 .pd:hover .order {
   opacity: 1;
-  pointer-events: auto;
-}
-.order .btn {
-  pointer-events: auto;
 }
 
 .product_cooperate img {
