@@ -30,7 +30,7 @@
     <div class="page_header">
       <div>
         <h1>Platform Overview</h1>
-        <p>Sweet Feet marketplace at a glance (TypeScript API).</p>
+        <p>Sweet Feet marketplace at a glance.</p>
       </div>
     </div>
 
@@ -54,37 +54,73 @@
   </div>
 </div>
 
-<div class="modal_overlay open" id="loginModal">
+<div class="modal_overlay" id="loginModal">
   <div class="modal">
     <h3>Admin Login</h3>
-    <p style="font-size:1.2rem;color:var(--clr-muted);margin:1rem 0 0">Use a customer/admin account on the TypeScript API.</p>
-    <div class="form_group" style="margin-top:2rem">
-      <label>Email</label>
-      <input type="email" id="adminEmail" placeholder="admin@sweetfeet.com" />
-    </div>
-    <div class="form_group">
-      <label>Password</label>
-      <input type="password" id="adminPassword" placeholder="Password" />
-    </div>
-    <div class="msg_error" id="loginError"></div>
-    <div class="modal_footer">
-      <button class="btn_sm dark" id="adminLoginBtn" style="width:100%">Log In →</button>
-    </div>
+    <p style="font-size:1.2rem;color:var(--clr-muted);margin:1rem 0 0">
+      Demo: <strong>admin@sweetfeet.demo</strong> / <strong>SweetFeet123!</strong>
+    </p>
+    <form id="adminLoginForm">
+      <div class="form_group" style="margin-top:2rem">
+        <label>Email</label>
+        <input type="email" id="adminEmail" value="admin@sweetfeet.demo" autocomplete="username" required />
+      </div>
+      <div class="form_group">
+        <label>Password</label>
+        <input type="password" id="adminPassword" placeholder="SweetFeet123!" autocomplete="current-password" required />
+      </div>
+      <div class="msg_error" id="loginError"></div>
+      <div class="modal_footer">
+        <button type="submit" class="btn_sm dark" id="adminLoginBtn" style="width:100%">Log In →</button>
+      </div>
+    </form>
   </div>
 </div>
 
 <script type="module">
-import { api, setSession, clearSession, getToken } from "/js/api.js";
+import { api, setSession, clearSession, getToken, getUser } from "/js/api.js";
 
-function fmtDate(d) {
+const modal = document.getElementById("loginModal");
+
+function showLogin(msg) {
+  if (msg) {
+    const errorEl = document.getElementById("loginError");
+    errorEl.textContent = msg;
+    errorEl.style.display = "block";
+  }
+  modal.classList.add("open");
+}
+
+function hideLogin() {
+  modal.classList.remove("open");
+  document.getElementById("loginError").style.display = "none";
+}
+
+async function requireAdmin() {
+  if (!getToken()) {
+    showLogin();
+    return false;
+  }
   try {
-    return new Date(d).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+    const me = await api("/auth/me");
+    const user = me.data || {};
+    if (user.role !== "admin") {
+      clearSession();
+      showLogin("This account is not an admin.");
+      return false;
+    }
+    setSession(getToken(), user, "user");
+    hideLogin();
+    return true;
   } catch {
-    return "—";
+    clearSession();
+    showLogin("Session expired. Please log in again.");
+    return false;
   }
 }
 
-document.getElementById("adminLoginBtn").addEventListener("click", async () => {
+document.getElementById("adminLoginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
   const errorEl = document.getElementById("loginError");
   const btn = document.getElementById("adminLoginBtn");
   errorEl.style.display = "none";
@@ -98,11 +134,15 @@ document.getElementById("adminLoginBtn").addEventListener("click", async () => {
         password: document.getElementById("adminPassword").value,
       },
     });
+    if (data.data?.role !== "admin") {
+      clearSession();
+      throw new Error("This account is not an admin.");
+    }
     setSession(data.token, data.data, "user");
-    document.getElementById("loginModal").classList.remove("open");
-    loadDashboard();
-  } catch (e) {
-    errorEl.textContent = e.message || "Login failed";
+    hideLogin();
+    await loadDashboard();
+  } catch (err) {
+    errorEl.textContent = err.message || "Login failed";
     errorEl.style.display = "block";
   }
   btn.textContent = "Log In →";
@@ -110,13 +150,12 @@ document.getElementById("adminLoginBtn").addEventListener("click", async () => {
 });
 
 async function loadDashboard() {
-  if (!getToken()) {
-    document.getElementById("loginModal").classList.add("open");
-    return;
-  }
+  const ok = await requireAdmin();
+  if (!ok) return;
+
   try {
     const [ret, prods] = await Promise.all([
-      api("/retailers").catch(() => ({ data: [] })),
+      api("/retailers/admin/all").catch(() => api("/retailers")),
       api("/products").catch(() => ({ data: [] })),
     ]);
     const retailers = ret.data || [];
@@ -124,10 +163,12 @@ async function loadDashboard() {
     const pending = retailers.filter((r) => r.status === "pending").length;
     const approved = retailers.filter((r) => r.status === "approved").length;
 
+    const badge = document.getElementById("pendingBadge");
     if (pending > 0) {
-      const badge = document.getElementById("pendingBadge");
       badge.textContent = pending;
       badge.style.display = "inline-flex";
+    } else {
+      badge.style.display = "none";
     }
 
     document.getElementById("statsGrid").innerHTML = `
@@ -152,12 +193,14 @@ async function loadDashboard() {
       : `<tr><td colspan="4" style="text-align:center;padding:3rem;color:var(--clr-muted)">No retailers yet.</td></tr>`;
   } catch (err) {
     console.error(err);
-    document.getElementById("loginModal").classList.add("open");
+    document.getElementById("ordersBody").innerHTML =
+      `<tr><td colspan="4">${err.message || "Failed to load data"}</td></tr>`;
   }
 }
 
 document.getElementById("logoutBtn").addEventListener("click", async (e) => {
   e.preventDefault();
+  if (!window.confirm("Log out of admin?")) return;
   try {
     await api("/auth/logout", { method: "POST" });
   } catch {
