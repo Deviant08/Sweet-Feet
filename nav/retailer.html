@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/assets/20251102_172020.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/CSS/style.css" />
+  <link rel="stylesheet" href="/CSS/retailer.css" />
+  <title>Seller profile — Sweet Feet</title>
+  <style>
+    .rp_wrap { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+    .rp_header { display:flex; gap:1.5rem; align-items:center; flex-wrap:wrap; margin-bottom:2rem; }
+    .rp_avatar { width:96px; height:96px; border-radius:50%; object-fit:cover; border:3px solid #160c02; }
+    .rp_name { font-family: var(--ff-display, inherit); font-size:2rem; font-weight:800; margin:0 0 .4rem; }
+    .rp_meta { color:#6b5e52; font-size:1.2rem; }
+    .rp_bio { margin-top:1rem; max-width:40rem; line-height:1.5; color:#3d342c; }
+    .rp_section_title { font-size:1.5rem; font-weight:700; margin:2rem 0 1rem; }
+    .rp_grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1.25rem; }
+    .rp_card { background:#fff; border:1px solid #e8e0d6; border-radius:14px; overflow:hidden; text-decoration:none; color:inherit; display:block; }
+    .rp_card img { width:100%; aspect-ratio:1; object-fit:cover; }
+    .rp_card_body { padding:1rem; }
+    .rp_badge { display:inline-block; font-size:.75rem; font-weight:700; background:#160c02; color:#f7dfb8; padding:.2rem .5rem; border-radius:999px; margin-bottom:.4rem; }
+    .rp_chat { display:inline-flex; margin-top:1.5rem; padding:.9rem 1.4rem; background:#160c02; color:#fff; border-radius:10px; text-decoration:none; font-weight:700; }
+    .rp_chat:hover { background:#c8440c; }
+    .rp_empty { color:#6b5e52; padding:2rem 0; }
+    .card_seller { display:flex; align-items:center; gap:.6rem; margin-top:.85rem; text-decoration:none; color:inherit; }
+    .card_seller_avatar { width:28px; height:28px; border-radius:50%; object-fit:cover; }
+  </style>
+</head>
+<body>
+  <div class="nav_bar" style="padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;background:#160c02;">
+    <a href="/index.html" style="color:#f7dfb8;text-decoration:none;font-weight:700;">Sweet Feet</a>
+    <div class="auth_nav_slot" style="display:flex;gap:1rem;align-items:center;"></div>
+  </div>
+
+  <main class="rp_wrap" id="retailerProfile">
+    <p class="rp_empty">Loading seller…</p>
+  </main>
+
+  <script type="module" src="/js/main.js"></script>
+  <script type="module">
+    import { api, mapProduct, avatarUrl, getToken } from "/js/api.js";
+
+    function formatPrice(p) {
+      return "₦" + Number(p || 0).toLocaleString("en-NG");
+    }
+
+    const id = new URLSearchParams(location.search).get("id");
+    const root = document.getElementById("retailerProfile");
+
+    if (!id) {
+      root.innerHTML = `<p class="rp_empty">No seller selected. <a href="/nav/products.html">Back to shop</a></p>`;
+    } else {
+      (async () => {
+        try {
+          const [rJson, pJson] = await Promise.all([
+            api("/retailers/" + encodeURIComponent(id)),
+            api("/products"),
+          ]);
+          const r = rJson.data || {};
+          const all = (pJson.data || []).map(mapProduct).filter(Boolean);
+          const mine = all.filter((p) => String(p.retailer_id) === String(r._id || r.id || id));
+          const top = mine.filter((p) => p.badge === "top" || /top/i.test(p.badgeLabel || ""));
+          const logo = avatarUrl(r.businessName, r.logo);
+          const chatHref =
+            "/nav/chat.html?retailer_id=" +
+            encodeURIComponent(r._id || r.id || id) +
+            "&retailer_name=" +
+            encodeURIComponent(r.businessName || "");
+
+          const card = (p) => `
+            <a class="rp_card" href="/nav/products.html">
+              <img src="${p.img}" alt="${p.name}" />
+              <div class="rp_card_body">
+                ${p.badge ? `<span class="rp_badge">${p.badgeLabel || p.badge}</span>` : ""}
+                <div style="font-weight:700">${p.name}</div>
+                <div style="margin-top:.35rem;color:#c8440c;font-weight:700">${formatPrice(p.price)}</div>
+              </div>
+            </a>`;
+
+          root.innerHTML = `
+            <div class="rp_header">
+              <img class="rp_avatar" src="${logo}" alt="" />
+              <div>
+                <h1 class="rp_name">${r.businessName || "Seller"}</h1>
+                <div class="rp_meta">${r.location || ""}${r.phone ? " · " + r.phone : ""}</div>
+                ${r.bio ? `<p class="rp_bio">${r.bio}</p>` : ""}
+                <a class="rp_chat" href="${chatHref}" id="rpChatBtn">💬 Chat with ${r.businessName || "seller"}</a>
+              </div>
+            </div>
+            ${top.length ? `<h2 class="rp_section_title">Top picks</h2><div class="rp_grid">${top.map(card).join("")}</div>` : ""}
+            <h2 class="rp_section_title">All products (${mine.length})</h2>
+            <div class="rp_grid">${mine.length ? mine.map(card).join("") : `<p class="rp_empty">No products listed yet.</p>`}</div>
+          `;
+
+          document.getElementById("rpChatBtn")?.addEventListener("click", (e) => {
+            if (!getToken()) {
+              e.preventDefault();
+              const next = chatHref;
+              window.location.href = "/nav/login.html?next=" + encodeURIComponent(next);
+            }
+          });
+        } catch (err) {
+          root.innerHTML = `<p class="rp_empty">${err.message || "Could not load seller."} <a href="/nav/products.html">Shop</a></p>`;
+        }
+      })();
+    }
+  </script>
+</body>
+</html>
