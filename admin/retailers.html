@@ -55,28 +55,73 @@
   </div>
 </div>
 
-<div class="modal_overlay open" id="loginModal">
+<div class="modal_overlay" id="loginModal">
   <div class="modal">
     <h3>Admin Login</h3>
-    <div class="form_group" style="margin-top:2rem">
-      <label>Email</label>
-      <input type="email" id="adminEmail" />
-    </div>
-    <div class="form_group">
-      <label>Password</label>
-      <input type="password" id="adminPassword" />
-    </div>
-    <div class="msg_error" id="loginError"></div>
-    <div class="modal_footer">
-      <button class="btn_sm dark" id="adminLoginBtn" style="width:100%">Log In →</button>
-    </div>
+    <p style="font-size:1.2rem;color:var(--clr-muted);margin:1rem 0 0">
+      Demo: <strong>admin@sweetfeet.demo</strong> / <strong>SweetFeet123!</strong>
+    </p>
+    <form id="adminLoginForm">
+      <div class="form_group" style="margin-top:2rem">
+        <label>Email</label>
+        <input type="email" id="adminEmail" value="admin@sweetfeet.demo" autocomplete="username" required />
+      </div>
+      <div class="form_group">
+        <label>Password</label>
+        <input type="password" id="adminPassword" placeholder="SweetFeet123!" autocomplete="current-password" required />
+      </div>
+      <div class="msg_error" id="loginError"></div>
+      <div class="modal_footer">
+        <button type="submit" class="btn_sm dark" id="adminLoginBtn" style="width:100%">Log In →</button>
+      </div>
+    </form>
   </div>
 </div>
 
 <script type="module">
 import { api, setSession, clearSession, getToken } from "/js/api.js";
 
-document.getElementById("adminLoginBtn").addEventListener("click", async () => {
+const modal = document.getElementById("loginModal");
+
+function showLogin(msg) {
+  if (msg) {
+    const errorEl = document.getElementById("loginError");
+    errorEl.textContent = msg;
+    errorEl.style.display = "block";
+  }
+  modal.classList.add("open");
+}
+
+function hideLogin() {
+  modal.classList.remove("open");
+  document.getElementById("loginError").style.display = "none";
+}
+
+async function requireAdmin() {
+  if (!getToken()) {
+    showLogin();
+    return false;
+  }
+  try {
+    const me = await api("/auth/me");
+    const user = me.data || {};
+    if (user.role !== "admin") {
+      clearSession();
+      showLogin("This account is not an admin.");
+      return false;
+    }
+    setSession(getToken(), user, "user");
+    hideLogin();
+    return true;
+  } catch {
+    clearSession();
+    showLogin("Session expired. Please log in again.");
+    return false;
+  }
+}
+
+document.getElementById("adminLoginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
   const errorEl = document.getElementById("loginError");
   const btn = document.getElementById("adminLoginBtn");
   errorEl.style.display = "none";
@@ -90,11 +135,15 @@ document.getElementById("adminLoginBtn").addEventListener("click", async () => {
         password: document.getElementById("adminPassword").value,
       },
     });
+    if (data.data?.role !== "admin") {
+      clearSession();
+      throw new Error("This account is not an admin.");
+    }
     setSession(data.token, data.data, "user");
-    document.getElementById("loginModal").classList.remove("open");
-    loadRetailers();
-  } catch (e) {
-    errorEl.textContent = e.message || "Login failed";
+    hideLogin();
+    await loadRetailers();
+  } catch (err) {
+    errorEl.textContent = err.message || "Login failed";
     errorEl.style.display = "block";
   }
   btn.disabled = false;
@@ -102,13 +151,12 @@ document.getElementById("adminLoginBtn").addEventListener("click", async () => {
 });
 
 async function loadRetailers() {
-  if (!getToken()) {
-    document.getElementById("loginModal").classList.add("open");
-    return;
-  }
+  const ok = await requireAdmin();
+  if (!ok) return;
+
   const tbody = document.getElementById("retailersBody");
   try {
-    const json = await api("/retailers");
+    const json = await api("/retailers/admin/all").catch(() => api("/retailers"));
     const list = json.data || [];
     if (!list.length) {
       tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:3rem;color:var(--clr-muted)">No retailers yet.</td></tr>`;
@@ -146,12 +194,12 @@ async function loadRetailers() {
     });
   } catch (e) {
     tbody.innerHTML = `<tr><td colspan="6">${e.message || "Failed to load"}</td></tr>`;
-    document.getElementById("loginModal").classList.add("open");
   }
 }
 
 document.getElementById("logoutBtn").addEventListener("click", async (e) => {
   e.preventDefault();
+  if (!window.confirm("Log out of admin?")) return;
   try {
     await api("/auth/logout", { method: "POST" });
   } catch {
