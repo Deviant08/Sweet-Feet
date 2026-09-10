@@ -29,7 +29,7 @@
     <div class="page_header">
       <div>
         <h1>Retailers</h1>
-        <p>Approve or suspend marketplace sellers.</p>
+        <p>Approve or decline new sellers. Suspend approved ones if needed.</p>
       </div>
     </div>
 
@@ -150,6 +150,22 @@ document.getElementById("adminLoginForm").addEventListener("submit", async (e) =
   btn.textContent = "Log In →";
 });
 
+function actionButtons(r, id) {
+  const s = r.status;
+  if (s === "pending") {
+    return `
+      <button class="btn_sm dark" data-id="${id}" data-status="approved">Approve</button>
+      <button class="btn_sm danger" data-id="${id}" data-status="declined">Decline</button>`;
+  }
+  if (s === "approved") {
+    return `<button class="btn_sm danger" data-id="${id}" data-status="suspended">Suspend</button>`;
+  }
+  if (s === "declined" || s === "suspended") {
+    return `<button class="btn_sm dark" data-id="${id}" data-status="approved">Approve</button>`;
+  }
+  return "";
+}
+
 async function loadRetailers() {
   const ok = await requireAdmin();
   if (!ok) return;
@@ -171,20 +187,20 @@ async function loadRetailers() {
         <td>${r.phone || ""}</td>
         <td>${r.location || ""}</td>
         <td><span class="badge ${r.status}">${r.status}</span></td>
-        <td>
-          ${r.status !== "approved" ? `<button class="btn_sm dark" data-id="${id}" data-status="approved">Approve</button>` : ""}
-          ${r.status !== "suspended" ? `<button class="btn_sm danger" data-id="${id}" data-status="suspended">Suspend</button>` : ""}
-        </td>
+        <td style="display:flex;gap:.4rem;flex-wrap:wrap">${actionButtons(r, id)}</td>
       </tr>`;
       })
       .join("");
 
     tbody.querySelectorAll("[data-status]").forEach((btn) => {
       btn.addEventListener("click", async () => {
+        const action = btn.dataset.status;
+        const label = action === "declined" ? "decline" : action;
+        if (!window.confirm(`Really ${label} this retailer?`)) return;
         try {
           await api(`/retailers/${btn.dataset.id}/status`, {
             method: "PATCH",
-            body: { status: btn.dataset.status },
+            body: { status: action },
           });
           loadRetailers();
         } catch (e) {
