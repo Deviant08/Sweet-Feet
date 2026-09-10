@@ -17,16 +17,13 @@ html {
   align-items: center;
   gap: 1rem;
   text-decoration: none;
-  /* color: #f7dfb8; */
   transition: transform 0.4s ease-in-out;
   width: fit-content;
   padding: 3em;
-  /* margin: 2rem 0 0 2 rem; */
 }
 
 .logo:hover {
   transform: scale(1.05);
-  /* color: #fcf2e8; */
 }
 
 .logo_img {
@@ -35,14 +32,8 @@ html {
   width: 30rem;
   height: 10rem;
   box-shadow: 1px 1px 1px 1px #51432e22;
-  /* object-fit: cover; */
-  /* background-color: #ffe3c413; */
   padding: 1rem;
 }
-
-/* .logo_txt {
-  font-size: 3rem;
-} */
 
 body {
   margin: 0;
@@ -60,7 +51,6 @@ body {
   text-align: center;
   align-content: center;
   transform-style: preserve-3d;
-  /* padding: 40px; */
 }
 
 .form {
@@ -120,18 +110,16 @@ h3 {
 }
 
 .message h1 {
-    font-size: 5rem;
-  /* letter-spacing: 1.5px; */
+  font-size: 5rem;
   margin: 4rem 0;
   font-weight: 700;
   text-align: left;
 }
 
-.message p{
-    font-size: 1.5rem;
+.message p {
+  font-size: 1.5rem;
   line-height: 1.9;
   letter-spacing: 1px;
-  /* margin-bottom: 4rem; */
 }
 
 .mb_10 {
@@ -143,10 +131,6 @@ h3 {
   font-weight: 600;
   color: gray;
 }
-
-/* .inp:active {
-  border: 2px solid #291603c2;
-} */
 
 .border {
   width: 100%;
@@ -164,6 +148,12 @@ h3 {
   font-weight: 600;
   color: #fff;
   text-decoration: none;
+  cursor: pointer;
+  min-height: 4.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 .btn_login:hover {
@@ -174,6 +164,43 @@ h3 {
 .btn_login:active {
   background-image: none;
   background-color: #efbc8a;
+}
+
+.btn_login:disabled {
+  opacity: 0.75;
+  cursor: wait;
+  transform: none;
+}
+
+.btn_spinner {
+  display: none;
+  width: 1.6rem;
+  height: 1.6rem;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: sfspin 0.7s linear infinite;
+}
+
+.btn_login.is-loading .btn_label {
+  display: none;
+}
+
+.btn_login.is-loading .btn_spinner {
+  display: inline-block;
+}
+
+@keyframes sfspin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.msg_error {
+  color: #b00020;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
 }
 
 .login_link {
