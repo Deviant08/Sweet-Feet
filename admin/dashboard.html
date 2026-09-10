@@ -21,6 +21,7 @@
     <span class="sidebar_label">Admin</span>
     <a class="sidebar_link active" href="/admin/dashboard.html"><span class="icon">📊</span> Overview</a>
     <a class="sidebar_link" href="/admin/retailers.html"><span class="icon">🏪</span> Retailers <span class="badge pending" id="pendingBadge" style="margin-left:auto;display:none"></span></a>
+    <a class="sidebar_link" href="/admin/chat.html"><span class="icon">💬</span> Support Chat</a>
     <div class="sidebar_divider"></div>
     <a class="sidebar_link" href="/index.html" target="_blank"><span class="icon">🌐</span> View Site</a>
     <a class="sidebar_link" href="#" id="logoutBtn"><span class="icon">🚪</span> Log Out</a>
@@ -43,10 +44,10 @@
         <div class="table_header"><h3>Retailers</h3></div>
         <table>
           <thead>
-            <tr><th>Business</th><th>Email</th><th>Location</th><th>Status</th></tr>
+            <tr><th>Business</th><th>Email</th><th>Location</th><th>Status</th><th></th></tr>
           </thead>
           <tbody id="ordersBody">
-            <tr><td colspan="4" style="text-align:center;padding:3rem;color:var(--clr-muted)">Loading…</td></tr>
+            <tr><td colspan="5" style="text-align:center;padding:3rem;color:var(--clr-muted)">Loading…</td></tr>
           </tbody>
         </table>
       </div>
@@ -78,7 +79,7 @@
 </div>
 
 <script type="module">
-import { api, setSession, clearSession, getToken, getUser } from "/js/api.js";
+import { api, setSession, clearSession, getToken } from "/js/api.js";
 
 const modal = document.getElementById("loginModal");
 
@@ -181,20 +182,22 @@ async function loadDashboard() {
     const tbody = document.getElementById("ordersBody");
     tbody.innerHTML = retailers.length
       ? retailers
-          .map(
-            (r) => `<tr>
+          .map((r) => {
+            const id = r._id || r.id;
+            return `<tr>
           <td>${r.businessName || "—"}</td>
           <td>${r.email || ""}</td>
           <td>${r.location || ""}</td>
           <td><span class="badge ${r.status}">${r.status}</span></td>
-        </tr>`
-          )
+          <td><a class="btn_sm outline" href="/admin/chat.html?retailer=${id}">Chat</a></td>
+        </tr>`;
+          })
           .join("")
-      : `<tr><td colspan="4" style="text-align:center;padding:3rem;color:var(--clr-muted)">No retailers yet.</td></tr>`;
+      : `<tr><td colspan="5" style="text-align:center;padding:3rem;color:var(--clr-muted)">No retailers yet.</td></tr>`;
   } catch (err) {
     console.error(err);
     document.getElementById("ordersBody").innerHTML =
-      `<tr><td colspan="4">${err.message || "Failed to load data"}</td></tr>`;
+      `<tr><td colspan="5">${err.message || "Failed to load data"}</td></tr>`;
   }
 }
 
