@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/assets/20251102_172020.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/CSS/retailer.css" />
+  <title>Admin Support — Sweet Feet Retailer</title>
+  <style>
+    .support_wrap { display: flex; flex-direction: column; min-height: 100vh; background: #faf7f2; }
+    .support_header { padding: 1.1rem 1.4rem; background: #fff; border-bottom: 1px solid #e8e0d6; }
+    .support_header h2 { margin: 0; font-size: 1.5rem; }
+    .support_header p { margin: 0.3rem 0 0; color: #6b5e52; font-size: 1.1rem; }
+    .support_messages { flex: 1; overflow-y: auto; padding: 1.4rem; display: flex; flex-direction: column; gap: 0.75rem; }
+    .bubble { max-width: 75%; padding: 0.75rem 1rem; border-radius: 14px; font-size: 1.15rem; line-height: 1.45; }
+    .bubble.mine { align-self: flex-end; background: #160c02; color: #f7dfb8; }
+    .bubble.theirs { align-self: flex-start; background: #fff; border: 1px solid #e8e0d6; color: #160c02; }
+    .bubble time { display: block; font-size: 0.85rem; opacity: 0.7; margin-top: 0.35rem; }
+    .support_compose { display: flex; gap: 0.5rem; padding: 1rem; border-top: 1px solid #e8e0d6; background: #fff; }
+    .support_compose input { flex: 1; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid #e8e0d6; font: inherit; }
+    .support_compose button { padding: 0.85rem 1.2rem; border: none; border-radius: 10px; background: #160c02; color: #fff; font-weight: 700; cursor: pointer; }
+    .empty_thread { margin: auto; color: #6b5e52; text-align: center; padding: 2rem; }
+  </style>
+</head>
+<body>
+<div class="dashboard_wrap">
+  <nav class="sidebar_nav">
+    <a class="sidebar_logo" href="/index.html">
+      <img src="/assets/images (7).jpeg" alt="Sweet Feet" />
+      <span>Sweet Feet</span>
+    </a>
+    <span class="sidebar_label">Retailer</span>
+    <a class="sidebar_link" href="/retailer/dashboard.html"><span class="icon">📊</span> Overview</a>
+    <a class="sidebar_link" href="/retailer/products.html"><span class="icon">👟</span> Products</a>
+    <a class="sidebar_link" href="/retailer/orders.html"><span class="icon">📦</span> Orders</a>
+    <a class="sidebar_link" href="/retailer/chat.html"><span class="icon">💬</span> Customers</a>
+    <a class="sidebar_link active" href="/retailer/support.html"><span class="icon">🛡️</span> Admin Support</a>
+    <div class="sidebar_divider"></div>
+    <a class="sidebar_link" href="#" id="logoutBtn"><span class="icon">🚪</span> Log Out</a>
+  </nav>
+
+  <div class="main_content" style="padding:0">
+    <div class="support_wrap">
+      <div class="support_header">
+        <h2>Sweet Feet Admin</h2>
+        <p>Ask about approvals, payouts, or store issues. Admin replies show up here.</p>
+      </div>
+      <div class="support_messages" id="threadMessages">
+        <div class="empty_thread">Loading conversation…</div>
+      </div>
+      <form class="support_compose" id="composeForm">
+        <input id="composeInput" type="text" placeholder="Message the admin…" autocomplete="off" required />
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { api, clearSession, getToken } from "/js/api.js";
+
+if (!getToken() || !localStorage.getItem("sf_retailer_id")) {
+  window.location.href = "/retailer/login.html?next=/retailer/support.html";
+}
+
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, "&")
+    .replace(/</g, "<")
+    .replace(/>/g, ">")
+    .replace(/"/g, """);
+}
+function fmtTime(d) {
+  try {
+    return new Date(d).toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  } catch {
+    return "";
+  }
+}
+
+async function loadMessages() {
+  const box = document.getElementById("threadMessages");
+  try {
+    const json = await api("/messages?threadType=staff");
+    const msgs = json.data || [];
+    if (!msgs.length) {
+      box.innerHTML =
+        '<div class="empty_thread">No messages yet. Introduce your store — admin will reply here.</div>';
+      return;
+    }
+    box.innerHTML = msgs
+      .map((m) => {
+        const mine = m.senderType === "retailer";
+        return `<div class="bubble ${mine ? "mine" : "theirs"}">${escapeHtml(m.message)}<time>${fmtTime(m.createdAt)}</time></div>`;
+      })
+      .join("");
+    box.scrollTop = box.scrollHeight;
+  } catch (err) {
+    box.innerHTML = `<div class="empty_thread">${escapeHtml(err.message || "Could not load messages")}</div>`;
+  }
+}
+
+document.getElementById("composeForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const input = document.getElementById("composeInput");
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = "";
+  try {
+    await api("/messages", {
+      method: "POST",
+      body: { threadType: "staff", toAdmin: true, message: text },
+    });
+    await loadMessages();
+  } catch (err) {
+    alert(err.message || "Send failed");
+  }
+});
+
+document.getElementById("logoutBtn").addEventListener("click", async (e) => {
+  e.preventDefault();
+  if (!confirm("Log out?")) return;
+  try {
+    await api("/auth/logout", { method: "POST" });
+  } catch {}
+  clearSession();
+  window.location.href = "/retailer/login.html";
+});
+
+loadMessages();
+setInterval(loadMessages, 4000);
+</script>
+</body>
+</html>
