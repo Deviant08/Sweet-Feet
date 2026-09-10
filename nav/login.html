@@ -3,20 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="icon"
-      type="image/jpeg"
-      sizes="32x32"
-      href="/assets/20251102_172020.png"
-    />
+    <link rel="icon" type="image/jpeg" sizes="32x32" href="/assets/20251102_172020.png" />
     <link rel="stylesheet" href="/CSS/login.css" />
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Capriola&family=Kumbh+Sans:wght,YOPQ@100..900,300&family=Public+Sans:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Capriola&family=Kumbh+Sans:wght,YOPQ@100..900,300&family=Public+Sans:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
     <title>Sweet Feet &mdash; Login</title>
   </head>
   <body>
@@ -24,19 +15,15 @@
       <div class="width50 img_container">
         <div>
           <a class="logo" href="/index.html">
-            <img
-              class="logo_img"
-              src="/assets/images (7).jpeg"
-              alt="Logo of Sweet feets"
-            />
+            <img class="logo_img" src="/assets/images (7).jpeg" alt="Logo of Sweet feets" />
             <h1 class="logo_txt">Sweet Feet</h1>
           </a>
         </div>
-
         <div class="message">
           <h1>Welcome Back!</h1>
           <p>
-            Log in and continue discovering footwear designed for <br> effortless comfort and timeless style &rarr;
+            Log in and continue discovering footwear designed for <br />
+            effortless comfort and timeless style &rarr;
           </p>
         </div>
       </div>
@@ -44,38 +31,134 @@
         <div class="form">
           <p class="bolden">Hello!</p>
           <div class="mb_10">
-            <h3>Login to get started !</h3>
+            <h3>Login to get started</h3>
           </div>
-          <form action="">
+
+          <div class="role_toggle" role="tablist" aria-label="Login as">
+            <button type="button" class="role_btn active" data-role="customer">Customer</button>
+            <button type="button" class="role_btn" data-role="retailer">Retailer</button>
+            <button type="button" class="role_btn" data-role="admin">Admin</button>
+          </div>
+
+          <form id="loginForm">
             <input
+              id="loginEmail"
               class="inp email_inp mb_10 border"
               type="email"
               placeholder="Email address"
+              autocomplete="email"
               required
             />
             <br />
             <input
+              id="loginPassword"
               class="inp mb_10 border"
               type="password"
               placeholder="Password"
+              autocomplete="current-password"
               required
             />
             <br />
-            <button class="mb_10 border btn_login">
-              <a href=""> Login </a>
-            </button>
+            <div id="loginError" class="msg_error" style="display: none"></div>
+            <div id="loginSuccess" class="msg_success" style="display: none"></div>
+            <button type="submit" class="mb_10 border btn_login" id="loginSubmitBtn">Login</button>
           </form>
+
           <div class="link_forgot">
-            <a href="#" target="_blank" class="link"> Forgot password?</a>
+            <a href="#" class="link">Forgot password?</a>
           </div>
           <span class="login_link">
             <p>Don't have an account?</p>
-            <a href="/nav/signup.html" target="_blank" class="link link_sign"
-              >Sign Up</a
-            >
+            <a href="/nav/signup.html" class="link link_sign">Sign Up</a>
+            <span class="muted">·</span>
+            <a href="/retailer/signup.html" class="link">Retailer signup</a>
           </span>
+          <p class="hint_text" id="roleHint">Customers use the same email & password from signup.</p>
         </div>
       </div>
     </div>
+
+    <script type="module">
+      import { api, setSession } from "/js/api.js";
+
+      let role = "customer";
+
+      const hints = {
+        customer: "Customers use the same email & password from signup.",
+        retailer: "Retailers log in with their business email (approved accounts only for selling).",
+        admin: "Admins use a staff account with role = admin, then open the admin dashboard.",
+      };
+
+      document.querySelectorAll(".role_btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".role_btn").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          role = btn.dataset.role;
+          document.getElementById("roleHint").textContent = hints[role] || "";
+          document.getElementById("loginError").style.display = "none";
+        });
+      });
+
+      const form = document.getElementById("loginForm");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const errorEl = document.getElementById("loginError");
+        const successEl = document.getElementById("loginSuccess");
+        const btn = document.getElementById("loginSubmitBtn");
+        errorEl.style.display = "none";
+        successEl.style.display = "none";
+
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value;
+
+        btn.disabled = true;
+        btn.textContent = "Logging in…";
+
+        try {
+          if (role === "retailer") {
+            const data = await api("/auth/retailer/login", {
+              method: "POST",
+              body: { email, password },
+            });
+            setSession(data.token, data.data, "retailer");
+            window.location.href = "/retailer/dashboard.html";
+            return;
+          }
+
+          const data = await api("/auth/login", {
+            method: "POST",
+            body: { email, password },
+          });
+          setSession(data.token, data.data, "user");
+
+          if (role === "admin") {
+            if (data.data?.role !== "admin") {
+              throw new Error("This account is not an admin. Choose Customer, or use an admin email.");
+            }
+            window.location.href = "/admin/dashboard.html";
+            return;
+          }
+
+          const next = new URLSearchParams(window.location.search).get("next");
+          window.location.href = next || "/index.html";
+        } catch (err) {
+          errorEl.textContent = err.message || "Login failed";
+          errorEl.style.display = "block";
+          btn.disabled = false;
+          btn.textContent = "Login";
+        }
+      });
+
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("registered") === "1") {
+        const msg = document.getElementById("loginSuccess");
+        msg.textContent = "Account created successfully. Please log in.";
+        msg.style.display = "block";
+      }
+      if (params.get("role") === "retailer" || params.get("role") === "admin") {
+        const r = params.get("role");
+        document.querySelector(`.role_btn[data-role="${r}"]`)?.click();
+      }
+    </script>
   </body>
 </html>
