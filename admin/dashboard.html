@@ -1,1 +1,215 @@
-PLACEHOLDER_DASH
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/assets/20251102_172020.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/CSS/retailer.css" />
+  <title>Admin Dashboard — Sweet Feet</title>
+</head>
+<body>
+
+<div class="dashboard_wrap">
+  <nav class="sidebar_nav">
+    <a class="sidebar_logo" href="/index.html">
+      <img src="/assets/images (7).jpeg" alt="Sweet Feet" />
+      <span>Sweet Feet</span>
+    </a>
+    <span class="sidebar_label">Admin</span>
+    <a class="sidebar_link active" href="/admin/dashboard.html"><span class="icon">📊</span> Overview</a>
+    <a class="sidebar_link" href="/admin/retailers.html"><span class="icon">🏪</span> Retailers <span class="badge pending" id="pendingBadge" style="margin-left:auto;display:none"></span></a>
+    <a class="sidebar_link" href="/admin/chat.html"><span class="icon">💬</span> Support Chat</a>
+    <div class="sidebar_divider"></div>
+    <a class="sidebar_link" href="/index.html" target="_blank"><span class="icon">🌐</span> View Site</a>
+    <a class="sidebar_link" href="#" id="logoutBtn"><span class="icon">🚪</span> Log Out</a>
+  </nav>
+
+  <div class="main_content">
+    <div class="page_header">
+      <div>
+        <h1>Platform Overview</h1>
+        <p>Sweet Feet marketplace at a glance.</p>
+      </div>
+    </div>
+
+    <div class="page_body">
+      <div class="stats_grid" id="statsGrid">
+        <div class="stat_card"><div class="stat_icon">⏳</div><div class="stat_value">—</div><div class="stat_label">Loading…</div></div>
+      </div>
+
+      <div class="table_wrap">
+        <div class="table_header"><h3>Retailers</h3></div>
+        <table>
+          <thead>
+            <tr><th>Business</th><th>Email</th><th>Location</th><th>Status</th><th></th></tr>
+          </thead>
+          <tbody id="ordersBody">
+            <tr><td colspan="5" style="text-align:center;padding:3rem;color:var(--clr-muted)">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal_overlay" id="loginModal">
+  <div class="modal">
+    <h3>Admin Login</h3>
+    <p style="font-size:1.2rem;color:var(--clr-muted);margin-bottom:1.5rem">Demo: admin@sweetfeet.demo / SweetFeet123!</p>
+    <form id="adminLoginForm">
+      <div class="form_group">
+        <label>Email</label>
+        <input type="email" id="adminEmail" required value="admin@sweetfeet.demo" />
+      </div>
+      <div class="form_group">
+        <label>Password</label>
+        <input type="password" id="adminPassword" required value="SweetFeet123!" />
+      </div>
+      <div class="msg_error" id="loginError"></div>
+      <div class="modal_actions" style="margin-top:1rem">
+        <button type="submit" class="btn_sm dark" id="adminLoginBtn" style="width:100%">Log In →</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script type="module">
+import { api, setSession, clearSession, getToken } from "/js/api.js";
+
+const modal = document.getElementById("loginModal");
+
+function showLogin(msg) {
+  modal.classList.add("open");
+  const errorEl = document.getElementById("loginError");
+  if (msg) {
+    errorEl.textContent = msg;
+    errorEl.style.display = "block";
+  }
+}
+
+function hideLogin() {
+  modal.classList.remove("open");
+  document.getElementById("loginError").style.display = "none";
+}
+
+async function requireAdmin() {
+  if (!getToken()) {
+    showLogin();
+    return false;
+  }
+  try {
+    const me = await api("/auth/me");
+    if (me.data?.role !== "admin") {
+      clearSession();
+      showLogin("This account is not an admin.");
+      return false;
+    }
+    hideLogin();
+    return true;
+  } catch {
+    clearSession();
+    showLogin("Session expired. Please log in again.");
+    return false;
+  }
+}
+
+document.getElementById("adminLoginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const errorEl = document.getElementById("loginError");
+  const btn = document.getElementById("adminLoginBtn");
+  errorEl.style.display = "none";
+  btn.disabled = true;
+  btn.textContent = "Signing in…";
+  try {
+    const data = await api("/auth/login", {
+      method: "POST",
+      body: {
+        email: document.getElementById("adminEmail").value.trim(),
+        password: document.getElementById("adminPassword").value,
+      },
+    });
+    if (data.data?.role !== "admin") {
+      clearSession();
+      throw new Error("Not an admin account");
+    }
+    setSession(data.token, data.data, "user");
+    hideLogin();
+    loadDashboard();
+  } catch (err) {
+    errorEl.textContent = err.message || "Login failed";
+    errorEl.style.display = "block";
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Log In →";
+  }
+});
+
+async function loadDashboard() {
+  const ok = await requireAdmin();
+  if (!ok) return;
+  try {
+    const [ret, prods] = await Promise.all([
+      api("/retailers/admin/all").catch(() => api("/retailers")),
+      api("/products").catch(() => ({ data: [] })),
+    ]);
+    const retailers = ret.data || [];
+    const products = prods.data || [];
+    const pending = retailers.filter((r) => r.status === "pending").length;
+    const approved = retailers.filter((r) => r.status === "approved").length;
+
+    const badge = document.getElementById("pendingBadge");
+    if (pending > 0) {
+      badge.textContent = pending;
+      badge.style.display = "inline-flex";
+    } else {
+      badge.style.display = "none";
+    }
+
+    document.getElementById("statsGrid").innerHTML = `
+      <div class="stat_card"><div class="stat_icon">🏪</div><div class="stat_value">${approved}</div><div class="stat_label">Approved Retailers</div></div>
+      <div class="stat_card"><div class="stat_icon">⏳</div><div class="stat_value">${pending}</div><div class="stat_label">Pending Approvals</div></div>
+      <div class="stat_card"><div class="stat_icon">👟</div><div class="stat_value">${products.length}</div><div class="stat_label">Active Listings</div></div>
+      <div class="stat_card"><div class="stat_icon">📦</div><div class="stat_value">${retailers.length}</div><div class="stat_label">Total Retailers</div></div>
+    `;
+
+    const tbody = document.getElementById("ordersBody");
+    tbody.innerHTML = retailers.length
+      ? retailers
+          .map((r) => {
+            const id = r._id || r.id;
+            return `<tr>
+          <td>${r.businessName || "—"}</td>
+          <td>${r.email || ""}</td>
+          <td>${r.location || ""}</td>
+          <td><span class="badge ${r.status}">${r.status}</span></td>
+          <td><a class="btn_sm outline" href="/admin/chat.html?retailer=${id}">Chat</a></td>
+        </tr>`;
+          })
+          .join("")
+      : `<tr><td colspan="5" style="text-align:center;padding:3rem;color:var(--clr-muted)">No retailers yet.</td></tr>`;
+  } catch (err) {
+    console.error(err);
+    document.getElementById("ordersBody").innerHTML =
+      `<tr><td colspan="5">${err.message || "Failed to load data"}</td></tr>`;
+  }
+}
+
+document.getElementById("logoutBtn").addEventListener("click", async (e) => {
+  e.preventDefault();
+  if (!window.confirm("Log out of admin?")) return;
+  try {
+    await api("/auth/logout", { method: "POST" });
+  } catch {
+    /* ignore */
+  }
+  clearSession();
+  window.location.href = "/nav/login.html?role=admin";
+});
+
+loadDashboard();
+</script>
+</body>
+</html>
