@@ -138,6 +138,10 @@ h3 {
   cursor: pointer;
   padding: 1.5rem;
   border-radius: 20px;
+  min-height: 4.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn_login:hover {
@@ -152,6 +156,30 @@ h3 {
 .btn_login:disabled {
   opacity: 0.7;
   cursor: wait;
+}
+
+.btn_spinner {
+  display: none;
+  width: 1.6rem;
+  height: 1.6rem;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: sfspin 0.7s linear infinite;
+}
+
+.btn_login.is-loading .btn_label {
+  display: none;
+}
+
+.btn_login.is-loading .btn_spinner {
+  display: inline-block;
+}
+
+@keyframes sfspin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .login_link {
