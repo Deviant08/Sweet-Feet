@@ -33,6 +33,21 @@ export function getToken() {
   return localStorage.getItem(TOKEN_KEY) || "";
 }
 
+export function chatAppUrl(query = {}) {
+  const configured =
+    (typeof window !== "undefined" && window.SF_CHAT_URL) || "";
+  const params = new URLSearchParams();
+  for (const [k, v] of Object.entries(query)) {
+    if (v != null && String(v) !== "") params.set(k, String(v));
+  }
+  const token = getToken();
+  const base = String(configured).replace(/\/$/, "");
+  if (base && token) params.set("token", token);
+  const qs = params.toString();
+  if (base) return qs ? `${base}/?${qs}` : `${base}/`;
+  return qs ? `/nav/chat.html?${qs}` : `/nav/chat.html`;
+}
+
 export function setSession(token, data, type = "user") {
   if (token) localStorage.setItem(TOKEN_KEY, token);
   if (type === "retailer") {
