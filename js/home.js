@@ -2,23 +2,22 @@
  * ============================================================
  *  Sweet Feet v2 — js/home.js
  *  Homepage + customer auth + feedback.
- *  Network calls use js/api.js → TypeScript backend (not PHP /API).
+ *  Featured products are PUBLIC (no login required).
  * ============================================================
  */
 
-import { api, setSession } from "./api.js";
+import { api, setSession, mapProduct, avatarUrl } from "./api.js";
+
+function formatPrice(p) {
+  return "₦" + Number(p || 0).toLocaleString("en-NG");
+}
 
 export function initHome() {
-  const product = document.querySelector(".product");
+  const productStrip = document.querySelector(".sweet_product .product");
   const aboutUs = document.querySelector(".about_us");
-  const loginForm = document.querySelector(".form__container");
-  const exitContainer = document.querySelector(".exit");
-  const checkOut = document.querySelectorAll(".checkout");
-  const eachProduct = document.querySelectorAll(".pd");
 
-  if (product) {
+  if (productStrip) {
     const sections = document.querySelectorAll("section");
-
     if (aboutUs && sections.length > 0) {
       aboutUs.addEventListener("click", function (e) {
         e.preventDefault();
@@ -26,36 +25,46 @@ export function initHome() {
       });
     }
 
-    let count = 0;
-    let oneTime = setInterval(() => {
-      count++;
-      if (count === 4) count = 0;
-      product.style.transform = count >= 3 ? "translateX(20rem)" : "translateX(-20rem)";
-    }, 1000);
+    // Stop old carousel shove
+    productStrip.style.transform = "none";
 
-    product.addEventListener("mouseover", () => clearInterval(oneTime));
-    product.addEventListener("mouseout", () => {
-      oneTime = setInterval(() => {
-        count++;
-        if (count === 4) count = 0;
-        product.style.transform = count >= 3 ? "translateX(20rem)" : "translateX(-20rem)";
-      }, 1000);
-    });
+    // Public catalogue — guests can browse seller + prices without logging in
+    (async () => {
+      try {
+        const json = await api("/products");
+        const list = (json.data || []).map(mapProduct).filter(Boolean).slice(0, 8);
+        if (!list.length) return;
 
-    function showSignUpForm(e) {
-      e.preventDefault();
-      loginForm?.classList.remove("hidden");
-      exitContainer?.classList.remove("hidden");
-    }
-    function removeSignUpForm(e) {
-      e.preventDefault();
-      loginForm?.classList.add("hidden");
-      exitContainer?.classList.add("hidden");
-    }
-
-    checkOut.forEach((btn) => btn.addEventListener("click", showSignUpForm));
-    eachProduct.forEach((pd) => pd.addEventListener("click", showSignUpForm));
-    exitContainer?.addEventListener("click", removeSignUpForm);
+        productStrip.innerHTML = list
+          .map((p) => {
+            const profileUrl = `/nav/retailer.html?id=${encodeURIComponent(p.retailer_id)}`;
+            const shopUrl = `/nav/products.html`;
+            return `
+            <div class="pd">
+              <a href="${shopUrl}" style="text-decoration:none;color:inherit">
+                <img src="${p.img}" alt="${p.name}" />
+              </a>
+              <div class="order" style="opacity:1">
+                <span>
+                  <p>${p.name}</p>
+                  <h5>${formatPrice(p.price)}</h5>
+                </span>
+                <div><a class="btn checkout" href="${shopUrl}">Order</a></div>
+                <a class="card_seller" href="${profileUrl}" style="margin-top:.6rem" title="View seller (no login needed)">
+                  <img class="card_seller_avatar" src="${p.retailerLogo || avatarUrl(p.retailerName)}" alt="" />
+                  <span class="card_seller_text">
+                    <span class="card_seller_by">Sold by</span>
+                    <span class="card_seller_name">${p.retailerName || "Sweet Feet"}</span>
+                  </span>
+                </a>
+              </div>
+            </div>`;
+          })
+          .join("");
+      } catch (err) {
+        console.warn("Could not load public featured products", err);
+      }
+    })();
   }
 
   // ── Customer login (nav/login.html) ───────────────────────
