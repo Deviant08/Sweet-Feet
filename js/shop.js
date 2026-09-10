@@ -1,15 +1,15 @@
 /*
  * ============================================================
  *  Sweet Feet v2 — js/shop.js
- *  Shop page logic only (nav/products.html).
- *  All network calls go through js/api.js → TypeScript backend.
+ *  Shop page logic (nav/products.html).
  * ============================================================
  */
 
 import { api, mapProduct, getToken } from "./api.js";
 
 export function formatPrice(p) {
-  return `₦${parseFloat(p).toFixed(2)}`;
+  const n = Number(p) || 0;
+  return `₦${n.toLocaleString("en-NG", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 }
 
 export function initShop() {
@@ -48,6 +48,7 @@ export function initShop() {
   }
 
   function renderCard(p) {
+    const profileUrl = `/nav/retailer.html?id=${encodeURIComponent(p.retailer_id)}`;
     const chatUrl =
       `/nav/chat.html` +
       `?retailer_id=${encodeURIComponent(p.retailer_id)}` +
@@ -57,16 +58,9 @@ export function initShop() {
     return `
       <article class="product_card" data-id="${p.id}">
         ${p.badge ? `<span class="card_badge badge_${p.badge}">${p.badgeLabel}</span>` : ""}
-        <button class="card_wishlist" title="Save for later">♡</button>
+        <button class="card_wishlist" title="Save for later" type="button">♡</button>
         <img class="card_img" src="${p.img}" alt="${p.name}" loading="lazy" />
         <div class="card_body">
-          <div class="card_retailer">
-            <div>
-              <div class="card_retailer_name">${p.retailerName || "Sweet Feet"}</div>
-              <div class="card_retailer_loc">${p.retailerLocation || ""}</div>
-            </div>
-            <a class="btn_chat" href="${chatUrl}">💬 Chat</a>
-          </div>
           <span class="card_category">${p.category} · ${p.gender}</span>
           <h2 class="card_name">${p.name}</h2>
           <div class="card_rating">
@@ -81,8 +75,16 @@ export function initShop() {
               ${formatPrice(p.price)}
               ${p.oldPrice ? `<span class="old_price">${formatPrice(p.oldPrice)}</span>` : ""}
             </div>
-            <button class="btn_order" data-id="${p.id}">Add to cart</button>
+            <button class="btn_order" type="button" data-id="${p.id}">Add to cart</button>
           </div>
+          <a class="card_seller" href="${profileUrl}" title="View ${p.retailerName || "seller"}">
+            <img class="card_seller_avatar" src="${p.retailerLogo}" alt="" />
+            <span class="card_seller_text">
+              <span class="card_seller_by">Sold by</span>
+              <span class="card_seller_name">${p.retailerName || "Sweet Feet"}</span>
+            </span>
+          </a>
+          <a class="btn_chat_link" href="${chatUrl}">💬 Chat with seller</a>
         </div>
       </article>`;
   }
@@ -327,7 +329,7 @@ export function initShop() {
     priceSlider.addEventListener("input", () => {
       state.maxPrice = parseFloat(priceSlider.value);
       const label = document.getElementById("priceLabel");
-      if (label) label.textContent = `Up to ₦${priceSlider.value}`;
+      if (label) label.textContent = `Up to ₦${Number(priceSlider.value).toLocaleString("en-NG")}`;
       renderGrid();
     });
   }
