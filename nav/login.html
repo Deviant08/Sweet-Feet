@@ -73,7 +73,6 @@
             <span class="muted">·</span>
             <a href="/retailer/signup.html" class="link">Retailer signup</a>
           </span>
-          <p class="hint_text" id="roleHint">Customers use the same email & password from signup.</p>
         </div>
       </div>
     </div>
@@ -83,18 +82,11 @@
 
       let role = "customer";
 
-      const hints = {
-        customer: "Customers use the same email & password from signup.",
-        retailer: "Retailers log in with their business email (approved accounts only for selling).",
-        admin: "Admins use a staff account with role = admin, then open the admin dashboard.",
-      };
-
       document.querySelectorAll(".role_btn").forEach((btn) => {
         btn.addEventListener("click", () => {
           document.querySelectorAll(".role_btn").forEach((b) => b.classList.remove("active"));
           btn.classList.add("active");
           role = btn.dataset.role;
-          document.getElementById("roleHint").textContent = hints[role] || "";
           document.getElementById("loginError").style.display = "none";
         });
       });
