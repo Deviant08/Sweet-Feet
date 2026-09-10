@@ -1,1 +1,233 @@
-PLACEHOLDER_RET
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/assets/20251102_172020.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/CSS/retailer.css" />
+  <title>Retailers — Sweet Feet Admin</title>
+</head>
+<body>
+
+<div class="dashboard_wrap">
+  <nav class="sidebar_nav">
+    <a class="sidebar_logo" href="/index.html">
+      <img src="/assets/images (7).jpeg" alt="Sweet Feet" />
+      <span>Sweet Feet</span>
+    </a>
+    <span class="sidebar_label">Admin</span>
+    <a class="sidebar_link" href="/admin/dashboard.html"><span class="icon">📊</span> Overview</a>
+    <a class="sidebar_link active" href="/admin/retailers.html"><span class="icon">🏪</span> Retailers</a>
+    <a class="sidebar_link" href="/admin/chat.html"><span class="icon">💬</span> Support Chat</a>
+    <div class="sidebar_divider"></div>
+    <a class="sidebar_link" href="#" id="logoutBtn"><span class="icon">🚪</span> Log Out</a>
+  </nav>
+
+  <div class="main_content">
+    <div class="page_header">
+      <div>
+        <h1>Retailers</h1>
+        <p>Approve or decline new sellers. Chat with any retailer from here.</p>
+      </div>
+    </div>
+
+    <div class="page_body">
+      <div class="table_wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Business</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Location</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="retailersBody">
+            <tr><td colspan="6" style="text-align:center;padding:3rem;color:var(--clr-muted)">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal_overlay" id="loginModal">
+  <div class="modal">
+    <h3>Admin Login</h3>
+    <p style="font-size:1.2rem;color:var(--clr-muted);margin:1rem 0 0">
+      Demo: <strong>admin@sweetfeet.demo</strong> / <strong>SweetFeet123!</strong>
+    </p>
+    <form id="adminLoginForm">
+      <div class="form_group" style="margin-top:2rem">
+        <label>Email</label>
+        <input type="email" id="adminEmail" value="admin@sweetfeet.demo" autocomplete="username" required />
+      </div>
+      <div class="form_group">
+        <label>Password</label>
+        <input type="password" id="adminPassword" placeholder="SweetFeet123!" autocomplete="current-password" required />
+      </div>
+      <div class="msg_error" id="loginError"></div>
+      <div class="modal_footer">
+        <button type="submit" class="btn_sm dark" id="adminLoginBtn" style="width:100%">Log In →</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script type="module">
+import { api, setSession, clearSession, getToken } from "/js/api.js";
+
+const modal = document.getElementById("loginModal");
+
+function showLogin(msg) {
+  if (msg) {
+    const errorEl = document.getElementById("loginError");
+    errorEl.textContent = msg;
+    errorEl.style.display = "block";
+  }
+  modal.classList.add("open");
+}
+
+function hideLogin() {
+  modal.classList.remove("open");
+  document.getElementById("loginError").style.display = "none";
+}
+
+async function requireAdmin() {
+  if (!getToken()) {
+    showLogin();
+    return false;
+  }
+  try {
+    const me = await api("/auth/me");
+    const user = me.data || {};
+    if (user.role !== "admin") {
+      clearSession();
+      showLogin("This account is not an admin.");
+      return false;
+    }
+    setSession(getToken(), user, "user");
+    hideLogin();
+    return true;
+  } catch {
+    clearSession();
+    showLogin("Session expired. Please log in again.");
+    return false;
+  }
+}
+
+document.getElementById("adminLoginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const errorEl = document.getElementById("loginError");
+  const btn = document.getElementById("adminLoginBtn");
+  errorEl.style.display = "none";
+  btn.disabled = true;
+  btn.textContent = "Logging in…";
+  try {
+    const data = await api("/auth/login", {
+      method: "POST",
+      body: {
+        email: document.getElementById("adminEmail").value.trim(),
+        password: document.getElementById("adminPassword").value,
+      },
+    });
+    if (data.data?.role !== "admin") {
+      clearSession();
+      throw new Error("This account is not an admin.");
+    }
+    setSession(data.token, data.data, "user");
+    hideLogin();
+    await loadRetailers();
+  } catch (err) {
+    errorEl.textContent = err.message || "Login failed";
+    errorEl.style.display = "block";
+  }
+  btn.disabled = false;
+  btn.textContent = "Log In →";
+});
+
+function actionButtons(r, id) {
+  const s = r.status;
+  const chat = `<a class="btn_sm outline" href="/admin/chat.html?retailer=${id}">Chat</a>`;
+  if (s === "pending") {
+    return `${chat}
+      <button class="btn_sm dark" data-id="${id}" data-status="approved">Approve</button>
+      <button class="btn_sm danger" data-id="${id}" data-status="declined">Decline</button>`;
+  }
+  if (s === "approved") {
+    return `${chat} <button class="btn_sm danger" data-id="${id}" data-status="suspended">Suspend</button>`;
+  }
+  if (s === "declined" || s === "suspended") {
+    return `${chat} <button class="btn_sm dark" data-id="${id}" data-status="approved">Approve</button>`;
+  }
+  return chat;
+}
+
+async function loadRetailers() {
+  const ok = await requireAdmin();
+  if (!ok) return;
+
+  const tbody = document.getElementById("retailersBody");
+  try {
+    const json = await api("/retailers/admin/all").catch(() => api("/retailers"));
+    const list = json.data || [];
+    if (!list.length) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:3rem;color:var(--clr-muted)">No retailers yet.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = list
+      .map((r) => {
+        const id = r._id || r.id;
+        return `<tr>
+        <td>${r.businessName || "—"}</td>
+        <td>${r.email || ""}</td>
+        <td>${r.phone || ""}</td>
+        <td>${r.location || ""}</td>
+        <td><span class="badge ${r.status}">${r.status}</span></td>
+        <td style="display:flex;gap:.4rem;flex-wrap:wrap">${actionButtons(r, id)}</td>
+      </tr>`;
+      })
+      .join("");
+
+    tbody.querySelectorAll("[data-status]").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const action = btn.dataset.status;
+        const label = action === "declined" ? "decline" : action;
+        if (!window.confirm(`Really ${label} this retailer?`)) return;
+        try {
+          await api(`/retailers/${btn.dataset.id}/status`, {
+            method: "PATCH",
+            body: { status: action },
+          });
+          loadRetailers();
+        } catch (e) {
+          alert(e.message || "Update failed");
+        }
+      });
+    });
+  } catch (e) {
+    tbody.innerHTML = `<tr><td colspan="6">${e.message || "Failed to load"}</td></tr>`;
+  }
+}
+
+document.getElementById("logoutBtn").addEventListener("click", async (e) => {
+  e.preventDefault();
+  if (!window.confirm("Log out of admin?")) return;
+  try {
+    await api("/auth/logout", { method: "POST" });
+  } catch {
+    /* ignore */
+  }
+  clearSession();
+  window.location.href = "/nav/login.html?role=admin";
+});
+
+loadRetailers();
+</script>
+</body>
+</html>
