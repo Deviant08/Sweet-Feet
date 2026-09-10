@@ -5,19 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="/assets/20251102_172020.png" sizes="32x32" />
     <link rel="stylesheet" href="/CSS/feedback.css" />
-    <!-- <link rel="stylesheet" href="/CSS/queries.css" /> -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght,YOPQ@100..900,300&family=Public+Sans:ital,wght@0,100..900;1,100..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
-    <script src="/js/main.js" defer></script>
+    <script type="module" src="/js/main.js"></script>
     <title>Sweet Feet &mdash; Feedback</title>
   </head>
   <body>
 
-    <!-- Header / Nav -->
     <header class="fb_header">
       <div class="nav_bar">
         <a class="logo" href="/index.html">
@@ -37,10 +35,7 @@
       </div>
     </header>
 
-    <!-- Main -->
     <main class="fb_main">
-
-      <!-- Left panel — info side -->
       <div class="fb_panel_left">
         <div class="fb_panel_content">
           <p class="fb_eyebrow">We're listening</p>
@@ -73,55 +68,49 @@
         </div>
       </div>
 
-      <!-- Right panel — form -->
       <div class="fb_panel_right">
         <div class="fb_form_card">
-
           <h3 class="fb_form_title">Send Us a Message</h3>
           <p class="fb_form_sub">
             Fill in the form below and we'll get back to you.
           </p>
 
           <form class="fb_form" action="#" method="post" id="feedbackForm">
-
-            <!-- Name -->
             <div class="fb_field">
               <label for="fb_name">Full Name</label>
               <input
                 id="fb_name"
                 name="name"
                 type="text"
-                placeholder="e.g. Chidi Okonkwo"
+                placeholder="Full name"
                 required
               />
             </div>
 
-            <!-- Email -->
             <div class="fb_field">
               <label for="fb_email">Email Address</label>
               <input
                 id="fb_email"
                 name="email"
                 type="email"
-                placeholder="e.g. chidi@email.com"
+                placeholder="Email address"
                 required
               />
             </div>
 
-            <!-- Category -->
             <div class="fb_field">
               <label for="fb_category">What is your feedback about?</label>
               <select id="fb_category" name="category" required>
                 <option value="" disabled selected>Select a category</option>
                 <option value="product">Product Quality</option>
-                <option value="delivery">Delivery &amp; Shipping</option>
+                <option value="delivery">Delivery & Shipping</option>
                 <option value="website">Website Experience</option>
-                <option value="sizing">Sizing &amp; Fit</option>
+                <option value="sizing">Sizing & Fit</option>
+                <option value="support">Support</option>
                 <option value="other">Other</option>
               </select>
             </div>
 
-            <!-- Star rating -->
             <div class="fb_field">
               <label>Overall Experience</label>
               <div class="star_rating" role="radiogroup" aria-label="Star rating">
@@ -138,7 +127,6 @@
               </div>
             </div>
 
-            <!-- Message -->
             <div class="fb_field">
               <label for="fb_message">Your Message</label>
               <textarea
@@ -150,25 +138,20 @@
               ></textarea>
             </div>
 
-            <!-- Submit -->
             <button type="submit" class="fb_submit">
               Send Feedback &rarr;
             </button>
-
           </form>
 
-          <!-- Success message shown by JS after submit -->
           <div class="fb_success hidden" id="fbSuccess">
             <span class="success_icon">&#10003;</span>
             <h4>Thank you!</h4>
             <p>Your feedback has been received. We'll be in touch soon.</p>
           </div>
-
         </div>
       </div>
     </main>
 
-    <!-- Footer -->
     <footer>
       <div class="footer">
         <div class="footer_logo">
@@ -184,13 +167,105 @@
         <div class="footer_links">
           <a href="#" class="link">About Us</a>
           <a href="#" class="link">Privacy Policy</a>
-          <a href="#" class="link">FAQ</a>
-          <a href="#" class="link">Contact Us</a>
-          <a href="#" class="link">Support</a>
+          <a href="/nav/feedback.html?view=faq" class="link">FAQ</a>
+          <a href="/nav/feedback.html?view=contact" class="link">Contact Us</a>
+          <a href="/nav/feedback.html?view=support" class="link">Support</a>
         </div>
         <p class="copy">&copy; Created by Thee_10th. All rights reserved</p>
       </div>
     </footer>
 
+    <div class="info_overlay" id="infoOverlay" hidden></div>
+
+    <div class="info_modal" id="modal-faq" role="dialog" aria-modal="true" hidden>
+      <button type="button" class="info_close" data-close-modal>&times;</button>
+      <h3>Frequently asked questions</h3>
+      <div class="faq_item">
+        <strong>How long does delivery take?</strong>
+        <p>Most orders in Lagos and Abuja arrive in 1–3 working days. Other cities typically take 3–7 working days.</p>
+      </div>
+      <div class="faq_item">
+        <strong>Can I return a pair?</strong>
+        <p>Yes. Unworn items can be returned within 7 days. Start a return from Track Order or send us a message.</p>
+      </div>
+      <div class="faq_item">
+        <strong>How do sizes work?</strong>
+        <p>We list EU sizes on every product. If you are between sizes, go up one — or ask the retailer in chat.</p>
+      </div>
+      <div class="faq_item">
+        <strong>How do I pay?</strong>
+        <p>Checkout uses a secure payment link. You will get an email receipt after a successful payment.</p>
+      </div>
+      <button type="button" class="info_cta" data-close-modal data-focus-form data-category="other">Still have a question? Message us</button>
+    </div>
+
+    <div class="info_modal" id="modal-contact" role="dialog" aria-modal="true" hidden>
+      <button type="button" class="info_close" data-close-modal>&times;</button>
+      <h3>Contact us</h3>
+      <p>We read every message. For orders, use Track Order. For everything else, send the form on this page or reach us here:</p>
+      <ul class="contact_list">
+        <li><strong>Email</strong> hello@sweetfeet.ng</li>
+        <li><strong>Hours</strong> Mon–Sat, 9am – 6pm WAT</li>
+        <li><strong>Chat</strong> Message a retailer from any product, or use Messages after you log in.</li>
+      </ul>
+      <button type="button" class="info_cta" data-close-modal data-focus-form data-category="other">Write to us</button>
+    </div>
+
+    <div class="info_modal" id="modal-support" role="dialog" aria-modal="true" hidden>
+      <button type="button" class="info_close" data-close-modal>&times;</button>
+      <h3>Need support?</h3>
+      <p>Tell us what went wrong and we will follow up. Include your order ID if you have one.</p>
+      <ul class="contact_list">
+        <li>Payment charged twice</li>
+        <li>Wrong size or damaged item</li>
+        <li>Delivery delay</li>
+        <li>Account or login issues</li>
+      </ul>
+      <button type="button" class="info_cta" data-close-modal data-focus-form data-category="support">Open a support request</button>
+    </div>
+
+    <script type="module">
+      const overlay = document.getElementById("infoOverlay");
+      const modals = {
+        faq: document.getElementById("modal-faq"),
+        contact: document.getElementById("modal-contact"),
+        support: document.getElementById("modal-support"),
+      };
+
+      function closeModals() {
+        overlay.hidden = true;
+        Object.values(modals).forEach((m) => {
+          if (m) m.hidden = true;
+        });
+      }
+
+      function openModal(key) {
+        const modal = modals[key];
+        if (!modal) return;
+        closeModals();
+        overlay.hidden = false;
+        modal.hidden = false;
+      }
+
+      overlay.addEventListener("click", closeModals);
+      document.querySelectorAll("[data-close-modal]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const cat = btn.dataset.category;
+          closeModals();
+          if (btn.hasAttribute("data-focus-form")) {
+            const select = document.getElementById("fb_category");
+            if (select && cat) select.value = cat;
+            document.getElementById("fb_name")?.focus();
+            document.getElementById("feedbackForm")?.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        });
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeModals();
+      });
+
+      const view = new URLSearchParams(window.location.search).get("view");
+      if (view && modals[view]) openModal(view);
+    </script>
   </body>
 </html>
