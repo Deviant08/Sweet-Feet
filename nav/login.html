@@ -61,7 +61,10 @@
             <br />
             <div id="loginError" class="msg_error" style="display: none"></div>
             <div id="loginSuccess" class="msg_success" style="display: none"></div>
-            <button type="submit" class="mb_10 border btn_login" id="loginSubmitBtn">Login</button>
+            <button type="submit" class="mb_10 border btn_login" id="loginSubmitBtn">
+              <span class="btn_label">Login</span>
+              <span class="btn_spinner" aria-hidden="true"></span>
+            </button>
           </form>
 
           <div class="link_forgot">
@@ -104,7 +107,7 @@
         const password = document.getElementById("loginPassword").value;
 
         btn.disabled = true;
-        btn.textContent = "Logging in…";
+        btn.classList.add("is-loading");
 
         try {
           if (role === "retailer") {
@@ -137,7 +140,7 @@
           errorEl.textContent = err.message || "Login failed";
           errorEl.style.display = "block";
           btn.disabled = false;
-          btn.textContent = "Login";
+          btn.classList.remove("is-loading");
         }
       });
 
