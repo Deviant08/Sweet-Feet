@@ -69,15 +69,14 @@
 <div class="modal_overlay" id="loginModal">
   <div class="modal">
     <h3>Admin Login</h3>
-    <p style="font-size:1.2rem;color:var(--clr-muted);margin:1rem 0 0">admin@sweetfeet.demo / SweetFeet123!</p>
     <form id="adminLoginForm">
       <div class="form_group" style="margin-top:2rem">
         <label>Email</label>
-        <input type="email" id="adminEmail" value="admin@sweetfeet.demo" required />
+        <input type="email" id="adminEmail" required autocomplete="username" />
       </div>
       <div class="form_group">
         <label>Password</label>
-        <input type="password" id="adminPassword" placeholder="SweetFeet123!" required />
+        <input type="password" id="adminPassword" placeholder="Password" required autocomplete="current-password" />
       </div>
       <div class="msg_error" id="loginError"></div>
       <div class="modal_footer">
