@@ -22,7 +22,7 @@ export function initShop() {
     cat: "all",
     search: "",
     sort: "default",
-    maxPrice: 500000,
+    maxPrice: 150000,
     gender: "all",
     color: "all",
     rating: "all",
