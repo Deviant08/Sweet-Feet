@@ -5,7 +5,7 @@
  * ============================================================
  */
 
-import { api, mapProduct, getToken } from "./api.js";
+import { api, mapProduct, getToken, chatAppUrl } from "./api.js";
 
 export function formatPrice(p) {
   const n = Number(p) || 0;
@@ -49,11 +49,12 @@ export function initShop() {
 
   function renderCard(p) {
     const profileUrl = `/nav/retailer.html?id=${encodeURIComponent(p.retailer_id)}`;
-    const chatUrl =
-      `/nav/chat.html` +
-      `?retailer_id=${encodeURIComponent(p.retailer_id)}` +
-      `&retailer_name=${encodeURIComponent(p.retailerName || "")}` +
-      `&product_id=${encodeURIComponent(p.id)}`;
+    const chatUrl = chatAppUrl({
+      retailer_id: p.retailer_id,
+      retailer_name: p.retailerName || "",
+      product_id: p.id,
+      product_name: p.name,
+    });
 
     return `
       <article class="product_card" data-id="${p.id}">
