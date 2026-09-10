@@ -92,7 +92,6 @@ import { api, setSession, clearSession, getToken, avatarUrl } from "/js/api.js";
 
 const modal = document.getElementById("loginModal");
 let activeRetailerId = null;
-let activeName = "";
 let pollTimer = null;
 
 function showLogin(msg) {
@@ -188,8 +187,7 @@ async function loadInbox() {
 
 async function openThread(id, name) {
   activeRetailerId = String(id);
-  activeName = name || "Retailer";
-  document.getElementById("threadTitle").textContent = activeName;
+  document.getElementById("threadTitle").textContent = name || "Retailer";
   document.getElementById("composeForm").style.display = "flex";
   document.querySelectorAll(".inbox_item").forEach((el) => {
     el.classList.toggle("active", el.dataset.id === id);
@@ -250,6 +248,11 @@ async function boot() {
   const ok = await requireAdmin();
   if (!ok) return;
   await loadInbox();
+  const q = new URLSearchParams(window.location.search).get("retailer");
+  if (q) {
+    const item = document.querySelector(`.inbox_item[data-id="${q}"]`);
+    if (item) openThread(item.dataset.id, item.dataset.name);
+  }
 }
 
 boot();
