@@ -8,10 +8,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/CSS/retailer.css" />
-  <link rel="stylesheet" href="/CSS/chat.css" />
   <title>Support Chat — Sweet Feet Admin</title>
   <style>
-    .chat_layout { display: flex; height: calc(100vh - 0px); background: #faf7f2; }
+    .chat_layout { display: flex; min-height: 100vh; background: #faf7f2; }
     .chat_inbox { width: 320px; border-right: 1px solid #e8e0d6; background: #fff; overflow-y: auto; flex-shrink: 0; }
     .inbox_item { display: flex; gap: 0.75rem; padding: 1rem 1.1rem; cursor: pointer; border-bottom: 1px solid #f0ebe3; }
     .inbox_item:hover, .inbox_item.active { background: #f5efe6; }
@@ -30,7 +29,6 @@
     .thread_compose input { flex: 1; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid #e8e0d6; font: inherit; }
     .thread_compose button { padding: 0.85rem 1.2rem; border: none; border-radius: 10px; background: #160c02; color: #fff; font-weight: 700; cursor: pointer; }
     .empty_thread { margin: auto; color: #6b5e52; text-align: center; padding: 2rem; }
-    .badge_unread { background: #c8440c; color: #fff; font-size: 0.85rem; padding: 0.15rem 0.45rem; border-radius: 999px; }
   </style>
 </head>
 <body>
@@ -94,6 +92,7 @@ import { api, setSession, clearSession, getToken, avatarUrl } from "/js/api.js";
 
 const modal = document.getElementById("loginModal");
 let activeRetailerId = null;
+let activeName = "";
 let pollTimer = null;
 
 function showLogin(msg) {
@@ -150,61 +149,76 @@ function fmtTime(d) {
   } catch { return ""; }
 }
 
-async function loadInbox() {
-  const json = await api("/support/inbox");
-  const list = json.data || [];
-  const el = document.getElementById("inboxItems");
-  if (!list.length) {
-    el.innerHTML = `<div style="padding:2rem;text-align:center;color:#6b5e52">No retailers yet.</div>`;
-    return;
-  }
-  el.innerHTML = list.map((t) => {
-    const r = t.retailer;
-    const id = r.id || r._id;
-    const preview = t.lastMessage?.message || "No messages yet";
-    const unread = t.unread ? `<span class="badge_unread">${t.unread}</span>` : "";
-    return `<div class="inbox_item ${activeRetailerId === String(id) ? "active" : ""}" data-id="${id}" data-name="${r.businessName || ""}">
-      <img src="${avatarUrl(r.businessName, r.logo)}" alt="" />
-      <div class="inbox_meta">
-        <div class="inbox_name">${r.businessName || "Retailer"} ${unread}</div>
-        <div class="inbox_preview">${preview}</div>
-      </div>
-    </div>`;
-  }).join("");
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, "&")
+    .replace(/</g, "<")
+    .replace(/>/g, ">")
+    .replace(/"/g, """);
+}
 
-  el.querySelectorAll(".inbox_item").forEach((item) => {
-    item.addEventListener("click", () => openThread(item.dataset.id, item.dataset.name));
-  });
+async function loadInbox() {
+  const el = document.getElementById("inboxItems");
+  try {
+    const json = await api("/messages/staff/partners");
+    const list = json.data || [];
+    if (!list.length) {
+      el.innerHTML = `<div style="padding:2rem;text-align:center;color:#6b5e52">No retailers yet.</div>`;
+      return;
+    }
+    el.innerHTML = list.map((r) => {
+      const id = r._id || r.id;
+      const name = r.businessName || "Retailer";
+      return `<div class="inbox_item ${activeRetailerId === String(id) ? "active" : ""}" data-id="${id}" data-name="${escapeHtml(name)}">
+        <img src="${avatarUrl(name, r.logo)}" alt="" />
+        <div class="inbox_meta">
+          <div class="inbox_name">${escapeHtml(name)}</div>
+          <div class="inbox_preview">${escapeHtml(r.status || "")} · ${escapeHtml(r.email || "")}</div>
+        </div>
+      </div>`;
+    }).join("");
+
+    el.querySelectorAll(".inbox_item").forEach((item) => {
+      item.addEventListener("click", () => openThread(item.dataset.id, item.dataset.name));
+    });
+  } catch (err) {
+    el.innerHTML = `<div style="padding:2rem;color:#6b5e52">${escapeHtml(err.message || "Failed to load")}</div>`;
+  }
 }
 
 async function openThread(id, name) {
   activeRetailerId = String(id);
-  document.getElementById("threadTitle").textContent = name || "Retailer";
+  activeName = name || "Retailer";
+  document.getElementById("threadTitle").textContent = activeName;
   document.getElementById("composeForm").style.display = "flex";
+  document.querySelectorAll(".inbox_item").forEach((el) => {
+    el.classList.toggle("active", el.dataset.id === id);
+  });
   await loadMessages();
-  loadInbox();
   if (pollTimer) clearInterval(pollTimer);
-  pollTimer = setInterval(loadMessages, 5000);
+  pollTimer = setInterval(loadMessages, 4000);
 }
 
 async function loadMessages() {
   if (!activeRetailerId) return;
-  const json = await api(`/support?retailerId=${encodeURIComponent(activeRetailerId)}`);
-  const msgs = json.data || [];
   const box = document.getElementById("threadMessages");
-  if (!msgs.length) {
-    box.innerHTML = `<div class="empty_thread">No messages yet. Say hello to this retailer.</div>`;
-    return;
+  try {
+    const json = await api(
+      `/messages?threadType=staff&retailerId=${encodeURIComponent(activeRetailerId)}`
+    );
+    const msgs = json.data || [];
+    if (!msgs.length) {
+      box.innerHTML = `<div class="empty_thread">No messages yet. Say hello to this retailer.</div>`;
+      return;
+    }
+    box.innerHTML = msgs.map((m) => {
+      const mine = m.senderType === "admin";
+      return `<div class="bubble ${mine ? "mine" : "theirs"}">${escapeHtml(m.message)}<time>${fmtTime(m.createdAt)}</time></div>`;
+    }).join("");
+    box.scrollTop = box.scrollHeight;
+  } catch (err) {
+    box.innerHTML = `<div class="empty_thread">${escapeHtml(err.message || "Could not load")}</div>`;
   }
-  box.innerHTML = msgs.map((m) => {
-    const mine = m.senderType === "admin";
-    return `<div class="bubble ${mine ? "mine" : "theirs"}">${escapeHtml(m.message)}<time>${fmtTime(m.createdAt)}</time></div>`;
-  }).join("");
-  box.scrollTop = box.scrollHeight;
-}
-
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&", "<": "<", ">": ">", '"': """, "'": "&#39;" }[c]));
 }
 
 document.getElementById("composeForm").addEventListener("submit", async (e) => {
@@ -214,9 +228,11 @@ document.getElementById("composeForm").addEventListener("submit", async (e) => {
   if (!text || !activeRetailerId) return;
   input.value = "";
   try {
-    await api("/support", { method: "POST", body: { retailerId: activeRetailerId, message: text } });
+    await api("/messages", {
+      method: "POST",
+      body: { threadType: "staff", retailerId: activeRetailerId, message: text },
+    });
     await loadMessages();
-    await loadInbox();
   } catch (err) {
     alert(err.message || "Send failed");
   }
