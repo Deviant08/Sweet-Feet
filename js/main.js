@@ -9,7 +9,7 @@ import { initHome } from "./home.js";
 import { initShop } from "./shop.js";
 import { initRetailer } from "./retailer.js";
 import { initChat } from "./chat.js";
-import { getUser, getToken, clearSession, avatarUrl, api } from "./api.js";
+import { getUser, getToken, clearSession, avatarUrl, api, chatAppUrl } from "./api.js";
 
 (function injectCoreStyles() {
   if (document.getElementById("sf-core-styles")) return;
@@ -228,7 +228,7 @@ function buildAuthLinks() {
         <a href="/nav/login.html">Login</a>
         <a href="/nav/products.html">Shop</a>
         <a href="/nav/track.html">Track Order</a>
-        <a href="/nav/chat.html">Messages</a>
+        <a href="${chatAppUrl()}">Messages</a>
         <a href="/nav/feedback.html">Feedback</a>
       `,
       loggedIn: false,
@@ -246,7 +246,7 @@ function buildAuthLinks() {
       </div>
       <a href="/nav/products.html">Shop</a>
       <a href="/nav/track.html">Track Order</a>
-      <a href="/nav/chat.html">Messages</a>
+      <a href="${chatAppUrl()}">Messages</a>
       <a href="/nav/feedback.html">Feedback</a>
       <button type="button" class="nav_logout_btn" data-logout>Log out</button>
     `,
