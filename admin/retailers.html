@@ -21,6 +21,7 @@
     <span class="sidebar_label">Admin</span>
     <a class="sidebar_link" href="/admin/dashboard.html"><span class="icon">📊</span> Overview</a>
     <a class="sidebar_link active" href="/admin/retailers.html"><span class="icon">🏪</span> Retailers</a>
+    <a class="sidebar_link" href="/admin/chat.html"><span class="icon">💬</span> Support Chat</a>
     <div class="sidebar_divider"></div>
     <a class="sidebar_link" href="#" id="logoutBtn"><span class="icon">🚪</span> Log Out</a>
   </nav>
@@ -29,7 +30,7 @@
     <div class="page_header">
       <div>
         <h1>Retailers</h1>
-        <p>Approve or decline new sellers. Suspend approved ones if needed.</p>
+        <p>Approve or decline new sellers. Chat with any retailer from here.</p>
       </div>
     </div>
 
@@ -152,18 +153,19 @@ document.getElementById("adminLoginForm").addEventListener("submit", async (e) =
 
 function actionButtons(r, id) {
   const s = r.status;
+  const chat = `<a class="btn_sm outline" href="/admin/chat.html?retailer=${id}">Chat</a>`;
   if (s === "pending") {
-    return `
+    return `${chat}
       <button class="btn_sm dark" data-id="${id}" data-status="approved">Approve</button>
       <button class="btn_sm danger" data-id="${id}" data-status="declined">Decline</button>`;
   }
   if (s === "approved") {
-    return `<button class="btn_sm danger" data-id="${id}" data-status="suspended">Suspend</button>`;
+    return `${chat} <button class="btn_sm danger" data-id="${id}" data-status="suspended">Suspend</button>`;
   }
   if (s === "declined" || s === "suspended") {
-    return `<button class="btn_sm dark" data-id="${id}" data-status="approved">Approve</button>`;
+    return `${chat} <button class="btn_sm dark" data-id="${id}" data-status="approved">Approve</button>`;
   }
-  return "";
+  return chat;
 }
 
 async function loadRetailers() {
