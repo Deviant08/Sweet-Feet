@@ -2,15 +2,11 @@
  * ============================================================
  *  Sweet Feet v2 — js/home.js
  *  Homepage + customer auth + feedback.
- *  Featured products are PUBLIC (no login required).
+ *  Featured products stay as the original static cards.
  * ============================================================
  */
 
-import { api, setSession, mapProduct, avatarUrl } from "./api.js";
-
-function formatPrice(p) {
-  return "₦" + Number(p || 0).toLocaleString("en-NG");
-}
+import { api, setSession } from "./api.js";
 
 export function initHome() {
   const productStrip = document.querySelector(".sweet_product .product");
@@ -24,47 +20,6 @@ export function initHome() {
         sections[0].scrollIntoView({ behavior: "smooth" });
       });
     }
-
-    // Stop old carousel shove
-    productStrip.style.transform = "none";
-
-    // Public catalogue — guests can browse seller + prices without logging in
-    (async () => {
-      try {
-        const json = await api("/products");
-        const list = (json.data || []).map(mapProduct).filter(Boolean).slice(0, 8);
-        if (!list.length) return;
-
-        productStrip.innerHTML = list
-          .map((p) => {
-            const profileUrl = `/nav/retailer.html?id=${encodeURIComponent(p.retailer_id)}`;
-            const shopUrl = `/nav/products.html`;
-            return `
-            <div class="pd">
-              <a href="${shopUrl}" style="text-decoration:none;color:inherit">
-                <img src="${p.img}" alt="${p.name}" />
-              </a>
-              <div class="order" style="opacity:1">
-                <span>
-                  <p>${p.name}</p>
-                  <h5>${formatPrice(p.price)}</h5>
-                </span>
-                <div><a class="btn checkout" href="${shopUrl}">Order</a></div>
-                <a class="card_seller" href="${profileUrl}" style="margin-top:.6rem" title="View seller (no login needed)">
-                  <img class="card_seller_avatar" src="${p.retailerLogo || avatarUrl(p.retailerName)}" alt="" />
-                  <span class="card_seller_text">
-                    <span class="card_seller_by">Sold by</span>
-                    <span class="card_seller_name">${p.retailerName || "Sweet Feet"}</span>
-                  </span>
-                </a>
-              </div>
-            </div>`;
-          })
-          .join("");
-      } catch (err) {
-        console.warn("Could not load public featured products", err);
-      }
-    })();
   }
 
   // ── Customer login (nav/login.html) ───────────────────────
