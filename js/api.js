@@ -4,17 +4,9 @@
  *  Single client for the standalone backend:
  *  https://github.com/Deviant08/sweet-feet-backend
  *  Live: https://sweet-feet-backend.onrender.com/api/v1
- *  All requests go to /api/v1 (never the legacy PHP /API folder).
  * ============================================================
  */
 
-/**
- * Backend base URL.
- * Default: production Render API.
- * Local override (optional):
- *   <script>window.SF_API_BASE = "http://localhost:5000/api/v1";</script>
- * Optional WebSocket: window.SF_WS_URL = "wss://sweet-feet-backend.onrender.com/ws/chat"
- */
 export const API_BASE =
   (typeof window !== "undefined" && window.SF_API_BASE) ||
   "https://sweet-feet-backend.onrender.com/api/v1";
@@ -84,10 +76,12 @@ export function getRetailer() {
   }
 }
 
-/**
- * @param {string} path - path after /api/v1 (e.g. "/products")
- * @param {object} opts - fetch options; body may be a plain object
- */
+export function avatarUrl(name, existing) {
+  if (existing) return existing;
+  const label = encodeURIComponent((name || "SF").slice(0, 24));
+  return `https://ui-avatars.com/api/?name=${label}&background=160c02&color=f7dfb8&size=128&bold=true`;
+}
+
 export async function api(path, opts = {}) {
   const url = path.startsWith("http")
     ? path
@@ -132,10 +126,10 @@ export async function api(path, opts = {}) {
   return json;
 }
 
-/** Normalize product from TS API → shape the UI expects */
 export function mapProduct(p) {
   if (!p) return null;
   const retailer = p.retailer || {};
+  const rName = retailer.businessName || "Sweet Feet";
   return {
     id: p._id || p.id,
     name: p.name,
@@ -154,7 +148,8 @@ export function mapProduct(p) {
     is_active: p.isActive !== false,
     isActive: p.isActive !== false,
     retailer_id: retailer._id || retailer.id || p.retailer || "",
-    retailerName: retailer.businessName || "Sweet Feet",
+    retailerName: rName,
     retailerLocation: retailer.location || "",
+    retailerLogo: avatarUrl(rName, retailer.logo),
   };
 }
