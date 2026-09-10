@@ -9,6 +9,38 @@
   <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/CSS/retailer.css" />
   <title>Become a Retailer — Sweet Feet</title>
+  <style>
+    .pending_panel {
+      display: none;
+      text-align: center;
+      padding: 1rem 0 0.5rem;
+    }
+    .pending_panel.visible { display: block; }
+    .pending_icon {
+      font-size: 3.2rem;
+      margin-bottom: 1rem;
+    }
+    .pending_panel h2 {
+      font-size: 1.8rem;
+      margin-bottom: 0.75rem;
+      color: #160c02;
+    }
+    .pending_panel p {
+      font-size: 1.25rem;
+      line-height: 1.55;
+      color: #5c4a35;
+      margin-bottom: 1rem;
+    }
+    .pending_panel .hint {
+      background: #f5efe6;
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      font-size: 1.15rem;
+      color: #3d342c;
+      margin: 1.25rem 0;
+      text-align: left;
+    }
+  </style>
 </head>
 <body>
 <div class="auth_wrap">
@@ -22,38 +54,55 @@
   </div>
   <div class="auth_panel_right">
     <div class="auth_card">
-      <h2>Retailer Registration</h2>
-      <p class="auth_card_sub">Fill in your business details. Once submitted, your account will be reviewed and approved by our team within 24 hours.</p>
-      <div class="msg_error"   id="msgError"></div>
-      <div class="msg_success" id="msgSuccess"></div>
-      <form id="retailerSignupForm">
-        <div class="form_group">
-          <label for="business_name">Business Name</label>
-          <input id="business_name" type="text" placeholder="e.g. Lagos Kicks" required />
+      <div id="signupFormWrap">
+        <h2>Retailer Registration</h2>
+        <p class="auth_card_sub">Fill in your business details. An admin must approve your account before you can list products.</p>
+        <div class="msg_error" id="msgError"></div>
+        <form id="retailerSignupForm">
+          <div class="form_group">
+            <label for="business_name">Business Name</label>
+            <input id="business_name" type="text" placeholder="e.g. Lagos Kicks" required />
+          </div>
+          <div class="form_group">
+            <label for="email">Business Email</label>
+            <input id="email" type="email" placeholder="e.g. info@lagoskicks.com" required />
+          </div>
+          <div class="form_group">
+            <label for="password">Password</label>
+            <input id="password" type="password" placeholder="Minimum 6 characters" required />
+          </div>
+          <div class="form_group">
+            <label for="phone">Phone Number</label>
+            <input id="phone" type="tel" placeholder="e.g. 08012345678" required />
+          </div>
+          <div class="form_group">
+            <label for="location">Business Location</label>
+            <input id="location" type="text" placeholder="e.g. Ikeja, Lagos" required />
+          </div>
+          <div class="form_group">
+            <label for="bio">Store Description</label>
+            <textarea id="bio" placeholder="Tell customers about your store and the shoes you sell…"></textarea>
+          </div>
+          <button type="submit" class="btn_primary" id="submitBtn">Submit Registration →</button>
+        </form>
+        <p class="auth_footer_link">Already registered? <a href="/retailer/login.html">Log in here</a></p>
+      </div>
+
+      <div class="pending_panel" id="pendingPanel">
+        <div class="pending_icon">⏳</div>
+        <h2>Application submitted</h2>
+        <p>
+          Thanks for signing up. Your retailer account is <strong>pending admin approval</strong>.
+          You cannot list products until an admin approves you.
+        </p>
+        <div class="hint">
+          <strong>What happens next?</strong><br />
+          1. An admin reviews your application on the admin dashboard.<br />
+          2. They choose <strong>Approve</strong> or <strong>Decline</strong>.<br />
+          3. Log in again to see your updated status on the retailer dashboard.
         </div>
-        <div class="form_group">
-          <label for="email">Business Email</label>
-          <input id="email" type="email" placeholder="e.g. info@lagoskicks.com" required />
-        </div>
-        <div class="form_group">
-          <label for="password">Password</label>
-          <input id="password" type="password" placeholder="Minimum 6 characters" required />
-        </div>
-        <div class="form_group">
-          <label for="phone">Phone Number</label>
-          <input id="phone" type="tel" placeholder="e.g. 08012345678" required />
-        </div>
-        <div class="form_group">
-          <label for="location">Business Location</label>
-          <input id="location" type="text" placeholder="e.g. Ikeja, Lagos" required />
-        </div>
-        <div class="form_group">
-          <label for="bio">Store Description</label>
-          <textarea id="bio" placeholder="Tell customers about your store and the shoes you sell…"></textarea>
-        </div>
-        <button type="submit" class="btn_primary" id="submitBtn">Submit Registration →</button>
-      </form>
-      <p class="auth_footer_link">Already approved? <a href="/retailer/login.html">Log in here</a></p>
+        <a class="btn_primary" href="/retailer/login.html" style="display:inline-block;text-decoration:none">Go to retailer login →</a>
+      </div>
     </div>
   </div>
 </div>
