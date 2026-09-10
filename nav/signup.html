@@ -10,14 +10,14 @@
       href="/assets/sweet-feet logo.png"
     />
     <link rel="stylesheet" href="/CSS/signup.css" />
-<link rel="stylesheet" href="/CSS/queries.css">
+    <link rel="stylesheet" href="/CSS/queries.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Capriola&family=Kumbh+Sans:wght,YOPQ@100..900,300&family=Public+Sans:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
-    <title>Sweet Feet &mdash; SignUp</title>
+    <title>Sweet Feet &mdash; Sign Up</title>
   </head>
   <body>
     <div class="flex height100">
@@ -27,15 +27,14 @@
             <img
               class="logo_img"
               src="/assets/Sweet-feet-logo.png"
-              alt="Logo of Sweet feets"
+              alt="Logo of Sweet Feet"
             />
-            <!-- <h1 class="logo_txt">Sweet Feet</h1> -->
           </a>
         </div>
-         <div class="message">
-          <h1>Join the Sweet Feet <br> Community Today!</h1>
+        <div class="message">
+          <h1>Join the Sweet Feet <br />Community Today!</h1>
           <p>
-           Create your account and discover footwear <br>made for comfort and style &rarr;
+            Create your account and discover footwear <br />made for comfort and style &rarr;
           </p>
         </div>
       </div>
@@ -43,31 +42,81 @@
         <div class="form">
           <p class="bolden">Hello!</p>
           <div class="mb_10">
-            <h3>Sign up to get started !</h3>
+            <h3>Sign up to get started</h3>
           </div>
-          <form action="">
+          <form id="signupForm">
             <input
+              id="signupName"
+              class="inp mb_10 border"
+              type="text"
+              placeholder="Full name"
+              autocomplete="name"
+              required
+            />
+            <br />
+            <input
+              id="signupEmail"
               class="inp email_inp mb_10 border"
               type="email"
               placeholder="Email address"
+              autocomplete="email"
               required
             />
             <br />
             <input
+              id="signupPassword"
               class="inp mb_10 border"
               type="password"
-              placeholder="Password"
+              placeholder="Password (min. 6 characters)"
+              autocomplete="new-password"
+              minlength="6"
               required
             />
             <br />
-            <button class="mb_10 border btn_login">Login</button>
+            <div id="signupError" class="msg_error" style="display: none"></div>
+            <button type="submit" class="mb_10 border btn_login" id="signupSubmitBtn">
+              <span class="btn_label">Sign Up</span>
+              <span class="btn_spinner" aria-hidden="true"></span>
+            </button>
           </form>
           <span class="login_link">
             <p>Already have an account?</p>
-            <a href="/nav/login.html" target="_blank" class="link_forgot">Login</a>
+            <a href="/nav/login.html" class="link_forgot">Login</a>
           </span>
         </div>
       </div>
     </div>
+
+    <script type="module">
+      import { api } from "/js/api.js";
+
+      const form = document.getElementById("signupForm");
+      const btn = document.getElementById("signupSubmitBtn");
+      const errorEl = document.getElementById("signupError");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        errorEl.style.display = "none";
+        btn.disabled = true;
+        btn.classList.add("is-loading");
+
+        const fullName = document.getElementById("signupName").value.trim();
+        const email = document.getElementById("signupEmail").value.trim();
+        const password = document.getElementById("signupPassword").value;
+
+        try {
+          await api("/auth/register", {
+            method: "POST",
+            body: { fullName, email, password, passwordConfirm: password },
+          });
+          window.location.href = "/nav/login.html?registered=1";
+        } catch (err) {
+          errorEl.textContent = err.message || "Signup failed";
+          errorEl.style.display = "block";
+          btn.disabled = false;
+          btn.classList.remove("is-loading");
+        }
+      });
+    </script>
   </body>
 </html>
