@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="/assets/20251102_172020.png" />
+  <link rel="icon" href="/assets/Sweet-feet-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
@@ -11,11 +11,10 @@
   <title>Admin Dashboard — Sweet Feet</title>
 </head>
 <body>
-
 <div class="dashboard_wrap">
   <nav class="sidebar_nav">
     <a class="sidebar_logo" href="/index.html">
-      <img src="/assets/images (7).jpeg" alt="Sweet Feet" />
+      <img src="/assets/Sweet-feet-logo.png" alt="Sweet Feet" />
       <span>Sweet Feet</span>
     </a>
     <span class="sidebar_label">Admin</span>
@@ -26,104 +25,55 @@
     <a class="sidebar_link" href="/index.html" target="_blank"><span class="icon">🌐</span> View Site</a>
     <a class="sidebar_link" href="#" id="logoutBtn"><span class="icon">🚪</span> Log Out</a>
   </nav>
-
   <div class="main_content">
-    <div class="page_header">
-      <div>
-        <h1>Platform Overview</h1>
-        <p>Sweet Feet marketplace at a glance.</p>
-      </div>
-    </div>
-
+    <div class="page_header"><div><h1>Platform Overview</h1><p>Sweet Feet marketplace at a glance.</p></div></div>
     <div class="page_body">
       <div class="stats_grid" id="statsGrid">
         <div class="stat_card"><div class="stat_icon">⏳</div><div class="stat_value">—</div><div class="stat_label">Loading…</div></div>
       </div>
-
       <div class="table_wrap">
         <div class="table_header"><h3>Retailers</h3></div>
         <table>
-          <thead>
-            <tr><th>Business</th><th>Email</th><th>Location</th><th>Status</th><th></th></tr>
-          </thead>
-          <tbody id="ordersBody">
-            <tr><td colspan="5" style="text-align:center;padding:3rem;color:var(--clr-muted)">Loading…</td></tr>
-          </tbody>
+          <thead><tr><th>Business</th><th>Email</th><th>Location</th><th>Status</th><th></th></tr></thead>
+          <tbody id="ordersBody"><tr><td colspan="5" style="text-align:center;padding:3rem;color:var(--clr-muted)">Loading…</td></tr></tbody>
         </table>
       </div>
     </div>
   </div>
 </div>
-
 <div class="modal_overlay" id="loginModal">
   <div class="modal">
     <h3>Admin Login</h3>
     <form id="adminLoginForm">
-      <div class="form_group">
-        <label>Username or email</label>
-        <input type="text" id="adminEmail" required autocomplete="username" placeholder="10thmav" />
-      </div>
-      <div class="form_group">
-        <label>Password</label>
-        <input type="password" id="adminPassword" required autocomplete="current-password" placeholder="Password" />
-      </div>
+      <div class="form_group"><label>Username or email</label><input type="text" id="adminEmail" required autocomplete="username" placeholder="10thmav" /></div>
+      <div class="form_group"><label>Password</label><input type="password" id="adminPassword" required autocomplete="current-password" placeholder="Password" /></div>
       <div class="msg_error" id="loginError"></div>
-      <div class="modal_actions" style="margin-top:1rem">
-        <button type="submit" class="btn_sm dark" id="adminLoginBtn" style="width:100%">Log In →</button>
-      </div>
+      <div class="modal_actions" style="margin-top:1rem"><button type="submit" class="btn_sm dark" id="adminLoginBtn" style="width:100%">Log In →</button></div>
     </form>
   </div>
 </div>
-
 <script type="module">
 import { api, setSession, clearSession, getToken } from "/js/api.js";
-
 const modal = document.getElementById("loginModal");
 const tbody = document.getElementById("ordersBody");
-
 function showLogin(msg) {
   modal.classList.add("open");
   const errorEl = document.getElementById("loginError");
-  if (msg) {
-    errorEl.textContent = msg;
-    errorEl.style.display = "block";
-  }
+  if (msg) { errorEl.textContent = msg; errorEl.style.display = "block"; }
   tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:3rem;color:var(--clr-muted)">Log in as admin to see retailers.</td></tr>`;
 }
-
-function hideLogin() {
-  modal.classList.remove("open");
-  document.getElementById("loginError").style.display = "none";
-}
-
+function hideLogin() { modal.classList.remove("open"); document.getElementById("loginError").style.display = "none"; }
 async function requireAdmin() {
-  if (!getToken()) {
-    showLogin();
-    return false;
-  }
+  if (!getToken()) { showLogin(); return false; }
   try {
     const me = await api("/auth/me");
-    if (me.data?.role !== "admin") {
-      clearSession();
-      showLogin("This account is not an admin.");
-      return false;
-    }
-    hideLogin();
-    return true;
-  } catch (err) {
-    clearSession();
-    showLogin(err.message || "Session expired. Please log in again.");
-    return false;
-  }
+    if (me.data?.role !== "admin") { clearSession(); showLogin("This account is not an admin."); return false; }
+    hideLogin(); return true;
+  } catch (err) { clearSession(); showLogin(err.message || "Session expired."); return false; }
 }
-
 async function loadRetailerList() {
   let json;
-  try {
-    json = await api("/retailers/admin/all");
-  } catch {
-    json = await api("/retailers");
-  }
+  try { json = await api("/retailers/admin/all"); } catch { json = await api("/retailers"); }
   let list = Array.isArray(json.data) ? json.data : [];
   if (!list.length) {
     tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--clr-muted)">No shops yet — loading demo retailers…</td></tr>`;
@@ -132,98 +82,45 @@ async function loadRetailerList() {
       await api("/seed/demo", { method: "POST" });
       json = await api("/retailers/admin/all").catch(() => api("/retailers"));
       list = Array.isArray(json.data) ? json.data : [];
-    } catch {
-      /* seed optional */
-    }
+    } catch {}
   }
   return list;
 }
-
 document.getElementById("adminLoginForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const errorEl = document.getElementById("loginError");
   const btn = document.getElementById("adminLoginBtn");
-  errorEl.style.display = "none";
-  btn.disabled = true;
-  btn.textContent = "Signing in…";
+  errorEl.style.display = "none"; btn.disabled = true; btn.textContent = "Signing in…";
   try {
-    const data = await api("/auth/login", {
-      method: "POST",
-      body: {
-        email: document.getElementById("adminEmail").value.trim(),
-        password: document.getElementById("adminPassword").value,
-      },
-    });
-    if (data.data?.role !== "admin") {
-      clearSession();
-      throw new Error("Not an admin account");
-    }
-    setSession(data.token, data.data, "user");
-    hideLogin();
-    loadDashboard();
-  } catch (err) {
-    errorEl.textContent = err.message || "Login failed";
-    errorEl.style.display = "block";
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "Log In →";
-  }
+    const data = await api("/auth/login", { method: "POST", body: { email: document.getElementById("adminEmail").value.trim(), password: document.getElementById("adminPassword").value } });
+    if (data.data?.role !== "admin") { clearSession(); throw new Error("Not an admin account"); }
+    setSession(data.token, data.data, "user"); hideLogin(); loadDashboard();
+  } catch (err) { errorEl.textContent = err.message || "Login failed"; errorEl.style.display = "block"; }
+  finally { btn.disabled = false; btn.textContent = "Log In →"; }
 });
-
 async function loadDashboard() {
-  const ok = await requireAdmin();
-  if (!ok) return;
+  const ok = await requireAdmin(); if (!ok) return;
   try {
-    const [retailers, prods] = await Promise.all([
-      loadRetailerList(),
-      api("/products").then((j) => j.data || []).catch(() => []),
-    ]);
+    const [retailers, prods] = await Promise.all([loadRetailerList(), api("/products").then((j) => j.data || []).catch(() => [])]);
     const pending = retailers.filter((r) => r.status === "pending").length;
     const approved = retailers.filter((r) => r.status === "approved").length;
-
     const badge = document.getElementById("pendingBadge");
-    if (pending > 0) {
-      badge.textContent = pending;
-      badge.style.display = "inline-flex";
-    } else {
-      badge.style.display = "none";
-    }
-
+    if (pending > 0) { badge.textContent = pending; badge.style.display = "inline-flex"; } else badge.style.display = "none";
     document.getElementById("statsGrid").innerHTML = `
       <div class="stat_card"><div class="stat_icon">🏪</div><div class="stat_value">${approved}</div><div class="stat_label">Approved Retailers</div></div>
       <div class="stat_card"><div class="stat_icon">⏳</div><div class="stat_value">${pending}</div><div class="stat_label">Pending Approvals</div></div>
       <div class="stat_card"><div class="stat_icon">👟</div><div class="stat_value">${prods.length}</div><div class="stat_label">Active Listings</div></div>
-      <div class="stat_card"><div class="stat_icon">📦</div><div class="stat_value">${retailers.length}</div><div class="stat_label">Total Retailers</div></div>
-    `;
-
-    tbody.innerHTML = retailers.length
-      ? retailers
-          .map((r) => {
-            const id = r._id || r.id;
-            return `<tr>
-          <td>${r.businessName || "—"}</td>
-          <td>${r.email || ""}</td>
-          <td>${r.location || ""}</td>
-          <td><span class="badge ${r.status}">${r.status}</span></td>
-          <td><a class="btn_sm outline" href="/admin/retailers.html">Manage</a></td>
-        </tr>`;
-          })
-          .join("")
-      : `<tr><td colspan="5" style="text-align:center;padding:3rem;color:var(--clr-muted)">No retailers yet. Seed failed or the database is empty.</td></tr>`;
+      <div class="stat_card"><div class="stat_icon">📦</div><div class="stat_value">${retailers.length}</div><div class="stat_label">Total Retailers</div></div>`;
+    tbody.innerHTML = retailers.length ? retailers.map((r) => `<tr><td>${r.businessName || "—"}</td><td>${r.email || ""}</td><td>${r.location || ""}</td><td><span class="badge ${r.status}">${r.status}</span></td><td><a class="btn_sm outline" href="/admin/retailers.html">Manage</a></td></tr>`).join("") : `<tr><td colspan="5" style="text-align:center;padding:3rem;color:var(--clr-muted)">No retailers yet.</td></tr>`;
   } catch (err) {
     tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:3rem">${err.message || "Failed to load retailers"}</td></tr>`;
   }
 }
-
 document.getElementById("logoutBtn").addEventListener("click", async (e) => {
-  e.preventDefault();
-  if (!window.confirm("Log out of admin?")) return;
-  try { await api("/auth/logout", { method: "POST" }); } catch { /* ignore */ }
-  clearSession();
-  window.location.href = "/nav/login.html?role=admin";
+  e.preventDefault(); if (!window.confirm("Log out of admin?")) return;
+  try { await api("/auth/logout", { method: "POST" }); } catch {}
+  clearSession(); window.location.href = "/nav/login.html?role=admin";
 });
-
 loadDashboard();
 </script>
-</body>
-</html>
+</body></html>
