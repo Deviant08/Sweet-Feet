@@ -61,8 +61,8 @@
     <h3>Admin Login</h3>
     <form id="adminLoginForm">
       <div class="form_group" style="margin-top:2rem">
-        <label>Email</label>
-        <input type="email" id="adminEmail" autocomplete="username" required />
+        <label>Username or email</label>
+        <input type="text" id="adminEmail" autocomplete="username" required placeholder="10thmav" />
       </div>
       <div class="form_group">
         <label>Password</label>
@@ -80,6 +80,7 @@
 import { api, setSession, clearSession, getToken } from "/js/api.js";
 
 const modal = document.getElementById("loginModal");
+const tbody = document.getElementById("retailersBody");
 
 function showLogin(msg) {
   if (msg) {
@@ -88,6 +89,7 @@ function showLogin(msg) {
     errorEl.style.display = "block";
   }
   modal.classList.add("open");
+  tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:3rem;color:var(--clr-muted)">Log in as admin to see retailers.</td></tr>`;
 }
 
 function hideLogin() {
@@ -111,9 +113,9 @@ async function requireAdmin() {
     setSession(getToken(), user, "user");
     hideLogin();
     return true;
-  } catch {
+  } catch (err) {
     clearSession();
-    showLogin("Session expired. Please log in again.");
+    showLogin(err.message || "Session expired. Please log in again.");
     return false;
   }
 }
@@ -169,10 +171,25 @@ async function loadRetailers() {
   const ok = await requireAdmin();
   if (!ok) return;
 
-  const tbody = document.getElementById("retailersBody");
   try {
-    const json = await api("/retailers/admin/all").catch(() => api("/retailers"));
-    const list = json.data || [];
+    let json;
+    try {
+      json = await api("/retailers/admin/all");
+    } catch {
+      json = await api("/retailers");
+    }
+    let list = Array.isArray(json.data) ? json.data : [];
+    if (!list.length) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--clr-muted)">No shops yet — loading demo retailers…</td></tr>`;
+      try {
+        await api("/seed/accounts", { method: "POST" });
+        await api("/seed/demo", { method: "POST" });
+        json = await api("/retailers/admin/all").catch(() => api("/retailers"));
+        list = Array.isArray(json.data) ? json.data : [];
+      } catch {
+        /* optional */
+      }
+    }
     if (!list.length) {
       tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:3rem;color:var(--clr-muted)">No retailers yet.</td></tr>`;
       return;
@@ -208,18 +225,14 @@ async function loadRetailers() {
       });
     });
   } catch (e) {
-    tbody.innerHTML = `<tr><td colspan="6">${e.message || "Failed to load"}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:3rem">${e.message || "Failed to load"}</td></tr>`;
   }
 }
 
 document.getElementById("logoutBtn").addEventListener("click", async (e) => {
   e.preventDefault();
   if (!window.confirm("Log out of admin?")) return;
-  try {
-    await api("/auth/logout", { method: "POST" });
-  } catch {
-    /* ignore */
-  }
+  try { await api("/auth/logout", { method: "POST" }); } catch { /* ignore */ }
   clearSession();
   window.location.href = "/nav/login.html?role=admin";
 });
