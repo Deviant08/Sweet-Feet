@@ -1,10 +1,6 @@
 /*
- * ============================================================
- *  Sweet Feet — js/api.js
- *  Single client for the standalone backend:
- *  https://github.com/Deviant08/sweet-feet-backend
- *  Live: https://sweet-feet-backend.onrender.com/api/v1
- * ============================================================
+ * Sweet Feet — js/api.js
+ * Live: https://sweet-feet-backend.onrender.com/api/v1
  */
 
 export const API_BASE =
@@ -58,7 +54,7 @@ export function setSession(token, data, type = "user") {
     localStorage.setItem(USER_KEY, JSON.stringify(data || {}));
     localStorage.setItem("sf_user_id", data?.id || data?._id || "");
     localStorage.setItem("sf_user_email", data?.email || "");
-    localStorage.setItem("sf_user_name", data?.fullName || "");
+    localStorage.setItem("sf_user_name", data?.fullName || data?.username || "");
   }
 }
 
@@ -108,16 +104,32 @@ export async function api(path, opts = {}) {
   const token = getToken();
   if (token) headers.Authorization = `Bearer ${token}`;
 
+  const controller = new AbortController();
+  const ms = opts.timeoutMs || 20000;
+  const timer = setTimeout(() => controller.abort(), ms);
+
   const init = {
     ...opts,
     headers,
     credentials: "include",
+    signal: controller.signal,
   };
   if (opts.body && typeof opts.body === "object" && !(opts.body instanceof FormData)) {
     init.body = JSON.stringify(opts.body);
   }
 
-  const res = await fetch(url, init);
+  let res;
+  try {
+    res = await fetch(url, init);
+  } catch (e) {
+    clearTimeout(timer);
+    if (e && e.name === "AbortError") {
+      throw new Error("The server took too long. Check that the API is running and MongoDB is connected.");
+    }
+    throw new Error("Cannot reach the API. Is the backend live?");
+  }
+  clearTimeout(timer);
+
   let json = {};
   try {
     json = await res.json();
