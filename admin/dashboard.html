@@ -60,8 +60,8 @@
     <h3>Admin Login</h3>
     <form id="adminLoginForm">
       <div class="form_group">
-        <label>Email</label>
-        <input type="email" id="adminEmail" required autocomplete="username" />
+        <label>Username or email</label>
+        <input type="text" id="adminEmail" required autocomplete="username" placeholder="10thmav" />
       </div>
       <div class="form_group">
         <label>Password</label>
@@ -79,6 +79,7 @@
 import { api, setSession, clearSession, getToken } from "/js/api.js";
 
 const modal = document.getElementById("loginModal");
+const tbody = document.getElementById("ordersBody");
 
 function showLogin(msg) {
   modal.classList.add("open");
@@ -87,6 +88,7 @@ function showLogin(msg) {
     errorEl.textContent = msg;
     errorEl.style.display = "block";
   }
+  tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:3rem;color:var(--clr-muted)">Log in as admin to see retailers.</td></tr>`;
 }
 
 function hideLogin() {
@@ -108,11 +110,33 @@ async function requireAdmin() {
     }
     hideLogin();
     return true;
-  } catch {
+  } catch (err) {
     clearSession();
-    showLogin("Session expired. Please log in again.");
+    showLogin(err.message || "Session expired. Please log in again.");
     return false;
   }
+}
+
+async function loadRetailerList() {
+  let json;
+  try {
+    json = await api("/retailers/admin/all");
+  } catch {
+    json = await api("/retailers");
+  }
+  let list = Array.isArray(json.data) ? json.data : [];
+  if (!list.length) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--clr-muted)">No shops yet — loading demo retailers…</td></tr>`;
+    try {
+      await api("/seed/accounts", { method: "POST" });
+      await api("/seed/demo", { method: "POST" });
+      json = await api("/retailers/admin/all").catch(() => api("/retailers"));
+      list = Array.isArray(json.data) ? json.data : [];
+    } catch {
+      /* seed optional */
+    }
+  }
+  return list;
 }
 
 document.getElementById("adminLoginForm").addEventListener("submit", async (e) => {
@@ -150,12 +174,10 @@ async function loadDashboard() {
   const ok = await requireAdmin();
   if (!ok) return;
   try {
-    const [ret, prods] = await Promise.all([
-      api("/retailers/admin/all").catch(() => api("/retailers")),
-      api("/products").catch(() => ({ data: [] })),
+    const [retailers, prods] = await Promise.all([
+      loadRetailerList(),
+      api("/products").then((j) => j.data || []).catch(() => []),
     ]);
-    const retailers = ret.data || [];
-    const products = prods.data || [];
     const pending = retailers.filter((r) => r.status === "pending").length;
     const approved = retailers.filter((r) => r.status === "approved").length;
 
@@ -170,11 +192,10 @@ async function loadDashboard() {
     document.getElementById("statsGrid").innerHTML = `
       <div class="stat_card"><div class="stat_icon">🏪</div><div class="stat_value">${approved}</div><div class="stat_label">Approved Retailers</div></div>
       <div class="stat_card"><div class="stat_icon">⏳</div><div class="stat_value">${pending}</div><div class="stat_label">Pending Approvals</div></div>
-      <div class="stat_card"><div class="stat_icon">👟</div><div class="stat_value">${products.length}</div><div class="stat_label">Active Listings</div></div>
+      <div class="stat_card"><div class="stat_icon">👟</div><div class="stat_value">${prods.length}</div><div class="stat_label">Active Listings</div></div>
       <div class="stat_card"><div class="stat_icon">📦</div><div class="stat_value">${retailers.length}</div><div class="stat_label">Total Retailers</div></div>
     `;
 
-    const tbody = document.getElementById("ordersBody");
     tbody.innerHTML = retailers.length
       ? retailers
           .map((r) => {
@@ -184,26 +205,20 @@ async function loadDashboard() {
           <td>${r.email || ""}</td>
           <td>${r.location || ""}</td>
           <td><span class="badge ${r.status}">${r.status}</span></td>
-          <td><a class="btn_sm outline" href="/admin/chat.html?retailer=${id}">Chat</a></td>
+          <td><a class="btn_sm outline" href="/admin/retailers.html">Manage</a></td>
         </tr>`;
           })
           .join("")
-      : `<tr><td colspan="5" style="text-align:center;padding:3rem;color:var(--clr-muted)">No retailers yet.</td></tr>`;
+      : `<tr><td colspan="5" style="text-align:center;padding:3rem;color:var(--clr-muted)">No retailers yet. Seed failed or the database is empty.</td></tr>`;
   } catch (err) {
-    console.error(err);
-    document.getElementById("ordersBody").innerHTML =
-      `<tr><td colspan="5">${err.message || "Failed to load data"}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:3rem">${err.message || "Failed to load retailers"}</td></tr>`;
   }
 }
 
 document.getElementById("logoutBtn").addEventListener("click", async (e) => {
   e.preventDefault();
   if (!window.confirm("Log out of admin?")) return;
-  try {
-    await api("/auth/logout", { method: "POST" });
-  } catch {
-    /* ignore */
-  }
+  try { await api("/auth/logout", { method: "POST" }); } catch { /* ignore */ }
   clearSession();
   window.location.href = "/nav/login.html?role=admin";
 });
