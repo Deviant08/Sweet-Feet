@@ -71,7 +71,7 @@ function escapeHtml(s) {
     .replace(/&/g, "&")
     .replace(/</g, "<")
     .replace(/>/g, ">")
-    .replace(/"/g, """);
+    .replace(/\"/g, """);
 }
 function fmtTime(d) {
   try {
@@ -99,7 +99,7 @@ async function loadMessages() {
     box.innerHTML = msgs
       .map((m) => {
         const mine = m.senderType === "retailer";
-        return `<div class="bubble ${mine ? "mine" : "theirs"}">${escapeHtml(m.message)}<time>${fmtTime(m.createdAt)}</time></div>`;
+        return `<div class="bubble ${mine ? "mine" : "theirs"}>${escapeHtml(m.message)}<time>${fmtTime(m.createdAt)}</time></div>`;
       })
       .join("");
     box.scrollTop = box.scrollHeight;
