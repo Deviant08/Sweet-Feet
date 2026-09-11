@@ -44,9 +44,9 @@
             <input
               id="loginEmail"
               class="inp email_inp mb_10 border"
-              type="email"
-              placeholder="Email address"
-              autocomplete="email"
+              type="text"
+              placeholder="Email or username"
+              autocomplete="username"
               required
             />
             <br />
@@ -91,6 +91,8 @@
           btn.classList.add("active");
           role = btn.dataset.role;
           document.getElementById("loginError").style.display = "none";
+          const emailInp = document.getElementById("loginEmail");
+          emailInp.placeholder = role === "admin" ? "Username or email" : "Email address";
         });
       });
 
