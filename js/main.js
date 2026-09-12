@@ -38,6 +38,24 @@ import { getUser, getToken, clearSession, avatarUrl, api, chatAppUrl } from "./a
       transition: transform .2s, opacity .2s;
     }
     .nav_bar { color: #f7dfb8; }
+    .nav a:link,
+    .nav a:visited,
+    .cust_nav_links a:link,
+    .cust_nav_links a:visited,
+    .auth_nav_slot a:link,
+    .auth_nav_slot a:visited,
+    .nav_sidebar a:link,
+    .nav_sidebar a:visited {
+      text-decoration: none;
+    }
+    .cust_nav_links a:link,
+    .cust_nav_links a:visited {
+      color: #ece3bd;
+    }
+    .nav_sidebar a:link,
+    .nav_sidebar a:visited {
+      color: #f7dfb8;
+    }
     .menu_toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
     .menu_toggle.open span:nth-child(2) { opacity: 0; }
     .menu_toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
