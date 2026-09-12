@@ -46,7 +46,9 @@ header {
   -webkit-animation: slide-in-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
   animation: slide-in-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
-.logo {
+.logo,
+.logo:link,
+.logo:visited {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -92,7 +94,9 @@ header {
   gap: 2rem;
 }
 
-.nav a {
+.nav a,
+.nav a:link,
+.nav a:visited {
   text-decoration: none;
   color: #ece3bd;
   font-size: 1.3rem;
@@ -534,7 +538,9 @@ footer {
   justify-content: center;
 }
 
-.footer_links a {
+.footer_links a,
+.footer_links a:link,
+.footer_links a:visited {
   font-size: 1.3rem;
   font-weight: 700;
   text-decoration: none;
