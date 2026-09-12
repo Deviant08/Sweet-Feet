@@ -135,64 +135,6 @@ import { getUser, getToken, clearSession, avatarUrl, api, chatAppUrl } from "./a
       .nav_sidebar, .nav_overlay { display: none !important; }
     }
 
-    .sweet_product .product {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: flex-start;
-      gap: 2rem;
-      width: 100%;
-      max-width: 1100px;
-      margin: 0 auto;
-      transform: none !important;
-    }
-    .sweet_product .pd {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 200px;
-      flex: 0 0 auto;
-    }
-    .sweet_product .pd img {
-      width: 180px;
-      height: 180px;
-      object-fit: cover;
-      border-radius: 12px;
-      background: #fff;
-    }
-    .sweet_product .order {
-      position: static !important;
-      margin-top: 0.75rem;
-      width: 100%;
-      align-items: center;
-      text-align: center;
-    }
-    .sweet_product .order span,
-    .sweet_product .order p,
-    .sweet_product .order h5 {
-      opacity: 1 !important;
-    }
-    .sweet_product .order p {
-      margin: 0;
-      font-size: 1rem;
-      font-weight: 700;
-      color: #160c02;
-    }
-    .sweet_product .order h5 {
-      margin: 0.25rem 0 0.5rem;
-      font-size: 1.05rem;
-      color: #c8440c;
-    }
-    .sweet_product .order .btn {
-      display: inline-block;
-      padding: 0.4rem 0.9rem;
-      background: #160c02;
-      color: #fff;
-      border-radius: 8px;
-      text-decoration: none;
-      font-size: 0.9rem;
-    }
-
     .card_seller{display:flex;align-items:center;gap:.55rem;margin-top:.75rem;text-decoration:none;color:inherit;}
     .card_seller_avatar{width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;}
     .card_seller_text{display:flex;flex-direction:column;line-height:1.2;}
