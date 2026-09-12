@@ -67,11 +67,9 @@ if (!getToken() || !localStorage.getItem("sf_retailer_id")) {
 }
 
 function escapeHtml(s) {
-  return String(s)
-    .replace(/&/g, "&")
-    .replace(/</g, "<")
-    .replace(/>/g, ">")
-    .replace(/\"/g, """);
+  const d = document.createElement("div");
+  d.textContent = String(s == null ? "" : s);
+  return d.innerHTML;
 }
 function fmtTime(d) {
   try {
@@ -99,12 +97,13 @@ async function loadMessages() {
     box.innerHTML = msgs
       .map((m) => {
         const mine = m.senderType === "retailer";
-        return `<div class="bubble ${mine ? "mine" : "theirs"}>${escapeHtml(m.message)}<time>${fmtTime(m.createdAt)}</time></div>`;
+        return '<div class="bubble ' + (mine ? "mine" : "theirs") + '">' +
+          escapeHtml(m.message) + '<time>' + fmtTime(m.createdAt) + '</time></div>';
       })
       .join("");
     box.scrollTop = box.scrollHeight;
   } catch (err) {
-    box.innerHTML = `<div class="empty_thread">${escapeHtml(err.message || "Could not load messages")}</div>`;
+    box.innerHTML = '<div class="empty_thread">' + escapeHtml(err.message || "Could not load messages") + '</div>';
   }
 }
 

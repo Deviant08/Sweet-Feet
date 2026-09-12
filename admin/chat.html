@@ -29,6 +29,10 @@
     .thread_compose input { flex: 1; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid #e8e0d6; font: inherit; }
     .thread_compose button { padding: 0.85rem 1.2rem; border: none; border-radius: 10px; background: #160c02; color: #fff; font-weight: 700; cursor: pointer; }
     .empty_thread { margin: auto; color: #6b5e52; text-align: center; padding: 2rem; }
+    .status_dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+    .status_dot.approved { background: #166534; }
+    .status_dot.pending { background: #b45309; }
+    .status_dot.declined, .status_dot.suspended { background: #c0392b; }
   </style>
 </head>
 <body>
@@ -93,14 +97,25 @@ const modal = document.getElementById("loginModal");
 let activeRetailerId = null;
 let pollTimer = null;
 
+function escapeHtml(s) {
+  const d = document.createElement("div");
+  d.textContent = String(s == null ? "" : s);
+  return d.innerHTML;
+}
+
 function showLogin(msg) {
   if (msg) {
     document.getElementById("loginError").textContent = msg;
     document.getElementById("loginError").style.display = "block";
   }
   modal.classList.add("open");
+  const el = document.getElementById("inboxItems");
+  el.innerHTML = '<div style="padding:2rem;text-align:center;color:#6b5e52">Log in as admin to see retailers.</div>';
 }
-function hideLogin() { modal.classList.remove("open"); }
+function hideLogin() {
+  modal.classList.remove("open");
+  document.getElementById("loginError").style.display = "none";
+}
 
 async function requireAdmin() {
   if (!getToken()) { showLogin(); return false; }
@@ -123,6 +138,11 @@ async function requireAdmin() {
 
 document.getElementById("adminLoginForm").addEventListener("submit", async (e) => {
   e.preventDefault();
+  const errorEl = document.getElementById("loginError");
+  const btn = e.target.querySelector("button[type='submit']");
+  errorEl.style.display = "none";
+  btn.disabled = true;
+  btn.textContent = "Signing in…";
   try {
     const data = await api("/auth/login", {
       method: "POST",
@@ -136,8 +156,11 @@ document.getElementById("adminLoginForm").addEventListener("submit", async (e) =
     hideLogin();
     boot();
   } catch (err) {
-    document.getElementById("loginError").textContent = err.message || "Login failed";
-    document.getElementById("loginError").style.display = "block";
+    errorEl.textContent = err.message || "Login failed";
+    errorEl.style.display = "block";
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Log In →";
   }
 });
 
@@ -147,40 +170,48 @@ function fmtTime(d) {
   } catch { return ""; }
 }
 
-function escapeHtml(s) {
-  return String(s)
-    .replace(/&/g, "&")
-    .replace(/</g, "<")
-    .replace(/>/g, ">")
-    .replace(/"/g, """);
+async function fetchPartners() {
+  const tries = ["/messages/staff/partners", "/retailers/admin/all", "/retailers"];
+  let lastErr = null;
+  for (const path of tries) {
+    try {
+      const json = await api(path);
+      const list = Array.isArray(json.data) ? json.data : [];
+      if (list.length || path === "/retailers") return list;
+    } catch (err) {
+      lastErr = err;
+    }
+  }
+  if (lastErr) throw lastErr;
+  return [];
 }
 
 async function loadInbox() {
   const el = document.getElementById("inboxItems");
   try {
-    const json = await api("/messages/staff/partners");
-    const list = json.data || [];
+    const list = await fetchPartners();
     if (!list.length) {
-      el.innerHTML = `<div style="padding:2rem;text-align:center;color:#6b5e52">No retailers yet.</div>`;
+      el.innerHTML = '<div style="padding:2rem;text-align:center;color:#6b5e52">No retailers yet.</div>';
       return;
     }
     el.innerHTML = list.map((r) => {
       const id = r._id || r.id;
       const name = r.businessName || "Retailer";
-      return `<div class="inbox_item ${activeRetailerId === String(id) ? "active" : ""}" data-id="${id}" data-name="${escapeHtml(name)}">
-        <img src="${avatarUrl(name, r.logo)}" alt="" />
-        <div class="inbox_meta">
-          <div class="inbox_name">${escapeHtml(name)}</div>
-          <div class="inbox_preview">${escapeHtml(r.status || "")} · ${escapeHtml(r.email || "")}</div>
-        </div>
-      </div>`;
+      const status = r.status || "";
+      return '<div class="inbox_item' + (activeRetailerId === String(id) ? ' active' : '') + '" data-id="' + escapeHtml(id) + '" data-name="' + escapeHtml(name) + '">' +
+        '<img src="' + avatarUrl(name, r.logo) + '" alt="" />' +
+        '<div class="inbox_meta">' +
+          '<div class="inbox_name">' + escapeHtml(name) + '</div>' +
+          '<div class="inbox_preview"><span class="status_dot ' + escapeHtml(status) + '"></span>' +
+            escapeHtml(status) + (r.email ? ' · ' + escapeHtml(r.email) : '') + '</div>' +
+        '</div></div>';
     }).join("");
 
     el.querySelectorAll(".inbox_item").forEach((item) => {
       item.addEventListener("click", () => openThread(item.dataset.id, item.dataset.name));
     });
   } catch (err) {
-    el.innerHTML = `<div style="padding:2rem;color:#6b5e52">${escapeHtml(err.message || "Failed to load")}</div>`;
+    el.innerHTML = '<div style="padding:2rem;color:#6b5e52">' + escapeHtml(err.message || "Failed to load") + '</div>';
   }
 }
 
@@ -189,7 +220,7 @@ async function openThread(id, name) {
   document.getElementById("threadTitle").textContent = name || "Retailer";
   document.getElementById("composeForm").style.display = "flex";
   document.querySelectorAll(".inbox_item").forEach((el) => {
-    el.classList.toggle("active", el.dataset.id === id);
+    el.classList.toggle("active", el.dataset.id === String(id));
   });
   await loadMessages();
   if (pollTimer) clearInterval(pollTimer);
@@ -201,20 +232,21 @@ async function loadMessages() {
   const box = document.getElementById("threadMessages");
   try {
     const json = await api(
-      `/messages?threadType=staff&retailerId=${encodeURIComponent(activeRetailerId)}`
+      "/messages?threadType=staff&retailerId=" + encodeURIComponent(activeRetailerId)
     );
     const msgs = json.data || [];
     if (!msgs.length) {
-      box.innerHTML = `<div class="empty_thread">No messages yet. Say hello to this retailer.</div>`;
+      box.innerHTML = '<div class="empty_thread">No messages yet. Say hello to this retailer.</div>';
       return;
     }
     box.innerHTML = msgs.map((m) => {
       const mine = m.senderType === "admin";
-      return `<div class="bubble ${mine ? "mine" : "theirs"}">${escapeHtml(m.message)}<time>${fmtTime(m.createdAt)}</time></div>`;
+      return '<div class="bubble ' + (mine ? "mine" : "theirs") + '">' +
+        escapeHtml(m.message) + '<time>' + fmtTime(m.createdAt) + '</time></div>';
     }).join("");
     box.scrollTop = box.scrollHeight;
   } catch (err) {
-    box.innerHTML = `<div class="empty_thread">${escapeHtml(err.message || "Could not load")}</div>`;
+    box.innerHTML = '<div class="empty_thread">' + escapeHtml(err.message || "Could not load") + '</div>';
   }
 }
 
@@ -249,7 +281,7 @@ async function boot() {
   await loadInbox();
   const q = new URLSearchParams(window.location.search).get("retailer");
   if (q) {
-    const item = document.querySelector(`.inbox_item[data-id="${q}"]`);
+    const item = document.querySelector('.inbox_item[data-id="' + q + '"]');
     if (item) openThread(item.dataset.id, item.dataset.name);
   }
 }
