@@ -278,7 +278,7 @@ if (navBar) {
   const auth = buildAuthLinks();
   navSidebar.innerHTML = `
     <a class="sidebar_logo" href="/index.html">
-      <img src="/assets/images (7).jpeg" alt="Sweet Feet" />
+      <img src="/assets/Sweet-feet-logo.png" alt="Sweet Feet" />
       <span>Sweet Feet</span>
     </a>
     ${auth.html}

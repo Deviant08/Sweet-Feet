@@ -13,10 +13,16 @@ export function formatPrice(p) {
 }
 
 export function initShop() {
+  // Retailer portal has its own #productGrid (My Products). Never mix in other sellers.
+  if (/\/retailer\//.test(window.location.pathname)) return;
+
   const productGrid = document.getElementById("productGrid");
   if (!productGrid) return;
 
   let products = [];
+  const params = new URLSearchParams(window.location.search);
+  const retailerFilter = params.get("id") || params.get("retailer") || params.get("retailer_id");
+  const isSellerPage = /retailer\.html/i.test(window.location.pathname);
 
   const state = {
     cat: "all",
@@ -30,14 +36,65 @@ export function initShop() {
   };
 
   async function loadProducts() {
+    if (isSellerPage && !retailerFilter) {
+      products = [];
+      const title = document.getElementById("shopHeroTitle");
+      const sub = document.getElementById("shopHeroSub");
+      if (title) title.innerHTML = `Choose a <span>seller.</span>`;
+      if (sub) sub.textContent = "Open a store from the shop to see that retailer’s products only.";
+      renderGrid();
+      return;
+    }
     try {
       const json = await api("/products");
       const list = json.data || json.results || json || [];
       products = (Array.isArray(list) ? list : []).map(mapProduct).filter(Boolean);
+      if (retailerFilter) {
+        products = products.filter((p) => String(p.retailer_id) === String(retailerFilter));
+        await applySellerChrome();
+      }
       renderGrid();
       updateCartUI();
     } catch {
       showToast("Network error loading products.");
+    }
+  }
+
+  async function applySellerChrome() {
+    let seller = null;
+    try {
+      const rJson = await api("/retailers/" + encodeURIComponent(retailerFilter));
+      seller = rJson.data || null;
+    } catch {
+      /* banner still works from product data */
+    }
+    const name = seller?.businessName || products[0]?.retailerName || "Seller";
+    const title = document.getElementById("shopHeroTitle");
+    const sub = document.getElementById("shopHeroSub");
+    const count = document.querySelector(".hero_count");
+    if (title) title.innerHTML = `${name}'s <span>shop.</span>`;
+    if (sub) {
+      const loc = seller?.location || "";
+      const n = products.length;
+      const countLabel = `${n} product${n === 1 ? "" : "s"} from this seller only.`;
+      sub.textContent = loc ? `${loc} · ${countLabel}` : countLabel;
+    }
+    if (count) count.textContent = String(products.length);
+    document.title = `${name} — Sweet Feet`;
+    const chatBtn = document.getElementById("sellerChatBtn");
+    if (chatBtn) {
+      const href = chatAppUrl({
+        retailer_id: retailerFilter,
+        retailer_name: name,
+      });
+      chatBtn.href = href;
+      chatBtn.hidden = false;
+      chatBtn.addEventListener("click", (e) => {
+        if (!getToken()) {
+          e.preventDefault();
+          window.location.href = "/nav/login.html?next=" + encodeURIComponent(href);
+        }
+      });
     }
   }
 
@@ -118,7 +175,13 @@ export function initShop() {
     if (countEl) countEl.textContent = `${list.length} product${list.length !== 1 ? "s" : ""}`;
     if (list.length === 0) {
       productGrid.innerHTML = "";
-      if (emptyEl) emptyEl.classList.add("visible");
+      if (emptyEl) {
+        emptyEl.classList.add("visible");
+        if (retailerFilter) {
+          const p = emptyEl.querySelector("p");
+          if (p) p.textContent = "This seller has no products listed yet.";
+        }
+      }
       return;
     }
     if (emptyEl) emptyEl.classList.remove("visible");

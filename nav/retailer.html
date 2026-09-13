@@ -1,127 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="/assets/20251102_172020.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/CSS/style.css" />
-  <link rel="stylesheet" href="/CSS/retailer.css" />
-  <title>Seller profile — Sweet Feet</title>
-  <style>
-    .rp_wrap { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
-    .rp_header { display:flex; gap:1.5rem; align-items:center; flex-wrap:wrap; margin-bottom:2rem; }
-    .rp_avatar { width:96px; height:96px; border-radius:50%; object-fit:cover; border:3px solid #160c02; }
-    .rp_name { font-family: var(--ff-display, inherit); font-size:2rem; font-weight:800; margin:0 0 .4rem; }
-    .rp_meta { color:#6b5e52; font-size:1.2rem; }
-    .rp_bio { margin-top:1rem; max-width:40rem; line-height:1.5; color:#3d342c; }
-    .rp_section_title { font-size:1.5rem; font-weight:700; margin:2rem 0 1rem; }
-    .rp_grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1.25rem; }
-    .rp_card { background:#fff; border:1px solid #e8e0d6; border-radius:14px; overflow:hidden; text-decoration:none; color:inherit; display:block; }
-    .rp_card img { width:100%; aspect-ratio:1; object-fit:cover; }
-    .rp_card_body { padding:1rem; }
-    .rp_badge { display:inline-block; font-size:.75rem; font-weight:700; background:#160c02; color:#f7dfb8; padding:.2rem .5rem; border-radius:999px; margin-bottom:.4rem; }
-    .rp_chat { display:inline-flex; margin-top:1.5rem; padding:.9rem 1.4rem; background:#160c02; color:#fff; border-radius:10px; text-decoration:none; font-weight:700; }
-    .rp_chat:hover { background:#c8440c; }
-    .rp_empty { color:#6b5e52; padding:2rem 0; }
-    .card_seller { display:flex; align-items:center; gap:.6rem; margin-top:.85rem; text-decoration:none; color:inherit; }
-    .card_seller_avatar { width:28px; height:28px; border-radius:50%; object-fit:cover; }
-  </style>
-</head>
-<body>
-  <div class="nav_bar" style="padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;background:#160c02;">
-    <a href="/index.html" style="color:#f7dfb8;text-decoration:none;font-weight:700;">Sweet Feet</a>
-    <div class="auth_nav_slot" style="display:flex;gap:1rem;align-items:center;"></div>
-  </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/assets/Sweet-feet-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght,YOPQ@100..900,300&family=Public+Sans:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/CSS/products.css" />
+    <link rel="stylesheet" href="/CSS/queries.css" />
+    <title>Seller shop — Sweet Feet</title>
+    <style>
+      .hero_actions {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-top: 1.25rem;
+        align-items: center;
+      }
+      .hero_all_shops {
+        color: #efbc8a;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .hero_all_shops:hover { color: #fff; }
+      .shop_hero .btn_order { background: #c8440c; }
+      .shop_hero .btn_order:hover { background: #efbc8a; color: #160c02; }
+    </style>
+  </head>
 
-  <main class="rp_wrap" id="retailerProfile">
-    <p class="rp_empty">Loading seller…</p>
-  </main>
+  <body>
+    <header>
+      <div class="nav_bar">
+        <a class="logo" href="/index.html">
+          <img class="logo_img" src="/assets/Sweet-feet-logo.png" alt="Sweet Feet logo" />
+          <h1 class="logo_txt">Sweet Feet</h1>
+        </a>
+        <nav class="nav">
+          <a href="/nav/signup.html">Sign Up</a>
+          <a href="/nav/login.html">Login</a>
+          <a href="/nav/products.html" class="active">Shop</a>
+          <a href="/nav/track.html">Track Order</a>
+          <a href="/nav/chat.html">Messages</a>
+          <a href="/nav/feedback.html">Feedback</a>
+        </nav>
+      </div>
+    </header>
 
-  <script type="module" src="/js/main.js"></script>
-  <script type="module">
-    import { api, mapProduct, avatarUrl, getToken } from "/js/api.js";
+    <section class="shop_hero">
+      <div>
+        <h1 id="shopHeroTitle">Seller <span>shop.</span></h1>
+        <p id="shopHeroSub">Loading this seller’s products…</p>
+        <div class="hero_actions">
+          <a class="btn_order" id="sellerChatBtn" hidden href="/nav/chat.html">💬 Chat with seller</a>
+          <a class="hero_all_shops" href="/nav/products.html">← Shop all brands</a>
+        </div>
+      </div>
+      <div class="hero_count" aria-hidden="true">—</div>
+    </section>
 
-    function formatPrice(p) {
-      return "₦" + Number(p || 0).toLocaleString("en-NG");
-    }
+    <div class="shop_wrapper">
+      <aside class="sidebar">
+        <h3>Filters</h3>
 
-    const id = new URLSearchParams(location.search).get("id");
-    const root = document.getElementById("retailerProfile");
+        <div class="filter_group">
+          <h4>Gender</h4>
+          <div class="filter_chips">
+            <button class="chip active" data-filter="gender" data-value="all">All</button>
+            <button class="chip" data-filter="gender" data-value="men">Men</button>
+            <button class="chip" data-filter="gender" data-value="women">Women</button>
+            <button class="chip" data-filter="gender" data-value="unisex">Unisex</button>
+          </div>
+        </div>
 
-    if (!id) {
-      root.innerHTML = `<p class="rp_empty">No seller selected. <a href="/nav/products.html">Back to shop</a></p>`;
-    } else {
-      (async () => {
-        try {
-          const [rJson, pJson] = await Promise.all([
-            api("/retailers/" + encodeURIComponent(id)),
-            api("/products"),
-          ]);
-          const r = rJson.data || {};
-          const all = (pJson.data || []).map(mapProduct).filter(Boolean);
-          const mine = all.filter((p) => String(p.retailer_id) === String(r._id || r.id || id));
-          const top = mine.filter((p) => p.badge === "top" || /top/i.test(p.badgeLabel || ""));
-          const logo = avatarUrl(r.businessName, r.logo);
-          const chatHref =
-            "/nav/chat.html?retailer_id=" +
-            encodeURIComponent(r._id || r.id || id) +
-            "&retailer_name=" +
-            encodeURIComponent(r.businessName || "");
-
-          function stars(r) {
-            const n = Number(r) || 0;
-            const full = Math.floor(n);
-            const half = n - full >= 0.5 ? 1 : 0;
-            return "★".repeat(full) + (half ? "☆" : "") + "☆".repeat(Math.max(0, 5 - full - half));
-          }
-          const card = (p) => `
-            <a class="product_card" href="/nav/products.html">
-              ${p.badge ? `<span class="card_badge badge_${p.badge}">${p.badgeLabel || p.badge}</span>` : ""}
-              <img class="card_img" src="${p.img}" alt="${p.name}" />
-              <div class="card_body">
-                <span class="card_category">${p.category || ""} · ${p.gender || ""}</span>
-                <h2 class="card_name">${p.name}</h2>
-                ${p.rating ? `<div class="card_rating"><span class="stars">${stars(p.rating)}</span><span>${p.rating} (${p.ratingCount || 0})</span></div>` : ""}
-                <div class="card_sizes">${(p.sizes || []).map((s) => `<span class="size_dot">${s}</span>`).join("")}</div>
-                <div class="card_footer">
-                  <div class="card_price">
-                    ${formatPrice(p.price)}
-                    ${p.oldPrice ? `<span class="old_price">${formatPrice(p.oldPrice)}</span>` : ""}
-                  </div>
-                </div>
-              </div>
-            </a>`;
-
-          root.innerHTML = `
-            <div class="rp_header">
-              <img class="rp_avatar" src="${logo}" alt="" />
-              <div>
-                <h1 class="rp_name">${r.businessName || "Seller"}</h1>
-                <div class="rp_meta">${r.location || ""}${r.phone ? " · " + r.phone : ""}</div>
-                ${r.bio ? `<p class="rp_bio">${r.bio}</p>` : ""}
-                <a class="rp_chat" href="${chatHref}" id="rpChatBtn">💬 Chat with ${r.businessName || "seller"}</a>
-              </div>
+        <div class="filter_group">
+          <h4>Price Range</h4>
+          <div class="price_range">
+            <input type="range" min="5000" max="150000" step="1000" value="150000" id="priceSlider" />
+            <div class="price_labels">
+              <span>₦5,000</span>
+              <span id="priceLabel">Up to ₦150,000</span>
             </div>
-            ${top.length ? `<h2 class="rp_section_title">Top picks</h2><div class="product_grid">${top.map(card).join("")}</div>` : ""}
-            <h2 class="rp_section_title">All products (${mine.length})</h2>
-            <div class="product_grid">${mine.length ? mine.map(card).join("") : `<p class="rp_empty">No products listed yet.</p>`}</div>
-          `;
+          </div>
+        </div>
 
-          document.getElementById("rpChatBtn")?.addEventListener("click", (e) => {
-            if (!getToken()) {
-              e.preventDefault();
-              const next = chatHref;
-              window.location.href = "/nav/login.html?next=" + encodeURIComponent(next);
-            }
-          });
-        } catch (err) {
-          root.innerHTML = `<p class="rp_empty">${err.message || "Could not load seller."} <a href="/nav/products.html">Shop</a></p>`;
-        }
-      })();
-    }
-  </script>
-</body>
+        <div class="filter_group">
+          <h4>Colour</h4>
+          <div class="filter_chips">
+            <button class="chip active" data-filter="color" data-value="all">All</button>
+            <button class="chip" data-filter="color" data-value="black">Black</button>
+            <button class="chip" data-filter="color" data-value="white">White</button>
+            <button class="chip" data-filter="color" data-value="brown">Brown</button>
+            <button class="chip" data-filter="color" data-value="multi">Multi</button>
+          </div>
+        </div>
+
+        <div class="filter_group">
+          <h4>Rating</h4>
+          <div class="filter_chips">
+            <button class="chip active" data-filter="rating" data-value="all">All</button>
+            <button class="chip" data-filter="rating" data-value="4">4★ & up</button>
+            <button class="chip" data-filter="rating" data-value="4.5">4.5★ & up</button>
+          </div>
+        </div>
+      </aside>
+
+      <section class="products_area">
+        <div class="toolbar">
+          <div class="toolbar_left">
+            <div class="search_bar">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="color:var(--clr-muted)">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+              <input type="text" id="searchInput" placeholder="Search this shop…" />
+            </div>
+            <span class="result_count" id="resultCount">Loading…</span>
+          </div>
+          <select class="sort_select" id="sortSelect">
+            <option value="default">Sort: Featured</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
+            <option value="rating">Top Rated</option>
+            <option value="name">Name A–Z</option>
+          </select>
+        </div>
+
+        <div class="cat_tabs" role="tablist">
+          <button class="cat_tab active" data-cat="all">All</button>
+          <button class="cat_tab" data-cat="trainers">Trainers</button>
+          <button class="cat_tab" data-cat="casual">Casual</button>
+          <button class="cat_tab" data-cat="corporate">Corporate</button>
+          <button class="cat_tab" data-cat="loafers">Loafers</button>
+          <button class="cat_tab" data-cat="runners">Runners</button>
+          <button class="cat_tab" data-cat="sandals">Sandals</button>
+          <button class="cat_tab" data-cat="boots">Boots</button>
+        </div>
+
+        <div class="product_grid" id="productGrid"></div>
+
+        <div class="empty_state" id="emptyState">
+          <div style="font-size:2rem">👟</div>
+          <p>This seller has no products listed yet.</p>
+          <p style="font-size:.85rem;margin-top:.25rem"><a href="/nav/products.html">Browse the full shop</a></p>
+        </div>
+      </section>
+    </div>
+
+    <div class="cart_icon_wrap">
+      <button class="cart_fab" id="cartFab" aria-label="Open cart">
+        🛒
+        <span class="cart_count hidden" id="cartCount">0</span>
+      </button>
+    </div>
+
+    <div class="drawer_overlay" id="drawerOverlay"></div>
+    <div class="cart_drawer" id="cartDrawer">
+      <div class="drawer_header">
+        <h2>Your Cart</h2>
+        <button class="drawer_close" id="drawerClose">✕</button>
+      </div>
+      <div class="drawer_items" id="drawerItems">
+        <div class="drawer_empty" id="drawerEmpty">
+          <span class="empty_icon">🛒</span>
+          <p>Your cart is empty.</p>
+          <p style="font-size:.8rem;color:var(--clr-muted)">Add a pair to get started.</p>
+        </div>
+      </div>
+      <div class="drawer_footer">
+        <div class="subtotal_row">
+          <span>Subtotal</span>
+          <span class="subtotal_amount" id="subtotalAmount">₦0</span>
+        </div>
+        <button type="button" class="btn_checkout">Proceed to Checkout →</button>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <footer>
+      <div class="footer">
+        <div class="footer_logo">
+          <a href="/index.html">
+            <img class="footer_img" src="/assets/Sweet-feet-logo.png" alt="Sweet Feet logo" />
+            <p class="footer_txt">Sweet Feet</p>
+          </a>
+        </div>
+        <div class="footer_links">
+          <a href="/nav/products.html">Shop all brands</a>
+          <a href="/nav/chat.html">Messages</a>
+          <a href="/nav/feedback.html">Feedback</a>
+          <a href="/nav/track.html">Track Order</a>
+        </div>
+        <p class="copy">&copy; Created by Thee_10th. All rights reserved</p>
+      </div>
+    </footer>
+
+    <script type="module" src="/js/main.js"></script>
+  </body>
 </html>
