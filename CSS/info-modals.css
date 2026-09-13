@@ -1,3 +1,8 @@
+a,
+a:link,
+a:visited {
+  text-decoration: none;
+}
 .info_overlay[hidden],
 .info_modal[hidden] {
   display: none !important;

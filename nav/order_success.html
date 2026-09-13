@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700;800&family=Kumbh+Sans:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    a, a:link, a:visited { text-decoration: none; }
     body {
       font-family: 'Kumbh Sans', sans-serif;
       background: #fdfaf6;
@@ -64,7 +65,6 @@
   <a href="/sweetfeet/nav/products.html" class="btn">Continue Shopping →</a>
 
   <script>
-    // Show the order reference from the URL
     const ref = new URLSearchParams(window.location.search).get('ref');
     if (ref) {
       document.getElementById('refDisplay').textContent = 'Order Reference: ' + ref;
