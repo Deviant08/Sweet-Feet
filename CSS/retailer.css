@@ -1,5 +1,12 @@
 /* Sweet Feet — CSS/retailer.css */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+a,
+a:link,
+a:visited {
+  text-decoration: none;
+}
+
 :root {
   --clr-bg: #fdfaf6; --clr-dark: #160c02; --clr-accent: #c8440c; --clr-muted: #7a6555;
   --clr-surface: #fff; --clr-border: #e8ddd4; --clr-tag-bg: #f3ede8;
