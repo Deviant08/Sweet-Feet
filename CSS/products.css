@@ -44,6 +44,8 @@ html {
       /* ── Reset & base ─────────────────────────────── */
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+      a, a:link, a:visited { text-decoration: none; }
+
       :root {
         --clr-bg:        #fdfaf6;
         --clr-dark:      #160c02;
