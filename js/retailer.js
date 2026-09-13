@@ -119,12 +119,16 @@ export function initRetailer() {
 
     async function loadDashboard() {
       try {
-        const [oRes, pRes] = await Promise.all([
+        const [oRes, pRes, uRes] = await Promise.all([
           api("/orders/retailer").catch(() => ({ data: [] })),
           api("/products/mine").catch(() => ({ data: [] })),
+          api("/messages/unread").catch(() => ({ data: { unread: 0, shop: 0, staff: 0 } })),
         ]);
         const orders = oRes.data || [];
         const prods = pRes.data || [];
+        const unreadData = uRes.data || {};
+        const shopUnread = Number(unreadData.shop ?? unreadData.unread ?? 0) || 0;
+        const staffUnread = Number(unreadData.staff ?? 0) || 0;
 
         let itemCount = 0;
         let pending = 0;
@@ -142,7 +146,28 @@ export function initRetailer() {
         el("statOrders", orders.length);
         el("statPending", pending);
         el("statProducts", prods.filter((p) => p.isActive !== false).length);
-        el("statMessages", "—");
+        el("statMessages", shopUnread);
+
+        const msgBadge = document.getElementById("msgBadge");
+        if (msgBadge) {
+          if (shopUnread > 0) {
+            msgBadge.textContent = String(shopUnread);
+            msgBadge.style.display = "inline-block";
+          } else {
+            msgBadge.textContent = "";
+            msgBadge.style.display = "none";
+          }
+        }
+        const staffBadge = document.getElementById("staffBadge");
+        if (staffBadge) {
+          if (staffUnread > 0) {
+            staffBadge.textContent = String(staffUnread);
+            staffBadge.style.display = "inline-block";
+          } else {
+            staffBadge.textContent = "";
+            staffBadge.style.display = "none";
+          }
+        }
 
         const tbody = document.getElementById("recentOrdersBody");
         if (tbody) {

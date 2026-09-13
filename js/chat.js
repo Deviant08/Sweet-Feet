@@ -151,31 +151,49 @@ export function initChat() {
   function buildInboxFromMessages(messages) {
     const map = new Map();
     for (const m of messages) {
+      if (m.threadType === "staff") continue;
       const partnerId = isRetailer
         ? String(m.customer?._id || m.customer)
         : String(m.retailer?._id || m.retailer);
+      if (!partnerId || partnerId === "undefined") continue;
       const partnerName = isRetailer
         ? m.customerName || m.customer?.fullName || "Customer"
         : m.retailerName || m.retailer?.businessName || "Retailer";
-      const existing = map.get(partnerId);
+      const incoming = isRetailer ? m.senderType === "customer" : m.senderType === "retailer";
+      const unreadInc = incoming && !m.isRead ? 1 : 0;
       const ts = new Date(m.createdAt || m.created_at || 0).getTime();
-      if (!existing || ts > existing._ts) {
+      const existing = map.get(partnerId);
+      if (!existing) {
         map.set(partnerId, {
           partnerId,
           partnerName,
           last_message: m.message,
-          unread_count: m.isRead ? 0 : 1,
+          unread_count: unreadInc,
           _ts: ts,
         });
-      } else if (!m.isRead) {
-        existing.unread_count = (existing.unread_count || 0) + 1;
+      } else {
+        if (ts >= existing._ts) {
+          existing.last_message = m.message;
+          existing.partnerName = partnerName;
+          existing._ts = ts;
+        }
+        if (unreadInc) existing.unread_count = (existing.unread_count || 0) + 1;
       }
     }
     return Array.from(map.values()).sort((a, b) => b._ts - a._ts);
   }
 
+  function clearUnread(partnerId) {
+    const conv = allConversations.find((c) => String(c.partnerId) === String(partnerId));
+    if (conv && conv.unread_count) {
+      conv.unread_count = 0;
+      renderInbox(allConversations);
+    }
+  }
+
   function bumpInbox(m) {
     const partnerId = isRetailer ? String(m.customer) : String(m.retailer);
+    const mine = isRetailer ? m.senderType === "retailer" : m.senderType === "customer";
     const partnerName =
       m.authorName ||
       (isRetailer ? "Customer" : "Retailer");
@@ -184,6 +202,7 @@ export function initChat() {
       partnerName,
       last_message: m.message,
       createdAt: m.createdAt,
+      skipUnread: mine,
     });
   }
 
@@ -194,13 +213,16 @@ export function initChat() {
     if (existing) {
       existing.last_message = frame.last_message;
       existing._ts = new Date(frame.createdAt || Date.now()).getTime();
-      if (String(activePartnerId) !== partnerId) existing.unread_count = (existing.unread_count || 0) + 1;
+      if (!frame.skipUnread && String(activePartnerId) !== partnerId) {
+        existing.unread_count = (existing.unread_count || 0) + 1;
+      }
     } else {
       allConversations.unshift({
         partnerId,
         partnerName: frame.partnerName || "Chat",
         last_message: frame.last_message,
-        unread_count: String(activePartnerId) === partnerId ? 0 : 1,
+        unread_count:
+          frame.skipUnread || String(activePartnerId) === partnerId ? 0 : 1,
         _ts: Date.now(),
       });
     }
@@ -284,6 +306,7 @@ export function initChat() {
 
     renderInbox(allConversations);
     await fetchMessages();
+    clearUnread(partnerId);
     wsSend({ type: "join", partnerId });
   }
 
@@ -332,6 +355,7 @@ export function initChat() {
         : `?customerId=${encodeURIComponent(activePartnerId)}`;
       const json = await api("/messages" + qs);
       paintMessages(json.data || []);
+      clearUnread(activePartnerId);
     } catch {
       console.error("Chat history failed.");
     }
@@ -363,9 +387,12 @@ export function initChat() {
       try {
         await api("/messages", { method: "POST", body: payload });
         await fetchMessages();
+        clearUnread(activePartnerId);
       } catch (e) {
         alert(e.message || "Could not send message.");
       }
+    } else {
+      clearUnread(activePartnerId);
     }
 
     chatInput.disabled = false;
