@@ -185,35 +185,107 @@ export function initRetailer() {
     const modal = document.getElementById("productModal");
     const modalError = document.getElementById("modalError");
 
+    let catalog = [];
+
+    function formatPrice(p) {
+      const n = Number(p) || 0;
+      return "₦" + n.toLocaleString("en-NG", { maximumFractionDigits: 0 });
+    }
+    function stars(r) {
+      const n = Number(r) || 0;
+      const full = Math.floor(n);
+      const half = n - full >= 0.5 ? 1 : 0;
+      return "★".repeat(full) + (half ? "☆" : "") + "☆".repeat(Math.max(0, 5 - full - half));
+    }
+    function escapeHtml(s) {
+      const d = document.createElement("div");
+      d.textContent = String(s ?? "");
+      return d.innerHTML;
+    }
+    function renderManageCard(p) {
+      const sizes = (p.sizes || [])
+        .map((s) => '<span class="size_dot">' + escapeHtml(s) + "</span>")
+        .join("");
+      const rating = Number(p.rating) || 0;
+      const ratingBlock = rating
+        ? '<div class="card_rating"><span class="stars">' +
+          stars(rating) +
+          "</span><span>" +
+          rating +
+          " (" +
+          (p.ratingCount || 0) +
+          ")</span></div>"
+        : "";
+      const badge = p.badge
+        ? '<span class="card_badge badge_' +
+          escapeHtml(p.badge) +
+          '">' +
+          escapeHtml(p.badgeLabel || p.badge) +
+          "</span>"
+        : "";
+      return (
+        '<article class="product_card" data-id="' +
+        escapeHtml(p.id) +
+        '">' +
+        badge +
+        '<span class="card_badge card_status_badge ' +
+        (p.isActive ? "badge_new" : "badge_hidden") +
+        '">' +
+        (p.isActive ? "Active" : "Hidden") +
+        "</span>" +
+        '<img class="card_img" src="' +
+        escapeHtml(p.img) +
+        '" alt="' +
+        escapeHtml(p.name) +
+        '" loading="lazy" />' +
+        '<div class="card_body">' +
+        '<span class="card_category">' +
+        escapeHtml(p.category || "") +
+        " · " +
+        escapeHtml(p.gender || "") +
+        "</span>" +
+        '<h2 class="card_name">' +
+        escapeHtml(p.name) +
+        "</h2>" +
+        ratingBlock +
+        '<div class="card_sizes">' +
+        sizes +
+        "</div>" +
+        '<div class="card_footer"><div class="card_price">' +
+        formatPrice(p.price) +
+        (p.oldPrice ? '<span class="old_price">' + formatPrice(p.oldPrice) + "</span>" : "") +
+        "</div></div>" +
+        '<div class="card_actions">' +
+        '<button class="btn_sm dark edit_btn" type="button" data-id="' +
+        escapeHtml(p.id) +
+        '">Edit</button>' +
+        '<button class="btn_sm ' +
+        (p.isActive ? "danger" : "success") +
+        ' toggle_btn" type="button" data-id="' +
+        escapeHtml(p.id) +
+        '" data-active="' +
+        (p.isActive ? 1 : 0) +
+        '">' +
+        (p.isActive ? "Hide" : "Show") +
+        "</button>" +
+        "</div></div></article>"
+      );
+    }
+
     async function loadProducts() {
       try {
         const json = await api("/products/mine");
-        const data = (json.data || []).map(mapProduct);
-        if (!data.length) {
+        catalog = (json.data || []).map(mapProduct).filter(Boolean);
+        if (!catalog.length) {
           productManageGrid.innerHTML = `<div class="empty_state"><div class="empty_icon">👟</div><p>No products listed yet.</p><small>Click "+ Add Product" to get started.</small></div>`;
           return;
         }
-        productManageGrid.innerHTML = data
-          .map(
-            (p) => `
-          <div class="product_manage_card">
-            <img src="${p.img}" alt="${p.name}" />
-            <div class="card_info">
-              <h4>${p.name}</h4>
-              <p class="card_meta">${p.category} · ${p.gender} · ₦${Number(p.price).toFixed(2)}</p>
-              <p class="card_meta">Sizes: ${(p.sizes || []).join(", ")}</p>
-              <p class="card_meta">Status: <span class="badge ${p.isActive ? "approved" : "cancelled"}">${p.isActive ? "Active" : "Hidden"}</span></p>
-              <div class="card_actions">
-                <button class="btn_sm outline edit_btn" data-product='${JSON.stringify(p).replace(/'/g, "&#39;")}'>Edit</button>
-                <button class="btn_sm ${p.isActive ? "danger" : "success"} toggle_btn" data-id="${p.id}" data-active="${p.isActive ? 1 : 0}">${p.isActive ? "Hide" : "Show"}</button>
-              </div>
-            </div>
-          </div>`
-          )
-          .join("");
-
+        productManageGrid.innerHTML = catalog.map(renderManageCard).join("");
         productManageGrid.querySelectorAll(".edit_btn").forEach((btn) => {
-          btn.addEventListener("click", () => openEditModal(JSON.parse(btn.dataset.product)));
+          btn.addEventListener("click", () => {
+            const p = catalog.find((x) => String(x.id) === String(btn.dataset.id));
+            if (p) openEditModal(p);
+          });
         });
         productManageGrid.querySelectorAll(".toggle_btn").forEach((btn) => {
           btn.addEventListener("click", () =>

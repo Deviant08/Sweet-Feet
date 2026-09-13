@@ -71,13 +71,27 @@
             "&retailer_name=" +
             encodeURIComponent(r.businessName || "");
 
+          function stars(r) {
+            const n = Number(r) || 0;
+            const full = Math.floor(n);
+            const half = n - full >= 0.5 ? 1 : 0;
+            return "★".repeat(full) + (half ? "☆" : "") + "☆".repeat(Math.max(0, 5 - full - half));
+          }
           const card = (p) => `
-            <a class="rp_card" href="/nav/products.html">
-              <img src="${p.img}" alt="${p.name}" />
-              <div class="rp_card_body">
-                ${p.badge ? `<span class="rp_badge">${p.badgeLabel || p.badge}</span>` : ""}
-                <div style="font-weight:700">${p.name}</div>
-                <div style="margin-top:.35rem;color:#c8440c;font-weight:700">${formatPrice(p.price)}</div>
+            <a class="product_card" href="/nav/products.html">
+              ${p.badge ? `<span class="card_badge badge_${p.badge}">${p.badgeLabel || p.badge}</span>` : ""}
+              <img class="card_img" src="${p.img}" alt="${p.name}" />
+              <div class="card_body">
+                <span class="card_category">${p.category || ""} · ${p.gender || ""}</span>
+                <h2 class="card_name">${p.name}</h2>
+                ${p.rating ? `<div class="card_rating"><span class="stars">${stars(p.rating)}</span><span>${p.rating} (${p.ratingCount || 0})</span></div>` : ""}
+                <div class="card_sizes">${(p.sizes || []).map((s) => `<span class="size_dot">${s}</span>`).join("")}</div>
+                <div class="card_footer">
+                  <div class="card_price">
+                    ${formatPrice(p.price)}
+                    ${p.oldPrice ? `<span class="old_price">${formatPrice(p.oldPrice)}</span>` : ""}
+                  </div>
+                </div>
               </div>
             </a>`;
 
@@ -91,9 +105,9 @@
                 <a class="rp_chat" href="${chatHref}" id="rpChatBtn">💬 Chat with ${r.businessName || "seller"}</a>
               </div>
             </div>
-            ${top.length ? `<h2 class="rp_section_title">Top picks</h2><div class="rp_grid">${top.map(card).join("")}</div>` : ""}
+            ${top.length ? `<h2 class="rp_section_title">Top picks</h2><div class="product_grid">${top.map(card).join("")}</div>` : ""}
             <h2 class="rp_section_title">All products (${mine.length})</h2>
-            <div class="rp_grid">${mine.length ? mine.map(card).join("") : `<p class="rp_empty">No products listed yet.</p>`}</div>
+            <div class="product_grid">${mine.length ? mine.map(card).join("") : `<p class="rp_empty">No products listed yet.</p>`}</div>
           `;
 
           document.getElementById("rpChatBtn")?.addEventListener("click", (e) => {
