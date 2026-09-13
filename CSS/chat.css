@@ -1,3 +1,8 @@
+a,
+a:link,
+a:visited {
+  text-decoration: none;
+}
 /*
  * Sweet Feet v2 — chat.css
  * Shared styles for the chat interface.
