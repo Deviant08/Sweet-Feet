@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/jpeg" href="/assets/images (7).jpeg" />
   <title>Payment Failed — Sweet Feet</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700;800&family=Kumbh+Sans:wght@400;600&display=swap" rel="stylesheet" />
@@ -21,54 +22,51 @@
       padding: 2rem;
       text-align: center;
     }
-    .icon {
-      font-size: 3rem;
-      width: 8rem; height: 8rem;
-      background: #fdf0f0;
-      border: 2px solid #f5a8a8;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 2rem;
-      color: #c0392b;
+    .card {
+      background: #fff;
+      border-radius: 1.5rem;
+      padding: 3rem 2.5rem;
+      max-width: 28rem;
+      box-shadow: 0 8px 32px rgba(22,12,2,0.08);
+      border: 1px solid rgba(22,12,2,0.06);
     }
-    h1 {
-      font-family: 'Work Sans', sans-serif;
-      font-size: clamp(2rem, 5vw, 3rem);
-      font-weight: 800;
-      letter-spacing: -.02em;
-      margin-bottom: 1rem;
-    }
-    p { font-size: 1rem; color: #7a6555; line-height: 1.6; max-width: 420px; margin: 0 auto .5rem; }
-    .buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2.5rem; }
+    .icon { font-size: 3.5rem; margin-bottom: 1rem; }
+    h1 { font-family: 'Work Sans', sans-serif; font-size: 1.75rem; font-weight: 800; margin-bottom: 0.75rem; }
+    p { font-size: 0.95rem; color: #695d49; line-height: 1.6; margin-bottom: 1.5rem; }
     .btn {
       display: inline-block;
-      padding: 1rem 2rem;
       background: #160c02;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 10px;
-      font-family: 'Work Sans', sans-serif;
+      color: #f7dfb8;
+      padding: 0.85rem 1.75rem;
+      border-radius: 2rem;
       font-weight: 700;
-      font-size: .95rem;
-      transition: background .2s;
+      font-size: 0.9rem;
+      transition: transform 0.2s;
+      margin: 0.25rem;
     }
-    .btn:hover { background: #c8440c; }
-    .btn.outline {
-      background: none;
-      border: 2px solid #160c02;
-      color: #160c02;
+    .btn:hover { transform: scale(1.03); }
+    .btn.outline { background: transparent; color: #160c02; border: 2px solid #160c02; }
+    .logo {
+      display: flex; align-items: center; gap: 0.6rem; justify-content: center;
+      margin-bottom: 1.5rem; color: #160c02; font-weight: 700; font-size: 1.1rem;
     }
-    .btn.outline:hover { background: #160c02; color: #fff; }
+    .logo img {
+      width: 2.5rem; height: 2.5rem; border-radius: 50%; object-fit: cover;
+      border: 1px ridge #d5b074e5;
+    }
   </style>
 </head>
 <body>
-  <div class="icon">✕</div>
-  <h1>Payment Unsuccessful</h1>
-  <p>Your payment could not be completed. Your card has not been charged.</p>
-  <p>This may be due to insufficient funds, a network issue, or the payment was cancelled.</p>
-  <div class="buttons">
-    <a href="/sweetfeet/nav/products.html" class="btn">Try Again →</a>
-    <a href="/sweetfeet/index.html" class="btn outline">Go Home</a>
+  <div class="card">
+    <a class="logo" href="/index.html">
+      <img src="/assets/images (7).jpeg" alt="Sweet Feet" />
+      Sweet Feet
+    </a>
+    <div class="icon">❌</div>
+    <h1>Payment failed</h1>
+    <p>Something went wrong with your payment. No charge was made. Please try again or contact support.</p>
+    <a class="btn" href="/nav/products.html">Back to shop →</a>
+    <a class="btn outline" href="/nav/chat.html">Contact support</a>
   </div>
 </body>
 </html>
