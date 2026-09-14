@@ -3,6 +3,8 @@
  * Live: https://sweet-feet-backend.onrender.com/api/v1
  */
 
+export const LOGIN_URL = "/nav/login.html";
+
 export const API_BASE =
   (typeof window !== "undefined" && window.SF_API_BASE) ||
   "https://sweet-feet-backend.onrender.com/api/v1";
