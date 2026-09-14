@@ -47,7 +47,7 @@
     <a class="sidebar_link" href="/admin/retailers.html"><span class="icon">🏪</span> Retailers</a>
     <a class="sidebar_link active" href="/admin/chat.html"><span class="icon">💬</span> Support Chat</a>
     <div class="sidebar_divider"></div>
-    <a class="sidebar_link" id="logoutBtn" href="/nav/login.html?role=admin"><span class="icon">🚪</span> Log Out</a>
+    <a class="sidebar_link" id="logoutBtn" href="/nav/login.html"><span class="icon">🚪</span> Log Out</a>
   </nav>
 
   <div class="main_content" style="padding:0">
@@ -70,30 +70,9 @@
   </div>
 </div>
 
-<div class="modal_overlay" id="loginModal">
-  <div class="modal">
-    <h3>Admin Login</h3>
-    <form id="adminLoginForm">
-      <div class="form_group" style="margin-top:2rem">
-        <label>Email</label>
-        <input type="email" id="adminEmail" required autocomplete="username" />
-      </div>
-      <div class="form_group">
-        <label>Password</label>
-        <input type="password" id="adminPassword" placeholder="Password" required autocomplete="current-password" />
-      </div>
-      <div class="msg_error" id="loginError"></div>
-      <div class="modal_footer">
-        <button type="submit" class="btn_sm dark" style="width:100%">Log In →</button>
-      </div>
-    </form>
-  </div>
-</div>
-
 <script type="module">
 import { api, setSession, clearSession, getToken, avatarUrl } from "/js/api.js";
 
-const modal = document.getElementById("loginModal");
 let activeRetailerId = null;
 let pollTimer = null;
 
@@ -103,66 +82,15 @@ function escapeHtml(s) {
   return d.innerHTML;
 }
 
-function showLogin(msg) {
-  if (msg) {
-    document.getElementById("loginError").textContent = msg;
-    document.getElementById("loginError").style.display = "block";
-  }
-  modal.classList.add("open");
-  const el = document.getElementById("inboxItems");
-  el.innerHTML = '<div style="padding:2rem;text-align:center;color:#6b5e52">Log in as admin to see retailers.</div>';
-}
-function hideLogin() {
-  modal.classList.remove("open");
-  document.getElementById("loginError").style.display = "none";
-}
-
 async function requireAdmin() {
-  if (!getToken()) { showLogin(); return false; }
+  if (!getToken()) { window.location.replace("/nav/login.html?role=admin"); return false; }
   try {
     const me = await api("/auth/me");
-    if (me.data?.role !== "admin") {
-      clearSession();
-      showLogin("Admin account required.");
-      return false;
-    }
+    if (me.data?.role !== "admin") { clearSession(); window.location.replace("/nav/login.html?role=admin"); return false; }
     setSession(getToken(), me.data, "user");
-    hideLogin();
     return true;
-  } catch {
-    clearSession();
-    showLogin("Session expired.");
-    return false;
-  }
+  } catch { clearSession(); window.location.replace("/nav/login.html?role=admin"); return false; }
 }
-
-document.getElementById("adminLoginForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const errorEl = document.getElementById("loginError");
-  const btn = e.target.querySelector("button[type='submit']");
-  errorEl.style.display = "none";
-  btn.disabled = true;
-  btn.textContent = "Signing in…";
-  try {
-    const data = await api("/auth/login", {
-      method: "POST",
-      body: {
-        email: document.getElementById("adminEmail").value.trim(),
-        password: document.getElementById("adminPassword").value,
-      },
-    });
-    if (data.data?.role !== "admin") throw new Error("Not an admin");
-    setSession(data.token, data.data, "user");
-    hideLogin();
-    boot();
-  } catch (err) {
-    errorEl.textContent = err.message || "Login failed";
-    errorEl.style.display = "block";
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "Log In →";
-  }
-});
 
 function fmtTime(d) {
   try {
@@ -272,7 +200,7 @@ document.getElementById("logoutBtn").addEventListener("click", async (e) => {
   if (!confirm("Log out?")) return;
   try { await api("/auth/logout", { method: "POST" }); } catch {}
   clearSession();
-  window.location.href = "/nav/login.html?role=admin";
+  window.location.href = "/nav/login.html";
 });
 
 async function boot() {
