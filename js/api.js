@@ -89,6 +89,20 @@ export function getRetailer() {
   }
 }
 
+/** Login page URL with the correct role tab. Call before clearSession(). */
+export function logoutRedirectUrl() {
+  try {
+    const user = JSON.parse(localStorage.getItem(USER_KEY) || "null");
+    if (user?.role === "admin") return `${LOGIN_URL}?role=admin`;
+  } catch {
+    /* ignore */
+  }
+  if (localStorage.getItem(RETAILER_KEY) || localStorage.getItem("sf_retailer_name")) {
+    return `${LOGIN_URL}?role=retailer`;
+  }
+  return LOGIN_URL;
+}
+
 export function avatarUrl(name, existing) {
   if (existing) return existing;
   const label = encodeURIComponent((name || "SF").slice(0, 24));
