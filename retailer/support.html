@@ -75,7 +75,7 @@
 import { api, clearSession, getToken } from "/js/api.js";
 
 if (!getToken() || !localStorage.getItem("sf_retailer_id")) {
-  window.location.href = "/retailer/login.html?next=/retailer/support.html";
+  window.location.href = "/nav/login.html?role=retailer&next=/retailer/support.html";
 }
 
 function escapeHtml(s) {
@@ -143,7 +143,7 @@ document.getElementById("logoutBtn").addEventListener("click", async (e) => {
     await api("/auth/logout", { method: "POST" });
   } catch {}
   clearSession();
-  window.location.href = "/retailer/login.html";
+  window.location.href = "/nav/login.html";
 });
 
 loadMessages();
