@@ -4,26 +4,141 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/jpeg" href="/assets/images (7).jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/CSS/chat.css" />
-  <link rel="stylesheet" href="/CSS/queries.css" />
   <title>Messages — Sweet Feet</title>
+  <style>
+    :root {
+      --clr-bg: #fdfaf6;
+      --clr-dark: #160c02;
+      --clr-accent: #c8440c;
+      --clr-muted: #7a6555;
+      --clr-surface: #fff;
+      --clr-border: #e8ddd4;
+      --clr-tag-bg: #f3ede8;
+      --clr-cream: #f7dfb8;
+      --ff-display: "Work Sans", sans-serif;
+      --ff-ui: "Kumbh Sans", sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { font-size: 62.5%; }
+    body {
+      margin: 0;
+      font-family: var(--ff-ui);
+      background: var(--clr-bg);
+      color: var(--clr-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .site_header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: 1rem 2rem;
+      background: var(--clr-dark);
+      color: var(--clr-cream);
+      flex-shrink: 0;
+    }
+    .site_header .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--clr-cream);
+      font-family: var(--ff-display);
+      font-weight: 800;
+      font-size: 1.5rem;
+    }
+    .site_header .logo img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .site_header nav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem 1.25rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+    .site_header nav a {
+      color: var(--clr-cream);
+      text-decoration: none;
+    }
+    .site_header nav a:hover,
+    .site_header nav a.active {
+      color: #efbc8a;
+    }
+    .chat_page_wrap {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .chat_page_wrap .chat_layout {
+      height: calc(100vh - 64px);
+      width: 100%;
+    }
+    .hidden { display: none !important; }
+  </style>
 </head>
 <body>
-  <header class="chat_header">
+  <header class="site_header">
     <a class="logo" href="/index.html">
       <img src="/assets/images (7).jpeg" alt="Sweet Feet" />
       <span>Sweet Feet</span>
     </a>
-    <nav>
+    <nav class="nav auth_nav_slot">
+      <a href="/nav/signup.html">Sign Up</a>
+      <a href="/nav/login.html">Login</a>
       <a href="/nav/products.html">Shop</a>
       <a href="/nav/track.html">Track</a>
       <a href="/nav/chat.html" class="active">Messages</a>
-      <a href="/nav/login.html">Login</a>
+      <a href="/nav/feedback.html">Feedback</a>
     </nav>
   </header>
-  <main class="chat_main">
-    <div id="chatApp">Loading messages…</div>
-  </main>
-  <script type="module" src="/js/chat.js"></script>
+
+  <div class="chat_page_wrap">
+    <div class="chat_layout">
+      <div class="chat_inbox" id="inboxList">
+        <div class="inbox_search">
+          <input type="text" id="inboxSearch" placeholder="Search conversations…" />
+        </div>
+        <div id="inboxItems">
+          <div style="padding:2rem;text-align:center;color:var(--clr-muted)">Loading…</div>
+        </div>
+      </div>
+
+      <div class="chat_panel" id="chatPanel">
+        <div class="chat_empty_state" id="chatEmptyState">
+          <div style="font-size:3rem;margin-bottom:1rem">💬</div>
+          <p>Select a conversation</p>
+          <p style="margin-top:1rem;font-size:1.15rem">
+            Browse the <a href="/nav/products.html" style="color:var(--clr-accent);font-weight:700">shop</a> and message a seller from a product card.
+          </p>
+        </div>
+        <div class="chat_header hidden" id="chatHeader">
+          <div class="chat_avatar" id="chatAvatar"></div>
+          <div>
+            <div class="chat_partner_name" id="chatPartnerName"></div>
+            <div class="chat_partner_sub" id="chatPartnerSub"></div>
+          </div>
+        </div>
+        <div class="chat_messages hidden" id="chatMessages"></div>
+        <div class="chat_input_bar hidden" id="chatInputBar">
+          <textarea id="chatInput" placeholder="Type a message…" rows="1"></textarea>
+          <button type="button" id="chatSendBtn">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/js/main.js"></script>
 </body>
 </html>
