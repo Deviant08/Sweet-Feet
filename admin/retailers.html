@@ -23,7 +23,7 @@
     <a class="sidebar_link active" href="/admin/retailers.html"><span class="icon">🏪</span> Retailers</a>
     <a class="sidebar_link" href="/admin/chat.html"><span class="icon">💬</span> Support Chat</a>
     <div class="sidebar_divider"></div>
-    <a class="sidebar_link" id="logoutBtn" href="/nav/login.html"><span class="icon">🚪</span> Log Out</a>
+    <a class="sidebar_link" id="logoutBtn" href="/nav/login.html?role=admin"><span class="icon">🚪</span> Log Out</a>
   </nav>
 
   <div class="main_content">
@@ -155,7 +155,7 @@ document.getElementById("logoutBtn").addEventListener("click", async (e) => {
   if (!window.confirm("Log out of admin?")) return;
   try { await api("/auth/logout", { method: "POST" }); } catch { /* ignore */ }
   clearSession();
-  window.location.href = "/nav/login.html";
+  window.location.href = "/nav/login.html?role=admin";
 });
 
 loadRetailers();
