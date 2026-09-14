@@ -3,78 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="/assets/20251102_172020.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/CSS/retailer.css" />
+  <link rel="icon" type="image/jpeg" href="/assets/images (7).jpeg" />
   <link rel="stylesheet" href="/CSS/chat.css" />
+  <link rel="stylesheet" href="/CSS/queries.css" />
   <title>Messages — Sweet Feet</title>
-  <style>
-    .cust_nav {
-      background: #160c02; padding: 0 3rem; display: flex; align-items: center;
-      justify-content: space-between; height: 6.4rem;
-    }
-    .cust_logo { display:flex; align-items:center; gap:1rem; text-decoration:none; color:#f7dfb8; }
-    .cust_logo img { width:3.8rem; height:3.8rem; border-radius:50%; object-fit:cover; }
-    .cust_logo span { font-family:var(--ff-display); font-size:1.8rem; font-weight:700; }
-    .cust_nav_links { display:flex; gap:2rem; }
-    .cust_nav_links a,
-    .cust_nav_links a:link,
-    .cust_nav_links a:visited { text-decoration:none; color:#ece3bd; font-size:1.3rem; font-weight:600; }
-    .cust_nav_links a.active, .cust_nav_links a:hover { color:#efbc8a; }
-    .chat_outer { height: calc(100vh - 6.4rem); }
-    .chat_layout { height: 100%; }
-    .hidden { display: none !important; }
-  </style>
 </head>
 <body>
-
-<div class="cust_nav">
-  <a class="cust_logo" href="/index.html">
-    <img src="/assets/images (7).jpeg" alt="Sweet Feet" />
-    <span>Sweet Feet</span>
-  </a>
-  <div class="cust_nav_links">
-    <a href="/nav/products.html">Shop</a>
-    <a href="/nav/track.html">Track Order</a>
-    <a href="/nav/chat.html" class="active">Messages</a>
-    <a href="/nav/feedback.html">Feedback</a>
-  </div>
-</div>
-
-<div class="chat_outer">
-  <div class="chat_layout" style="width:100%">
-    <div class="chat_inbox" id="inboxList">
-      <div class="inbox_search">
-        <input type="text" id="inboxSearch" placeholder="Search retailers…" />
-      </div>
-      <div id="inboxItems">
-        <div style="padding:2rem;text-align:center;color:var(--clr-muted)">Loading…</div>
-      </div>
-    </div>
-
-    <div class="chat_panel" id="chatPanel">
-      <div class="chat_empty_state" id="chatEmptyState">
-        <div style="font-size:3rem;margin-bottom:1rem">💬</div>
-        <p>Select a conversation from the left</p>
-      </div>
-      <div class="chat_header hidden" id="chatHeader">
-        <div class="chat_avatar" id="chatAvatar"></div>
-        <div>
-          <div class="chat_partner_name" id="chatPartnerName"></div>
-          <div class="chat_partner_sub" id="chatPartnerSub"></div>
-        </div>
-      </div>
-      <div class="chat_messages hidden" id="chatMessages"></div>
-      <div class="chat_input_bar hidden" id="chatInputBar">
-        <textarea id="chatInput" placeholder="Type a message…" rows="1"></textarea>
-        <button id="chatSendBtn">Send</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script type="module" src="/js/main.js"></script>
+  <header class="chat_header">
+    <a class="logo" href="/index.html">
+      <img src="/assets/images (7).jpeg" alt="Sweet Feet" />
+      <span>Sweet Feet</span>
+    </a>
+    <nav>
+      <a href="/nav/products.html">Shop</a>
+      <a href="/nav/track.html">Track</a>
+      <a href="/nav/chat.html" class="active">Messages</a>
+      <a href="/nav/login.html">Login</a>
+    </nav>
+  </header>
+  <main class="chat_main">
+    <div id="chatApp">Loading messages…</div>
+  </main>
+  <script type="module" src="/js/chat.js"></script>
 </body>
 </html>
