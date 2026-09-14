@@ -6,7 +6,7 @@
  * ============================================================
  */
 
-import { api, getToken, clearSession, getWsUrl } from "./api.js";
+import { api, getToken, clearSession, getWsUrl, logoutRedirectUrl } from "./api.js";
 
 export function initChat() {
   const inboxList = document.getElementById("inboxList");
@@ -55,7 +55,7 @@ export function initChat() {
     return new Date(d).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
   }
   function escHtml(t) {
-    return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    return String(t).replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">");
   }
   function initial(name) {
     return (name || "?").charAt(0).toUpperCase();
@@ -433,8 +433,9 @@ export function initChat() {
       } catch {
         /* ignore */
       }
+      const dest = logoutRedirectUrl();
       clearSession();
-      window.location.href = "/nav/login.html";
+      window.location.href = dest;
     });
   }
 
