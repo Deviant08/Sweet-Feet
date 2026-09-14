@@ -24,6 +24,27 @@ export function initShop() {
   const retailerFilter = params.get("id") || params.get("retailer") || params.get("retailer_id");
   const isSellerPage = /retailer\.html/i.test(window.location.pathname);
 
+  const CART_KEY = "sf_cart";
+
+  function loadCart() {
+    try {
+      const raw = localStorage.getItem(CART_KEY);
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveCart() {
+    try {
+      localStorage.setItem(CART_KEY, JSON.stringify(state.cart));
+    } catch {
+      /* quota / private mode */
+    }
+  }
+
   const state = {
     cat: "all",
     search: "",
@@ -32,7 +53,7 @@ export function initShop() {
     gender: "all",
     color: "all",
     rating: "all",
-    cart: [],
+    cart: loadCart(),
   };
 
   async function loadProducts() {
@@ -231,6 +252,7 @@ export function initShop() {
   }
 
   function updateCartUI() {
+    saveCart();
     const total = state.cart.reduce((s, i) => s + i.qty, 0);
     const subtotal = state.cart.reduce((s, i) => s + i.price * i.qty, 0);
     const countEl = document.getElementById("cartCount");
@@ -336,6 +358,10 @@ export function initShop() {
       });
       const authUrl = json.data?.authorization_url || json.authorization_url;
       if (authUrl) {
+        try {
+          state.cart = [];
+          saveCart();
+        } catch { /* ignore */ }
         window.location.href = authUrl;
       } else {
         showToast("Order created. Complete payment when prompted.");
