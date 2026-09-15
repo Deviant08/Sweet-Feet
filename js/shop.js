@@ -228,20 +228,37 @@ export function initShop() {
   function addToCart(id, size) {
     const p = products.find((x) => String(x.id) === String(id));
     if (!p) return;
-    const existing = state.cart.find((i) => String(i.id) === String(id) && i.selectedSize === size);
+    const sizeKey = cartSizeKey(size);
+    const existing = state.cart.find((i) => sameCartLine(i, id, sizeKey));
     if (existing) existing.qty += 1;
-    else state.cart.push({ ...p, qty: 1, selectedSize: size });
+    else state.cart.push({ ...p, qty: 1, selectedSize: sizeKey || null });
     updateCartUI();
     showToast(`${p.name} added to cart`);
   }
 
+  function cartSizeKey(s) {
+    if (s == null || s === "" || s === "null" || s === "undefined" || s === "—") return "";
+    return String(s);
+  }
+
+  function sameCartLine(item, id, size) {
+    return String(item.id) === String(id) && cartSizeKey(item.selectedSize) === cartSizeKey(size);
+  }
+
   function removeFromCart(id, size) {
-    state.cart = state.cart.filter((i) => !(String(i.id) === String(id) && i.selectedSize === size));
+    const before = state.cart.length;
+    state.cart = state.cart.filter((i) => !sameCartLine(i, id, size));
+    if (state.cart.length === before) {
+      const matches = state.cart.filter((i) => String(i.id) === String(id));
+      if (matches.length === 1) {
+        state.cart = state.cart.filter((i) => String(i.id) !== String(id));
+      }
+    }
     updateCartUI();
   }
 
   function updateQty(id, size, delta) {
-    const item = state.cart.find((i) => String(i.id) === String(id) && i.selectedSize === size);
+    const item = state.cart.find((i) => sameCartLine(i, id, size));
     if (!item) return;
     item.qty += delta;
     if (item.qty < 1) {
@@ -268,42 +285,58 @@ export function initShop() {
     if (!itemsEl) return;
 
     if (state.cart.length === 0) {
-      itemsEl.innerHTML = "";
-      if (emptyEl) {
-        itemsEl.appendChild(emptyEl);
-        emptyEl.style.display = "flex";
-      }
+      itemsEl.innerHTML = `
+        <div class="drawer_empty" id="drawerEmpty" style="display:flex">
+          <span class="empty_icon">🛒</span>
+          <p>Your cart is empty.</p>
+          <p style="font-size:.8rem;color:var(--clr-muted)">Add a pair to get started.</p>
+        </div>`;
       return;
     }
     if (emptyEl) emptyEl.style.display = "none";
 
     itemsEl.innerHTML = state.cart
-      .map(
-        (item) => `
+      .map((item) => {
+        const sizeAttr = cartSizeKey(item.selectedSize);
+        return `
       <div class="cart_item">
         <img src="${item.img}" alt="${item.name}" />
         <div class="cart_item_info">
           <div class="cart_item_name">${item.name}</div>
-          <div class="cart_item_meta">${item.retailerName || ""} · Size: ${item.selectedSize || "—"}</div>
+          <div class="cart_item_meta">${item.retailerName || ""} · Size: ${sizeAttr || "—"}</div>
           <div class="qty_control">
-            <button class="qty_btn" data-id="${item.id}" data-size="${item.selectedSize}" data-delta="-1">−</button>
+            <button type="button" class="qty_btn" data-id="${item.id}" data-size="${sizeAttr}" data-delta="-1">−</button>
             <span class="qty_num">${item.qty}</span>
-            <button class="qty_btn" data-id="${item.id}" data-size="${item.selectedSize}" data-delta="1">+</button>
+            <button type="button" class="qty_btn" data-id="${item.id}" data-size="${sizeAttr}" data-delta="1">+</button>
           </div>
-          <button class="cart_remove" data-id="${item.id}" data-size="${item.selectedSize}">Remove</button>
+          <button type="button" class="cart_remove" data-id="${item.id}" data-size="${sizeAttr}">Remove</button>
         </div>
         <div class="cart_item_price">${formatPrice(item.price * item.qty)}</div>
-      </div>`
-      )
+      </div>`;
+      })
       .join("");
 
-    itemsEl.querySelectorAll(".qty_btn").forEach((b) => {
-      b.addEventListener("click", () =>
-        updateQty(b.dataset.id, b.dataset.size, parseInt(b.dataset.delta, 10))
-      );
-    });
-    itemsEl.querySelectorAll(".cart_remove").forEach((b) => {
-      b.addEventListener("click", () => removeFromCart(b.dataset.id, b.dataset.size));
+    bindCartControls();
+  }
+
+  function bindCartControls() {
+    const itemsEl = document.getElementById("drawerItems");
+    if (!itemsEl || itemsEl.dataset.bound === "1") return;
+    itemsEl.dataset.bound = "1";
+    itemsEl.addEventListener("click", (e) => {
+      const qty = e.target.closest(".qty_btn");
+      if (qty) {
+        e.preventDefault();
+        e.stopPropagation();
+        updateQty(qty.dataset.id, qty.dataset.size, parseInt(qty.dataset.delta, 10));
+        return;
+      }
+      const rm = e.target.closest(".cart_remove");
+      if (rm) {
+        e.preventDefault();
+        e.stopPropagation();
+        removeFromCart(rm.dataset.id, rm.dataset.size);
+      }
     });
   }
 
@@ -526,6 +559,7 @@ export function initShop() {
   cartFab?.addEventListener("click", openDrawer);
   drawerClose?.addEventListener("click", closeDrawer);
   drawerOverlay?.addEventListener("click", closeDrawer);
+  bindCartControls();
 
   const checkoutBtn = document.querySelector(".btn_checkout");
   if (checkoutBtn) {
