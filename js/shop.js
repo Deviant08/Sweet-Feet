@@ -5,22 +5,7 @@
  * ============================================================
  */
 
-import { api, mapProduct, getToken, chatAppUrl, extractList } from "./api.js";
-
-const FALLBACK_PRODUCTS = [
-  { id: "sf-pro-grip", name: "Pro Grip Trainers", category: "trainers", gender: "unisex", price: 45000, oldPrice: 52000, rating: 4.3, ratingCount: 128, color: "black", badge: "top", badgeLabel: "TOP PICK", img: "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=800&q=80", sizes: [40, 41, 42, 43, 44], retailer_id: "lagos-kicks", retailerName: "Lagos Kicks Hub", retailerLocation: "Ikeja, Lagos", retailerLogo: "https://ui-avatars.com/api/?name=Lagos+Kicks&background=160c02&color=f7dfb8&size=128&bold=true" },
-  { id: "sf-urban-runners", name: "Urban Street Runners", category: "runners", gender: "men", price: 38500, oldPrice: 42000, rating: 4.5, ratingCount: 86, color: "white", badge: "new", badgeLabel: "NEW", img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80", sizes: [41, 42, 43, 44, 45], retailer_id: "lagos-kicks", retailerName: "Lagos Kicks Hub", retailerLocation: "Ikeja, Lagos", retailerLogo: "https://ui-avatars.com/api/?name=Lagos+Kicks&background=160c02&color=f7dfb8&size=128&bold=true" },
-  { id: "sf-court-sneakers", name: "Classic Court Sneakers", category: "casual", gender: "unisex", price: 32000, oldPrice: 36000, rating: 4.1, ratingCount: 64, color: "white", badge: "top", badgeLabel: "TOP PICK", img: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=800&q=80", sizes: [39, 40, 41, 42, 43], retailer_id: "lagos-kicks", retailerName: "Lagos Kicks Hub", retailerLocation: "Ikeja, Lagos", retailerLogo: "https://ui-avatars.com/api/?name=Lagos+Kicks&background=160c02&color=f7dfb8&size=128&bold=true" },
-  { id: "sf-foam-runner", name: "Foam Runner Lite", category: "runners", gender: "unisex", price: 28000, oldPrice: 33000, rating: 4.2, ratingCount: 190, color: "multi", badge: "sale", badgeLabel: "SALE", img: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&q=80", sizes: [39, 40, 41, 42, 43, 44], retailer_id: "lagos-kicks", retailerName: "Lagos Kicks Hub", retailerLocation: "Ikeja, Lagos", retailerLogo: "https://ui-avatars.com/api/?name=Lagos+Kicks&background=160c02&color=f7dfb8&size=128&bold=true" },
-  { id: "sf-canvas-low", name: "Canvas Low-Top", category: "casual", gender: "unisex", price: 24500, oldPrice: null, rating: 4.0, ratingCount: 112, color: "white", badge: "", badgeLabel: "", img: "https://images.unsplash.com/photo-1463100099107-aa0980c362e6?w=800&q=80", sizes: [39, 40, 41, 42, 43], retailer_id: "lagos-kicks", retailerName: "Lagos Kicks Hub", retailerLocation: "Ikeja, Lagos", retailerLogo: "https://ui-avatars.com/api/?name=Lagos+Kicks&background=160c02&color=f7dfb8&size=128&bold=true" },
-  { id: "sf-slide-sandals", name: "Slide Comfort Sandals", category: "sandals", gender: "women", price: 18500, oldPrice: null, rating: 4.4, ratingCount: 94, color: "brown", badge: "new", badgeLabel: "NEW", img: "https://images.unsplash.com/photo-1603487742131-4160ec999306?w=800&q=80", sizes: [36, 37, 38, 39, 40], retailer_id: "lagos-kicks", retailerName: "Lagos Kicks Hub", retailerLocation: "Ikeja, Lagos", retailerLogo: "https://ui-avatars.com/api/?name=Lagos+Kicks&background=160c02&color=f7dfb8&size=128&bold=true" },
-  { id: "sf-oxford", name: "Classic Oxford", category: "corporate", gender: "men", price: 55000, oldPrice: null, rating: 4.8, ratingCount: 87, color: "brown", badge: "top", badgeLabel: "TOP PICK", img: "https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=800&q=80", sizes: [40, 41, 42, 43, 44, 45], retailer_id: "abuja-style", retailerName: "Abuja Style Co", retailerLocation: "Wuse 2, Abuja", retailerLogo: "https://ui-avatars.com/api/?name=Abuja+Style&background=c8440c&color=fff&size=128&bold=true" },
-  { id: "sf-everyday-loafers", name: "EverDay Loafers", category: "loafers", gender: "unisex", price: 38500, oldPrice: null, rating: 4.7, ratingCount: 302, color: "black", badge: "top", badgeLabel: "BEST SELLER", img: "https://images.unsplash.com/photo-1533867617858-e7b97e060509?w=800&q=80", sizes: [38, 39, 40, 41, 42, 43], retailer_id: "abuja-style", retailerName: "Abuja Style Co", retailerLocation: "Wuse 2, Abuja", retailerLogo: "https://ui-avatars.com/api/?name=Abuja+Style&background=c8440c&color=fff&size=128&bold=true" },
-  { id: "sf-derby-brogue", name: "Derby Brogue", category: "corporate", gender: "men", price: 62000, oldPrice: null, rating: 4.6, ratingCount: 43, color: "brown", badge: "new", badgeLabel: "NEW", img: "https://images.unsplash.com/photo-1582897085656-c636d006a246?w=800&q=80", sizes: [40, 41, 42, 43, 44], retailer_id: "abuja-style", retailerName: "Abuja Style Co", retailerLocation: "Wuse 2, Abuja", retailerLogo: "https://ui-avatars.com/api/?name=Abuja+Style&background=c8440c&color=fff&size=128&bold=true" },
-  { id: "sf-chelsea-tan", name: "Chelsea Boot Tan", category: "boots", gender: "men", price: 72000, oldPrice: null, rating: 4.8, ratingCount: 31, color: "brown", badge: "new", badgeLabel: "NEW", img: "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=800&q=80", sizes: [40, 41, 42, 43, 44, 45], retailer_id: "abuja-style", retailerName: "Abuja Style Co", retailerLocation: "Wuse 2, Abuja", retailerLogo: "https://ui-avatars.com/api/?name=Abuja+Style&background=c8440c&color=fff&size=128&bold=true" },
-  { id: "sf-ankle-midnight", name: "Ankle Boot Midnight", category: "boots", gender: "women", price: 68000, oldPrice: 78000, rating: 4.9, ratingCount: 59, color: "black", badge: "sale", badgeLabel: "SALE", img: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=800&q=80", sizes: [36, 37, 38, 39, 40, 41], retailer_id: "abuja-style", retailerName: "Abuja Style Co", retailerLocation: "Wuse 2, Abuja", retailerLogo: "https://ui-avatars.com/api/?name=Abuja+Style&background=c8440c&color=fff&size=128&bold=true" },
-  { id: "sf-espadrille", name: "Espadrille Mule", category: "sandals", gender: "women", price: 22000, oldPrice: 28000, rating: 4.0, ratingCount: 77, color: "brown", badge: "sale", badgeLabel: "SALE", img: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=800&q=80", sizes: [36, 37, 38, 39, 40], retailer_id: "abuja-style", retailerName: "Abuja Style Co", retailerLocation: "Wuse 2, Abuja", retailerLogo: "https://ui-avatars.com/api/?name=Abuja+Style&background=c8440c&color=fff&size=128&bold=true" },
-];
+import { api, mapProduct, getToken, chatAppUrl } from "./api.js";
 
 export function formatPrice(p) {
   const n = Number(p) || 0;
@@ -28,6 +13,7 @@ export function formatPrice(p) {
 }
 
 export function initShop() {
+  // Retailer portal has its own #productGrid (My Products). Never mix in other sellers.
   if (/\/retailer\//.test(window.location.pathname)) return;
 
   const productGrid = document.getElementById("productGrid");
@@ -37,6 +23,7 @@ export function initShop() {
   const params = new URLSearchParams(window.location.search);
   const retailerFilter = params.get("id") || params.get("retailer") || params.get("retailer_id");
   const isSellerPage = /retailer\.html/i.test(window.location.pathname);
+
   const CART_KEY = "sf_cart";
 
   function loadCart() {
@@ -54,7 +41,7 @@ export function initShop() {
     try {
       localStorage.setItem(CART_KEY, JSON.stringify(state.cart));
     } catch {
-      /* ignore */
+      /* quota / private mode */
     }
   }
 
@@ -69,20 +56,6 @@ export function initShop() {
     cart: loadCart(),
   };
 
-  function featuredStock() {
-    let list = FALLBACK_PRODUCTS.map((p) => ({ ...p, is_active: true, isActive: true }));
-    if (retailerFilter) {
-      list = list.filter((p) => String(p.retailer_id) === String(retailerFilter));
-    }
-    return list;
-  }
-
-  async function fetchLiveProducts() {
-    const json = await api("/products", { timeoutMs: 8000, retries: 2 });
-    const list = extractList(json);
-    return (Array.isArray(list) ? list : []).map(mapProduct).filter(Boolean);
-  }
-
   async function loadProducts() {
     if (isSellerPage && !retailerFilter) {
       products = [];
@@ -93,33 +66,25 @@ export function initShop() {
       renderGrid();
       return;
     }
-
-    products = featuredStock();
-    renderGrid();
-    updateCartUI();
-
     try {
-      const live = await fetchLiveProducts();
-      if (live.length) {
-        products = retailerFilter
-          ? live.filter((p) => String(p.retailer_id) === String(retailerFilter))
-          : live;
-        if (retailerFilter) await applySellerChrome();
-        renderGrid();
-        updateCartUI();
+      const json = await api("/products");
+      const list = json.data || json.results || json || [];
+      products = (Array.isArray(list) ? list : []).map(mapProduct).filter(Boolean);
+      if (retailerFilter) {
+        products = products.filter((p) => String(p.retailer_id) === String(retailerFilter));
+        await applySellerChrome();
       }
+      renderGrid();
+      updateCartUI();
     } catch {
-      /* featured stock already on screen */
+      showToast("Network error loading products.");
     }
   }
 
   async function applySellerChrome() {
     let seller = null;
     try {
-      const rJson = await api("/retailers/" + encodeURIComponent(retailerFilter), {
-        timeoutMs: 8000,
-        retries: 1,
-      });
+      const rJson = await api("/retailers/" + encodeURIComponent(retailerFilter));
       seller = rJson.data || null;
     } catch {
       /* banner still works from product data */
@@ -157,18 +122,11 @@ export function initShop() {
   function stars(r) {
     const full = Math.floor(r);
     const half = r - full >= 0.5 ? 1 : 0;
-    return "★".repeat(full) + (half ? "☆" : "") + "☆".repeat(Math.max(0, 5 - full - half));
-  }
-
-  function escapeAttr(s) {
-    return String(s ?? "")
-      .replace(/&/g, "&")
-      .replace(/"/g, """)
-      .replace(/</g, "<");
+    return "★".repeat(full) + (half ? "☆" : "") + "☆".repeat(5 - full - half);
   }
 
   function renderCard(p) {
-    const profileUrl = `/nav/retailer.html?id=${encodeURIComponent(p.retailer_id || "")}`;
+    const profileUrl = `/nav/retailer.html?id=${encodeURIComponent(p.retailer_id)}`;
     const chatUrl = chatAppUrl({
       retailer_id: p.retailer_id,
       retailer_name: p.retailerName || "",
@@ -177,35 +135,35 @@ export function initShop() {
     });
 
     return `
-      <article class="product_card" data-id="${escapeAttr(p.id)}">
-        ${p.badge ? `<span class="card_badge badge_${escapeAttr(p.badge)}">${escapeAttr(p.badgeLabel)}</span>` : ""}
+      <article class="product_card" data-id="${p.id}">
+        ${p.badge ? `<span class="card_badge badge_${p.badge}">${p.badgeLabel}</span>` : ""}
         <button class="card_wishlist" title="Save for later" type="button">♡</button>
-        <img class="card_img" src="${escapeAttr(p.img)}" alt="${escapeAttr(p.name)}" loading="lazy" />
+        <img class="card_img" src="${p.img}" alt="${p.name}" loading="lazy" />
         <div class="card_body">
-          <span class="card_category">${escapeAttr(p.category)} · ${escapeAttr(p.gender)}</span>
-          <h2 class="card_name">${escapeAttr(p.name)}</h2>
+          <span class="card_category">${p.category} · ${p.gender}</span>
+          <h2 class="card_name">${p.name}</h2>
           <div class="card_rating">
             <span class="stars">${stars(p.rating)}</span>
             <span>${p.rating} (${p.ratingCount})</span>
           </div>
           <div class="card_sizes">
-            ${(p.sizes || []).map((s) => `<span class="size_dot" data-size="${escapeAttr(s)}">${escapeAttr(s)}</span>`).join("")}
+            ${(p.sizes || []).map((s) => `<span class="size_dot" data-size="${s}">${s}</span>`).join("")}
           </div>
           <div class="card_footer">
             <div class="card_price">
               ${formatPrice(p.price)}
               ${p.oldPrice ? `<span class="old_price">${formatPrice(p.oldPrice)}</span>` : ""}
             </div>
-            <button class="btn_order" type="button" data-id="${escapeAttr(p.id)}">Add to cart</button>
+            <button class="btn_order" type="button" data-id="${p.id}">Add to cart</button>
           </div>
-          <a class="card_seller" href="${profileUrl}" title="View ${escapeAttr(p.retailerName || "seller")}">
-            <img class="card_seller_avatar" src="${escapeAttr(p.retailerLogo)}" alt="" />
+          <a class="card_seller" href="${profileUrl}" title="View ${p.retailerName || "seller"}">
+            <img class="card_seller_avatar" src="${p.retailerLogo}" alt="" />
             <span class="card_seller_text">
               <span class="card_seller_by">Sold by</span>
-              <span class="card_seller_name">${escapeAttr(p.retailerName || "Sweet Feet")}</span>
+              <span class="card_seller_name">${p.retailerName || "Sweet Feet"}</span>
             </span>
           </a>
-          <a class="btn_chat_link" href="${chatUrl}">Chat with seller</a>
+          <a class="btn_chat_link" href="${chatUrl}">💬 Chat with seller</a>
         </div>
       </article>`;
   }
