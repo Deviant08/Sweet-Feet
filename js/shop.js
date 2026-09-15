@@ -5,7 +5,7 @@
  * ============================================================
  */
 
-import { api, mapProduct, getToken, chatAppUrl } from "./api.js";
+import { api, mapProduct, getToken, getUser, chatAppUrl } from "./api.js";
 
 export function formatPrice(p) {
   const n = Number(p) || 0;
@@ -315,6 +315,91 @@ export function initShop() {
     setTimeout(() => t.classList.remove("visible"), 2200);
   }
 
+  function injectCheckoutModal() {
+    if (document.getElementById("sfCheckoutModal")) return;
+    const style = document.createElement("style");
+    style.textContent = `
+      .sf_checkout_modal{position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center}
+      .sf_checkout_modal[hidden]{display:none!important}
+      .sf_checkout_backdrop{position:absolute;inset:0;background:rgba(22,12,2,.55)}
+      .sf_checkout_card{position:relative;background:#fff;border-radius:16px;padding:2.2rem;width:min(32rem,92vw);box-shadow:0 16px 40px rgba(22,12,2,.25)}
+      .sf_checkout_card h3{font-size:1.4rem;margin:0 0 .4rem;color:#160c02}
+      .sf_checkout_card p{font-size:.9rem;color:#6d5f49;margin:0 0 1.1rem;line-height:1.45}
+      .sf_checkout_card label{display:block;font-size:.8rem;font-weight:700;margin-bottom:.4rem;color:#160c02}
+      .sf_checkout_card input{width:100%;box-sizing:border-box;padding:.85rem 1rem;border:1.5px solid #e8dcc8;border-radius:10px;font-size:.95rem}
+      .sf_checkout_actions{display:flex;gap:.6rem;margin-top:1.2rem}
+      .sf_checkout_actions button{flex:1;padding:.75rem 1rem;border-radius:10px;font-weight:700;cursor:pointer;font-size:.9rem}
+      .sf_checkout_cancel{background:transparent;border:1.5px solid #160c02;color:#160c02}
+      .sf_checkout_go{background:#160c02;border:none;color:#f7dfb8}
+      .sf_checkout_err{color:#b00020;font-size:.8rem;font-weight:600;margin-top:.5rem;min-height:1.1em}
+    `;
+    document.head.appendChild(style);
+    const wrap = document.createElement("div");
+    wrap.id = "sfCheckoutModal";
+    wrap.className = "sf_checkout_modal";
+    wrap.hidden = true;
+    wrap.setAttribute("role", "dialog");
+    wrap.setAttribute("aria-modal", "true");
+    wrap.setAttribute("aria-labelledby", "sfCheckoutTitle");
+    wrap.innerHTML = `
+      <div class="sf_checkout_backdrop" data-close></div>
+      <div class="sf_checkout_card">
+        <h3 id="sfCheckoutTitle">Receipt email</h3>
+        <p>Paystack will send the payment receipt to this address.</p>
+        <label for="sfCheckoutEmail">Email address</label>
+        <input id="sfCheckoutEmail" type="email" autocomplete="email" placeholder="you@example.com" />
+        <div class="sf_checkout_err" id="sfCheckoutErr"></div>
+        <div class="sf_checkout_actions">
+          <button type="button" class="sf_checkout_cancel" data-close>Cancel</button>
+          <button type="button" class="sf_checkout_go" id="sfCheckoutGo">Continue to payment</button>
+        </div>
+      </div>`;
+    document.body.appendChild(wrap);
+  }
+
+  function askReceiptEmail() {
+    injectCheckoutModal();
+    const modal = document.getElementById("sfCheckoutModal");
+    const input = document.getElementById("sfCheckoutEmail");
+    const err = document.getElementById("sfCheckoutErr");
+    const user = getUser();
+    input.value = (user && user.email) || localStorage.getItem("sf_user_email") || "";
+    err.textContent = "";
+    modal.hidden = false;
+    setTimeout(() => input.focus(), 40);
+
+    return new Promise((resolve) => {
+      const goBtn = document.getElementById("sfCheckoutGo");
+      function close(value) {
+        modal.hidden = true;
+        modal.removeEventListener("click", onClick);
+        goBtn.removeEventListener("click", onGo);
+        input.removeEventListener("keydown", onKey);
+        resolve(value);
+      }
+      function onClick(e) {
+        if (e.target.closest("[data-close]")) close(null);
+      }
+      function onGo() {
+        const email = String(input.value || "").trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          err.textContent = "Enter a valid email address.";
+          input.focus();
+          return;
+        }
+        try { localStorage.setItem("sf_user_email", email); } catch { /* ignore */ }
+        close(email);
+      }
+      function onKey(e) {
+        if (e.key === "Enter") { e.preventDefault(); onGo(); }
+        if (e.key === "Escape") close(null);
+      }
+      modal.addEventListener("click", onClick);
+      goBtn.addEventListener("click", onGo);
+      input.addEventListener("keydown", onKey);
+    });
+  }
+
   async function initiatePayment() {
     if (state.cart.length === 0) {
       showToast("Your cart is empty.");
@@ -327,14 +412,8 @@ export function initShop() {
       return;
     }
 
-    const email =
-      prompt("Enter your email address for the receipt:") ||
-      localStorage.getItem("sf_user_email") ||
-      "";
-    if (!email || !email.includes("@")) {
-      showToast("A valid email is required to proceed.");
-      return;
-    }
+    const email = await askReceiptEmail();
+    if (!email) return;
 
     const btn = document.querySelector(".btn_checkout");
     if (btn) {
@@ -357,21 +436,27 @@ export function initShop() {
         },
       });
       const authUrl = json.data?.authorization_url || json.authorization_url;
+      const reference = json.data?.reference || json.reference;
+      const order = json.data?.order;
       if (authUrl) {
         try {
-          state.cart = [];
-          saveCart();
+          sessionStorage.setItem(
+            "sf_pending_pay",
+            JSON.stringify({
+              reference,
+              orderId: order?._id || order?.id || "",
+              at: Date.now(),
+            })
+          );
         } catch { /* ignore */ }
+        // Keep the cart until Paystack verifies on the track page.
         window.location.href = authUrl;
-      } else {
-        showToast("Order created. Complete payment when prompted.");
-        if (btn) {
-          btn.textContent = "Proceed to Checkout →";
-          btn.disabled = false;
-        }
+        return;
       }
+      showToast("Payment could not be started. Paystack is not configured on the server.");
     } catch (e) {
       showToast(e.message || "Could not start payment.");
+    } finally {
       if (btn) {
         btn.textContent = "Proceed to Checkout →";
         btn.disabled = false;
