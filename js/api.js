@@ -109,111 +109,70 @@ export function avatarUrl(name, existing) {
   return `https://ui-avatars.com/api/?name=${label}&background=160c02&color=f7dfb8&size=128&bold=true`;
 }
 
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-export function extractList(json) {
-  if (!json) return [];
-  if (Array.isArray(json)) return json;
-  if (Array.isArray(json.data)) return json.data;
-  if (Array.isArray(json.products)) return json.products;
-  if (json.data && Array.isArray(json.data.products)) return json.data.products;
-  if (json.data && Array.isArray(json.data.items)) return json.data.items;
-  return [];
-}
-
 export async function api(path, opts = {}) {
   const url = path.startsWith("http")
     ? path
     : `${API_BASE}${path.startsWith("/") ? path : "/" + path}`;
-  const token = getToken();
-  const method = String(opts.method || "GET").toUpperCase();
-  const attempts = Math.max(1, opts.retries ?? (method === "GET" ? 3 : 1));
-  const ms = opts.timeoutMs || (method === "GET" ? 45000 : 20000);
-
   const headers = {
     "Content-Type": "application/json",
     ...(opts.headers || {}),
   };
+  const token = getToken();
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  const useCreds =
-    opts.credentials === "include" || Boolean(token) || method !== "GET";
+  const controller = new AbortController();
+  const ms = opts.timeoutMs || 20000;
+  const timer = setTimeout(() => controller.abort(), ms);
 
-  let lastErr;
-  for (let i = 0; i < attempts; i++) {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), ms);
-    const init = {
-      method,
-      headers,
-      credentials: useCreds ? "include" : "omit",
-      signal: controller.signal,
-    };
-    if (opts.body && typeof opts.body === "object" && !(opts.body instanceof FormData)) {
-      init.body = JSON.stringify(opts.body);
-    } else if (opts.body) {
-      init.body = opts.body;
-    }
-
-    try {
-      const res = await fetch(url, init);
-      clearTimeout(timer);
-
-      if (res.status >= 500 && i < attempts - 1) {
-        await sleep(1600 * (i + 1));
-        continue;
-      }
-
-      let json = {};
-      try {
-        json = await res.json();
-      } catch {
-        /* empty body */
-      }
-
-      if (!res.ok) {
-        const msg =
-          json.message ||
-          json.error ||
-          (typeof json.status === "string" && json.status !== "Success"
-            ? json.status
-            : null) ||
-          `Request failed (${res.status})`;
-        const err = new Error(msg);
-        err.status = res.status;
-        err.data = json;
-        throw err;
-      }
-      return json;
-    } catch (e) {
-      clearTimeout(timer);
-      lastErr = e;
-      const retryable =
-        !e.status || e.status >= 500 || e.name === "AbortError" || e.name === "TypeError";
-      if (retryable && i < attempts - 1) {
-        await sleep(1600 * (i + 1));
-        continue;
-      }
-      if (e && e.name === "AbortError") {
-        throw new Error(
-          "The server took too long. Check that the API is running and MongoDB is connected."
-        );
-      }
-      if (!e.status) {
-        throw new Error("Cannot reach the API. Is the backend live?");
-      }
-      throw e;
-    }
+  const init = {
+    ...opts,
+    headers,
+    credentials: "include",
+    signal: controller.signal,
+  };
+  if (opts.body && typeof opts.body === "object" && !(opts.body instanceof FormData)) {
+    init.body = JSON.stringify(opts.body);
   }
-  throw lastErr || new Error("Cannot reach the API. Is the backend live?");
+
+  let res;
+  try {
+    res = await fetch(url, init);
+  } catch (e) {
+    clearTimeout(timer);
+    if (e && e.name === "AbortError") {
+      throw new Error("The server took too long. Check that the API is running and MongoDB is connected.");
+    }
+    throw new Error("Cannot reach the API. Is the backend live?");
+  }
+  clearTimeout(timer);
+
+  let json = {};
+  try {
+    json = await res.json();
+  } catch {
+    /* empty body */
+  }
+
+  if (!res.ok) {
+    const msg =
+      json.message ||
+      json.error ||
+      (typeof json.status === "string" && json.status !== "Success"
+        ? json.status
+        : null) ||
+      `Request failed (${res.status})`;
+    const err = new Error(msg);
+    err.status = res.status;
+    err.data = json;
+    throw err;
+  }
+  return json;
 }
 
 export function mapProduct(p) {
   if (!p) return null;
-  const retailer = p.retailer && typeof p.retailer === "object" ? p.retailer : {};
-  const rName = retailer.businessName || p.retailerName || "Sweet Feet";
+  const retailer = p.retailer || {};
+  const rName = retailer.businessName || "Sweet Feet";
   return {
     id: p._id || p.id,
     name: p.name,
@@ -231,9 +190,9 @@ export function mapProduct(p) {
     sizes: Array.isArray(p.sizes) ? p.sizes : [],
     is_active: p.isActive !== false,
     isActive: p.isActive !== false,
-    retailer_id: retailer._id || retailer.id || p.retailer_id || p.retailer || "",
+    retailer_id: retailer._id || retailer.id || p.retailer || "",
     retailerName: rName,
-    retailerLocation: retailer.location || p.retailerLocation || "",
-    retailerLogo: avatarUrl(rName, retailer.logo || p.retailerLogo),
+    retailerLocation: retailer.location || "",
+    retailerLogo: avatarUrl(rName, retailer.logo),
   };
 }
