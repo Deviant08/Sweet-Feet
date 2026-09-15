@@ -12,6 +12,7 @@
     />
     <link rel="stylesheet" href="/CSS/products.css" />
     <link rel="stylesheet" href="/CSS/queries.css" />
+    <link rel="stylesheet" href="/CSS/skeletons.css" />
     <title>Seller shop — Sweet Feet</title>
     <style>
       .hero_actions {
@@ -140,7 +141,14 @@
           <button class="cat_tab" data-cat="boots">Boots</button>
         </div>
 
-        <div class="product_grid" id="productGrid"></div>
+        <div class="product_grid" id="productGrid" aria-busy="true">
+          <article class="product_card product_card--skeleton" aria-hidden="true"><div class="sk sk-img"></div><div class="card_body"><div class="sk sk-line sk-w-40"></div><div class="sk sk-line sk-w-80"></div><div class="sk sk-line sk-w-55"></div></div></article>
+          <article class="product_card product_card--skeleton" aria-hidden="true"><div class="sk sk-img"></div><div class="card_body"><div class="sk sk-line sk-w-40"></div><div class="sk sk-line sk-w-80"></div><div class="sk sk-line sk-w-55"></div></div></article>
+          <article class="product_card product_card--skeleton" aria-hidden="true"><div class="sk sk-img"></div><div class="card_body"><div class="sk sk-line sk-w-40"></div><div class="sk sk-line sk-w-80"></div><div class="sk sk-line sk-w-55"></div></div></article>
+          <article class="product_card product_card--skeleton" aria-hidden="true"><div class="sk sk-img"></div><div class="card_body"><div class="sk sk-line sk-w-40"></div><div class="sk sk-line sk-w-80"></div><div class="sk sk-line sk-w-55"></div></div></article>
+          <article class="product_card product_card--skeleton" aria-hidden="true"><div class="sk sk-img"></div><div class="card_body"><div class="sk sk-line sk-w-40"></div><div class="sk sk-line sk-w-80"></div><div class="sk sk-line sk-w-55"></div></div></article>
+          <article class="product_card product_card--skeleton" aria-hidden="true"><div class="sk sk-img"></div><div class="card_body"><div class="sk sk-line sk-w-40"></div><div class="sk sk-line sk-w-80"></div><div class="sk sk-line sk-w-55"></div></div></article>
+        </div>
 
         <div class="empty_state" id="emptyState">
           <div style="font-size:2rem">👟</div>
