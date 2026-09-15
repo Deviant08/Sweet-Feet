@@ -5,7 +5,8 @@
  * ============================================================
  */
 
-import { api, mapProduct, getToken, chatAppUrl } from "./api.js";
+import { api, mapProduct, getToken, chatAppUrl, extractList } from "./api.js";
+import { FALLBACK_PRODUCTS } from "./catalog.js";
 
 export function formatPrice(p) {
   const n = Number(p) || 0;
@@ -56,7 +57,26 @@ export function initShop() {
     cart: loadCart(),
   };
 
+  function applyFallback(reason) {
+    products = FALLBACK_PRODUCTS.map((p) => ({ ...p }));
+    if (retailerFilter) {
+      products = products.filter((p) => String(p.retailer_id) === String(retailerFilter));
+    }
+    renderGrid();
+    updateCartUI();
+    if (reason) showToast(reason);
+  }
+
+  async function fetchLiveProducts() {
+    const json = await api("/products", { timeoutMs: 45000, retries: 3 });
+    const list = extractList(json);
+    return (Array.isArray(list) ? list : []).map(mapProduct).filter(Boolean);
+  }
+
   async function loadProducts() {
+    const countEl = document.getElementById("resultCount");
+    if (countEl) countEl.textContent = "Loading…";
+
     if (isSellerPage && !retailerFilter) {
       products = [];
       const title = document.getElementById("shopHeroTitle");
@@ -66,10 +86,21 @@ export function initShop() {
       renderGrid();
       return;
     }
+
     try {
-      const json = await api("/products");
-      const list = json.data || json.results || json || [];
-      products = (Array.isArray(list) ? list : []).map(mapProduct).filter(Boolean);
+      products = await fetchLiveProducts();
+      if (!products.length) {
+        try {
+          await api("/seed/demo", { method: "POST", timeoutMs: 45000, retries: 1 });
+          products = await fetchLiveProducts();
+        } catch {
+          /* seed is best-effort */
+        }
+      }
+      if (!products.length) {
+        applyFallback("Showing featured stock while the live catalog reconnects.");
+        return;
+      }
       if (retailerFilter) {
         products = products.filter((p) => String(p.retailer_id) === String(retailerFilter));
         await applySellerChrome();
@@ -77,7 +108,7 @@ export function initShop() {
       renderGrid();
       updateCartUI();
     } catch {
-      showToast("Network error loading products.");
+      applyFallback("Live catalog is waking up — showing featured stock.");
     }
   }
 
@@ -125,6 +156,13 @@ export function initShop() {
     return "★".repeat(full) + (half ? "☆" : "") + "☆".repeat(5 - full - half);
   }
 
+  function escapeAttr(s) {
+    return String(s ?? "")
+      .replace(/&/g, "&")
+      .replace(/"/g, """)
+      .replace(/</g, "<");
+  }
+
   function renderCard(p) {
     const profileUrl = `/nav/retailer.html?id=${encodeURIComponent(p.retailer_id)}`;
     const chatUrl = chatAppUrl({
@@ -135,32 +173,32 @@ export function initShop() {
     });
 
     return `
-      <article class="product_card" data-id="${p.id}">
-        ${p.badge ? `<span class="card_badge badge_${p.badge}">${p.badgeLabel}</span>` : ""}
+      <article class="product_card" data-id="${escapeAttr(p.id)}">
+        ${p.badge ? `<span class="card_badge badge_${escapeAttr(p.badge)}">${escapeAttr(p.badgeLabel)}</span>` : ""}
         <button class="card_wishlist" title="Save for later" type="button">♡</button>
-        <img class="card_img" src="${p.img}" alt="${p.name}" loading="lazy" />
+        <img class="card_img" src="${escapeAttr(p.img)}" alt="${escapeAttr(p.name)}" loading="lazy" />
         <div class="card_body">
-          <span class="card_category">${p.category} · ${p.gender}</span>
-          <h2 class="card_name">${p.name}</h2>
+          <span class="card_category">${escapeAttr(p.category)} · ${escapeAttr(p.gender)}</span>
+          <h2 class="card_name">${escapeAttr(p.name)}</h2>
           <div class="card_rating">
             <span class="stars">${stars(p.rating)}</span>
             <span>${p.rating} (${p.ratingCount})</span>
           </div>
           <div class="card_sizes">
-            ${(p.sizes || []).map((s) => `<span class="size_dot" data-size="${s}">${s}</span>`).join("")}
+            ${(p.sizes || []).map((s) => `<span class="size_dot" data-size="${escapeAttr(s)}">${escapeAttr(s)}</span>`).join("")}
           </div>
           <div class="card_footer">
             <div class="card_price">
               ${formatPrice(p.price)}
               ${p.oldPrice ? `<span class="old_price">${formatPrice(p.oldPrice)}</span>` : ""}
             </div>
-            <button class="btn_order" type="button" data-id="${p.id}">Add to cart</button>
+            <button class="btn_order" type="button" data-id="${escapeAttr(p.id)}">Add to cart</button>
           </div>
-          <a class="card_seller" href="${profileUrl}" title="View ${p.retailerName || "seller"}">
-            <img class="card_seller_avatar" src="${p.retailerLogo}" alt="" />
+          <a class="card_seller" href="${profileUrl}" title="View ${escapeAttr(p.retailerName || "seller")}">
+            <img class="card_seller_avatar" src="${escapeAttr(p.retailerLogo)}" alt="" />
             <span class="card_seller_text">
               <span class="card_seller_by">Sold by</span>
-              <span class="card_seller_name">${p.retailerName || "Sweet Feet"}</span>
+              <span class="card_seller_name">${escapeAttr(p.retailerName || "Sweet Feet")}</span>
             </span>
           </a>
           <a class="btn_chat_link" href="${chatUrl}">💬 Chat with seller</a>
