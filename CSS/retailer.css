@@ -40,6 +40,10 @@ body {
   min-height: 100vh;
 }
 
+body::-webkit-scrollbar {
+  display: none;
+}
+
 img { max-width: 100%; }
 
 /* ── Auth ─────────────────────────────────────────────── */

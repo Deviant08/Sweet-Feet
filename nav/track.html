@@ -1,144 +1,288 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/jpeg" href="/assets/20251102_172020.png" sizes="32x32"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/CSS/retailer.css" />
-  <title>Track My Order — Sweet Feet</title>
-  <style>
-    body { min-height: 100vh; display: flex; flex-direction: column; }
-    .track_nav { background:#160c02; padding:0 3rem; display:flex; align-items:center; justify-content:space-between; height:6.4rem; }
-    .track_logo { display:flex; align-items:center; gap:1rem; text-decoration:none; color:#f7dfb8; }
-    .track_logo img { width:3.8rem; height:3.8rem; border-radius:50%; object-fit:cover; }
-    .track_logo span { font-family:var(--ff-display); font-size:1.8rem; font-weight:700; }
-    .track_nav_links { display:flex; gap:2rem; }
-    .track_nav_links a { text-decoration:none; color:#ece3bd; font-size:1.3rem; font-weight:600; }
-    .track_nav_links a.active, .track_nav_links a:hover { color:#efbc8a; }
-    .track_main { flex:1; display:flex; flex-direction:column; align-items:center; padding:5rem 2rem; background:var(--clr-bg); }
-    .track_hero { text-align:center; margin-bottom:4rem; }
-    .track_hero h1 { font-family:var(--ff-display); font-size:clamp(2.8rem,5vw,4rem); font-weight:800; color:var(--clr-dark); margin-bottom:1rem; }
-    .track_hero p { font-size:1.4rem; color:var(--clr-muted); max-width:44rem; }
-    .track_form_card { background:var(--clr-surface); border:1px solid var(--clr-border); border-radius:var(--radius); padding:3.5rem; width:100%; max-width:54rem; margin-bottom:3rem; }
-    .track_input_row { display:flex; gap:1rem; }
-    .track_input_row input { flex:1; font-size:1.4rem; padding:1.2rem 1.6rem; border:1.5px solid var(--clr-border); border-radius:10px; }
-    .track_input_row button { font-family:var(--ff-display); font-size:1.4rem; font-weight:700; padding:1.2rem 2.4rem; background:var(--clr-dark); color:#fff; border:none; border-radius:10px; cursor:pointer; }
-    .track_results { width:100%; max-width:54rem; display:none; }
-    .track_results.visible { display:block; }
-    .order_summary { background:var(--clr-surface); border:1px solid var(--clr-border); border-radius:var(--radius); padding:2rem 2.5rem; margin-bottom:2rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
-    .track_msg_error { background:#fdf0f0; border:1px solid #f5a8a8; color:var(--clr-danger); border-radius:10px; padding:1.2rem 1.8rem; font-size:1.3rem; margin-top:1.5rem; display:none; }
-    .track_msg_error.visible { display:block; }
-    .track_item_card { background:var(--clr-surface); border:1px solid var(--clr-border); border-radius:var(--radius); padding:2rem; margin-bottom:1.5rem; }
-  </style>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/jpeg"
+      href="/assets/20251102_172020.png"
+      sizes="32x32"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/CSS/retailer.css" />
+    <title>Track My Order — Sweet Feet</title>
+    <style>
+      body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
 
-<div class="track_nav">
-  <a class="track_logo" href="/index.html">
-    <img src="/assets/images (7).jpeg" alt="Sweet Feet" />
-    <span>Sweet Feet</span>
-  </a>
-  <div class="track_nav_links">
-    <a href="/nav/products.html">Shop</a>
-    <a href="/nav/track.html" class="active">Track Order</a>
-    <a href="/nav/chat.html">Messages</a>
-    <a href="/nav/feedback.html">Feedback</a>
-  </div>
-</div>
-
-<main class="track_main">
-  <div class="track_hero">
-    <h1>Track Your Order</h1>
-    <p>Enter your order ID or Paystack reference to see status updates.</p>
-  </div>
-
-  <div class="track_form_card">
-    <label style="font-size:1.25rem;font-weight:700;display:block;margin-bottom:1.2rem;">Order ID or Reference</label>
-    <div class="track_input_row">
-      <input type="text" id="refInput" placeholder="Order ID or payment reference" />
-      <button type="button" id="trackBtn">Track →</button>
+      body::-webkit-scrollbar {
+  display: none;
+}
+      .track_nav {
+        background: #160c02;
+        padding: 0 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 6.4rem;
+      }
+      .track_logo {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        text-decoration: none;
+        color: #f7dfb8;
+      }
+      .track_logo img {
+        width: 3.8rem;
+        height: 3.8rem;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+      .track_logo span {
+        font-family: var(--ff-display);
+        font-size: 1.8rem;
+        font-weight: 700;
+      }
+      .track_nav_links {
+        display: flex;
+        gap: 2rem;
+      }
+      .track_nav_links a {
+        text-decoration: none;
+        color: #ece3bd;
+        font-size: 1.3rem;
+        font-weight: 600;
+      }
+      .track_nav_links a.active,
+      .track_nav_links a:hover {
+        color: #efbc8a;
+      }
+      .track_main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 5rem 2rem;
+        background: var(--clr-bg);
+      }
+      .track_hero {
+        text-align: center;
+        margin-bottom: 4rem;
+      }
+      .track_hero h1 {
+        font-family: var(--ff-display);
+        font-size: clamp(2.8rem, 5vw, 4rem);
+        font-weight: 800;
+        color: var(--clr-dark);
+        margin-bottom: 1rem;
+      }
+      .track_hero p {
+        font-size: 1.4rem;
+        color: var(--clr-muted);
+        max-width: 44rem;
+      }
+      .track_form_card {
+        background: var(--clr-surface);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+        padding: 3.5rem;
+        width: 100%;
+        max-width: 54rem;
+        margin-bottom: 3rem;
+      }
+      .track_input_row {
+        display: flex;
+        gap: 1rem;
+      }
+      .track_input_row input {
+        flex: 1;
+        font-size: 1.4rem;
+        padding: 1.2rem 1.6rem;
+        border: 1.5px solid var(--clr-border);
+        border-radius: 10px;
+      }
+      .track_input_row button {
+        font-family: var(--ff-display);
+        font-size: 1.4rem;
+        font-weight: 700;
+        padding: 1.2rem 2.4rem;
+        background: var(--clr-dark);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+      .track_results {
+        width: 100%;
+        max-width: 54rem;
+        display: none;
+      }
+      .track_results.visible {
+        display: block;
+      }
+      .order_summary {
+        background: var(--clr-surface);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+        padding: 2rem 2.5rem;
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .track_msg_error {
+        background: #fdf0f0;
+        border: 1px solid #f5a8a8;
+        color: var(--clr-danger);
+        border-radius: 10px;
+        padding: 1.2rem 1.8rem;
+        font-size: 1.3rem;
+        margin-top: 1.5rem;
+        display: none;
+      }
+      .track_msg_error.visible {
+        display: block;
+      }
+      .track_item_card {
+        background: var(--clr-surface);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="track_nav">
+      <a class="track_logo" href="/index.html">
+        <img src="/assets/images (7).jpeg" alt="Sweet Feet" />
+        <span>Sweet Feet</span>
+      </a>
+      <div class="track_nav_links">
+        <a href="/nav/products.html">Shop</a>
+        <a href="/nav/track.html" class="active">Track Order</a>
+        <a href="/nav/chat.html">Messages</a>
+        <a href="/nav/feedback.html">Feedback</a>
+      </div>
     </div>
-    <div class="track_msg_error" id="trackError"></div>
-  </div>
 
-  <div class="track_results" id="trackResults"></div>
-</main>
+    <main class="track_main">
+      <div class="track_hero">
+        <h1>Track Your Order</h1>
+        <p>Enter your order ID or Paystack reference to see status updates.</p>
+      </div>
 
-<script type="module">
-import { api, getToken } from "/js/api.js";
+      <div class="track_form_card">
+        <label
+          style="
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 1.2rem;
+          "
+          >Order ID or Reference</label
+        >
+        <div class="track_input_row">
+          <input
+            type="text"
+            id="refInput"
+            placeholder="Order ID or payment reference"
+          />
+          <button type="button" id="trackBtn">Track →</button>
+        </div>
+        <div class="track_msg_error" id="trackError"></div>
+      </div>
 
-const urlParams = new URLSearchParams(window.location.search);
-const preRef = urlParams.get("ref");
-if (preRef) {
-  document.getElementById("refInput").value = preRef;
-  setTimeout(doTrack, 300);
-}
+      <div class="track_results" id="trackResults"></div>
+    </main>
 
-document.getElementById("trackBtn").addEventListener("click", doTrack);
-document.getElementById("refInput").addEventListener("keydown", (e) => {
-  if (e.key === "Enter") doTrack();
-});
+    <script type="module">
+      import { api, getToken } from "/js/api.js";
 
-function fmtDate(d) {
-  try {
-    return new Date(d).toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
-  } catch {
-    return d || "—";
-  }
-}
+      const urlParams = new URLSearchParams(window.location.search);
+      const preRef = urlParams.get("ref");
+      if (preRef) {
+        document.getElementById("refInput").value = preRef;
+        setTimeout(doTrack, 300);
+      }
 
-async function doTrack() {
-  const ref = document.getElementById("refInput").value.trim();
-  const errorEl = document.getElementById("trackError");
-  const btn = document.getElementById("trackBtn");
-  const results = document.getElementById("trackResults");
+      document.getElementById("trackBtn").addEventListener("click", doTrack);
+      document.getElementById("refInput").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") doTrack();
+      });
 
-  errorEl.classList.remove("visible");
-  results.classList.remove("visible");
+      function fmtDate(d) {
+        try {
+          return new Date(d).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
+          });
+        } catch {
+          return d || "—";
+        }
+      }
 
-  if (!ref) {
-    errorEl.textContent = "Please enter your order ID or reference.";
-    errorEl.classList.add("visible");
-    return;
-  }
+      async function doTrack() {
+        const ref = document.getElementById("refInput").value.trim();
+        const errorEl = document.getElementById("trackError");
+        const btn = document.getElementById("trackBtn");
+        const results = document.getElementById("trackResults");
 
-  if (!getToken()) {
-    errorEl.textContent = "Please log in to track your orders.";
-    errorEl.classList.add("visible");
-    return;
-  }
+        errorEl.classList.remove("visible");
+        results.classList.remove("visible");
 
-  btn.textContent = "Searching…";
-  btn.disabled = true;
+        if (!ref) {
+          errorEl.textContent = "Please enter your order ID or reference.";
+          errorEl.classList.add("visible");
+          return;
+        }
 
-  try {
-    // Prefer direct order by id; also search my orders for matching paystackRef
-    let order = null;
-    try {
-      const one = await api("/orders/" + encodeURIComponent(ref));
-      order = one.data;
-    } catch {
-      const mine = await api("/orders/mine");
-      const list = mine.data || [];
-      order = list.find(
-        (o) =>
-          String(o._id) === ref ||
-          String(o.id) === ref ||
-          o.paystackRef === ref
-      );
-    }
+        if (!getToken()) {
+          errorEl.textContent = "Please log in to track your orders.";
+          errorEl.classList.add("visible");
+          return;
+        }
 
-    if (!order) {
-      errorEl.textContent = "Order not found.";
-      errorEl.classList.add("visible");
-      return;
-    }
+        btn.textContent = "Searching…";
+        btn.disabled = true;
 
-    const items = order.items || [];
-    results.innerHTML = `
+        try {
+          // Prefer direct order by id; also search my orders for matching paystackRef
+          let order = null;
+          try {
+            const one = await api("/orders/" + encodeURIComponent(ref));
+            order = one.data;
+          } catch {
+            const mine = await api("/orders/mine");
+            const list = mine.data || [];
+            order = list.find(
+              (o) =>
+                String(o._id) === ref ||
+                String(o.id) === ref ||
+                o.paystackRef === ref,
+            );
+          }
+
+          if (!order) {
+            errorEl.textContent = "Order not found.";
+            errorEl.classList.add("visible");
+            return;
+          }
+
+          const items = order.items || [];
+          results.innerHTML = `
       <div class="order_summary">
         <div>
           <div style="font-size:1.2rem;color:var(--clr-muted)">Order</div>
@@ -162,20 +306,20 @@ async function doTrack() {
             </div>
             <span class="badge ${it.status}">${it.status}</span>
           </div>
-        </div>`
+        </div>`,
         )
         .join("")}
       <p style="margin-top:1rem;color:var(--clr-muted);font-size:1.3rem">Order status: <strong>${order.status}</strong></p>
     `;
-    results.classList.add("visible");
-  } catch (e) {
-    errorEl.textContent = e.message || "Could not load order.";
-    errorEl.classList.add("visible");
-  } finally {
-    btn.textContent = "Track →";
-    btn.disabled = false;
-  }
-}
-</script>
-</body>
+          results.classList.add("visible");
+        } catch (e) {
+          errorEl.textContent = e.message || "Could not load order.";
+          errorEl.classList.add("visible");
+        } finally {
+          btn.textContent = "Track →";
+          btn.disabled = false;
+        }
+      }
+    </script>
+  </body>
 </html>

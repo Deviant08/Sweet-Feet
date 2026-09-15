@@ -3,6 +3,11 @@ a:link,
 a:visited {
   text-decoration: none;
 }
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
 .info_overlay[hidden],
 .info_modal[hidden] {
   display: none !important;
