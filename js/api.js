@@ -1,13 +1,28 @@
 /*
  * Sweet Feet — js/api.js
- * Live: https://sweet-feet-backend.onrender.com/api/v1
+ * Live (default): https://sweet-feet-backend.onrender.com/api/v1
+ *
+ * Optional local API — does not change Vercel. In DevTools:
+ *   localStorage.setItem("sf_api_base", "http://localhost:5000/api/v1")
+ *   localStorage.removeItem("sf_api_base")  // back to Render
  */
 
 export const LOGIN_URL = "/nav/login.html";
 
-export const API_BASE =
-  (typeof window !== "undefined" && window.SF_API_BASE) ||
-  "https://sweet-feet-backend.onrender.com/api/v1";
+const LIVE_API = "https://sweet-feet-backend.onrender.com/api/v1";
+
+function resolveApiBase() {
+  if (typeof window !== "undefined" && window.SF_API_BASE) return window.SF_API_BASE;
+  try {
+    const stored = localStorage.getItem("sf_api_base");
+    if (stored) return String(stored).replace(/\/$/, "");
+  } catch {
+    /* private mode */
+  }
+  return LIVE_API;
+}
+
+export const API_BASE = resolveApiBase();
 
 export function getWsUrl() {
   if (typeof window !== "undefined" && window.SF_WS_URL) return window.SF_WS_URL;
