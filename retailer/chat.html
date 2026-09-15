@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/CSS/retailer.css" />
   <link rel="stylesheet" href="/CSS/chat.css" />
+  <link rel="stylesheet" href="/CSS/skeletons.css" />
   <title>Messages — Sweet Feet Retailer</title>
   <style>.hidden { display: none !important; }</style>
 </head>
@@ -49,7 +50,11 @@
           <input type="text" id="inboxSearch" placeholder="Search customers…" />
         </div>
         <div id="inboxItems">
-          <div style="padding:2rem;text-align:center;color:var(--clr-muted)">Loading…</div>
+          <div class="sk-inbox" aria-hidden="true"><div class="sk sk-circle"></div><div class="sk-col"><div class="sk sk-line sk-w-55"></div><div class="sk sk-line sk-w-80"></div></div></div>
+          <div class="sk-inbox" aria-hidden="true"><div class="sk sk-circle"></div><div class="sk-col"><div class="sk sk-line sk-w-40"></div><div class="sk sk-line sk-w-70"></div></div></div>
+          <div class="sk-inbox" aria-hidden="true"><div class="sk sk-circle"></div><div class="sk-col"><div class="sk sk-line sk-w-55"></div><div class="sk sk-line sk-w-80"></div></div></div>
+          <div class="sk-inbox" aria-hidden="true"><div class="sk sk-circle"></div><div class="sk-col"><div class="sk sk-line sk-w-40"></div><div class="sk sk-line sk-w-70"></div></div></div>
+          <div class="sk-inbox" aria-hidden="true"><div class="sk sk-circle"></div><div class="sk-col"><div class="sk sk-line sk-w-55"></div><div class="sk sk-line sk-w-80"></div></div></div>
         </div>
       </div>
 

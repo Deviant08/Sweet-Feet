@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/jpeg" href="/assets/20251102_172020.png" sizes="32x32"/>
   <link rel="stylesheet" href="/CSS/retailer.css" />
+  <link rel="stylesheet" href="/CSS/skeletons.css" />
   <title>Admin Dashboard — Sweet Feet</title>
 </head>
 <body>
@@ -28,13 +29,21 @@
     <div class="page_header"><div><h1>Platform Overview</h1><p>Sweet Feet marketplace at a glance.</p></div></div>
     <div class="page_body">
       <div class="stats_grid" id="statsGrid">
-        <div class="stat_card"><div class="stat_icon">⏳</div><div class="stat_value">—</div><div class="stat_label">Loading…</div></div>
+        <div class="stat_card"><div class="stat_icon">🏪</div><div class="stat_value"><span class="sk sk-stat"></span></div><div class="stat_label">Approved Retailers</div></div>
+        <div class="stat_card"><div class="stat_icon">⏳</div><div class="stat_value"><span class="sk sk-stat"></span></div><div class="stat_label">Pending Approvals</div></div>
+        <div class="stat_card"><div class="stat_icon">👟</div><div class="stat_value"><span class="sk sk-stat"></span></div><div class="stat_label">Active Listings</div></div>
+        <div class="stat_card"><div class="stat_icon">📦</div><div class="stat_value"><span class="sk sk-stat"></span></div><div class="stat_label">Total Retailers</div></div>
       </div>
       <div class="table_wrap">
         <div class="table_header"><h3>Retailers</h3></div>
         <table>
           <thead><tr><th>Business</th><th>Email</th><th>Location</th><th>Status</th><th></th></tr></thead>
-          <tbody id="ordersBody"><tr><td colspan="5" style="text-align:center;padding:3rem;color:var(--clr-muted)">Loading…</td></tr></tbody>
+          <tbody id="ordersBody">
+            <tr class="sk-row"><td><div class="sk sk-w-70"></div></td><td><div class="sk sk-w-80"></div></td><td><div class="sk sk-w-55"></div></td><td><div class="sk sk-w-40"></div></td><td><div class="sk sk-w-40"></div></td></tr>
+            <tr class="sk-row"><td><div class="sk sk-w-55"></div></td><td><div class="sk sk-w-70"></div></td><td><div class="sk sk-w-40"></div></td><td><div class="sk sk-w-40"></div></td><td><div class="sk sk-w-30"></div></td></tr>
+            <tr class="sk-row"><td><div class="sk sk-w-70"></div></td><td><div class="sk sk-w-80"></div></td><td><div class="sk sk-w-55"></div></td><td><div class="sk sk-w-40"></div></td><td><div class="sk sk-w-40"></div></td></tr>
+            <tr class="sk-row"><td><div class="sk sk-w-55"></div></td><td><div class="sk sk-w-70"></div></td><td><div class="sk sk-w-40"></div></td><td><div class="sk sk-w-40"></div></td><td><div class="sk sk-w-30"></div></td></tr>
+          </tbody>
         </table>
       </div>
     </div>

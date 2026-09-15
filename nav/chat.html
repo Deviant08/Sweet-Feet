@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/CSS/chat.css" />
+  <link rel="stylesheet" href="/CSS/skeletons.css" />
   <title>Messages — Sweet Feet</title>
   <style>
     :root {
@@ -33,10 +34,7 @@
       display: flex;
       flex-direction: column;
     }
-
-    body::-webkit-scrollbar {
-  display: none;
-}
+    body::-webkit-scrollbar { display: none; }
     .site_header {
       display: flex;
       align-items: center;
@@ -76,9 +74,7 @@
       text-decoration: none;
     }
     .site_header nav a:hover,
-    .site_header nav a.active {
-      color: #efbc8a;
-    }
+    .site_header nav a.active { color: #efbc8a; }
     .chat_page_wrap {
       flex: 1;
       min-height: 0;
@@ -115,7 +111,11 @@
           <input type="text" id="inboxSearch" placeholder="Search conversations…" />
         </div>
         <div id="inboxItems">
-          <div style="padding:2rem;text-align:center;color:var(--clr-muted)">Loading…</div>
+          <div class="sk-inbox" aria-hidden="true"><div class="sk sk-circle"></div><div class="sk-col"><div class="sk sk-line sk-w-55"></div><div class="sk sk-line sk-w-80"></div></div></div>
+          <div class="sk-inbox" aria-hidden="true"><div class="sk sk-circle"></div><div class="sk-col"><div class="sk sk-line sk-w-40"></div><div class="sk sk-line sk-w-70"></div></div></div>
+          <div class="sk-inbox" aria-hidden="true"><div class="sk sk-circle"></div><div class="sk-col"><div class="sk sk-line sk-w-55"></div><div class="sk sk-line sk-w-80"></div></div></div>
+          <div class="sk-inbox" aria-hidden="true"><div class="sk sk-circle"></div><div class="sk-col"><div class="sk sk-line sk-w-40"></div><div class="sk sk-line sk-w-70"></div></div></div>
+          <div class="sk-inbox" aria-hidden="true"><div class="sk sk-circle"></div><div class="sk-col"><div class="sk sk-line sk-w-55"></div><div class="sk sk-line sk-w-80"></div></div></div>
         </div>
       </div>
 
