@@ -211,10 +211,14 @@
       import { api, getToken } from "/js/api.js";
 
       const urlParams = new URLSearchParams(window.location.search);
-      const preRef = urlParams.get("ref");
+      const preRef =
+        urlParams.get("reference") ||
+        urlParams.get("trxref") ||
+        urlParams.get("ref") ||
+        "";
       if (preRef) {
         document.getElementById("refInput").value = preRef;
-        setTimeout(doTrack, 300);
+        setTimeout(() => doTrack({ fromPaystack: !!(urlParams.get("reference") || urlParams.get("trxref")) }), 200);
       }
 
       document.getElementById("trackBtn").addEventListener("click", doTrack);
@@ -234,55 +238,17 @@
         }
       }
 
-      async function doTrack() {
-        const ref = document.getElementById("refInput").value.trim();
-        const errorEl = document.getElementById("trackError");
-        const btn = document.getElementById("trackBtn");
-        const results = document.getElementById("trackResults");
-
-        errorEl.classList.remove("visible");
-        results.classList.remove("visible");
-
-        if (!ref) {
-          errorEl.textContent = "Please enter your order ID or reference.";
-          errorEl.classList.add("visible");
-          return;
-        }
-
-        if (!getToken()) {
-          errorEl.textContent = "Please log in to track your orders.";
-          errorEl.classList.add("visible");
-          return;
-        }
-
-        btn.textContent = "Searching…";
-        btn.disabled = true;
-
+      function clearPaidCart() {
         try {
-          // Prefer direct order by id; also search my orders for matching paystackRef
-          let order = null;
-          try {
-            const one = await api("/orders/" + encodeURIComponent(ref));
-            order = one.data;
-          } catch {
-            const mine = await api("/orders/mine");
-            const list = mine.data || [];
-            order = list.find(
-              (o) =>
-                String(o._id) === ref ||
-                String(o.id) === ref ||
-                o.paystackRef === ref,
-            );
-          }
+          localStorage.removeItem("sf_cart");
+          sessionStorage.removeItem("sf_pending_pay");
+        } catch { /* ignore */ }
+      }
 
-          if (!order) {
-            errorEl.textContent = "Order not found.";
-            errorEl.classList.add("visible");
-            return;
-          }
-
-          const items = order.items || [];
-          results.innerHTML = `
+      function renderOrder(order) {
+        const results = document.getElementById("trackResults");
+        const items = order.items || [];
+        results.innerHTML = `
       <div class="order_summary">
         <div>
           <div style="font-size:1.2rem;color:var(--clr-muted)">Order</div>
@@ -311,7 +277,88 @@
         .join("")}
       <p style="margin-top:1rem;color:var(--clr-muted);font-size:1.3rem">Order status: <strong>${order.status}</strong></p>
     `;
-          results.classList.add("visible");
+        results.classList.add("visible");
+      }
+
+      async function doTrack(opts = {}) {
+        const ref = document.getElementById("refInput").value.trim();
+        const errorEl = document.getElementById("trackError");
+        const btn = document.getElementById("trackBtn");
+        const results = document.getElementById("trackResults");
+
+        errorEl.classList.remove("visible");
+        results.classList.remove("visible");
+
+        if (!ref) {
+          errorEl.textContent = "Please enter your order ID or reference.";
+          errorEl.classList.add("visible");
+          return;
+        }
+
+        btn.textContent = "Searching…";
+        btn.disabled = true;
+
+        try {
+          let order = null;
+
+          if (opts.fromPaystack) {
+            try {
+              const verified = await api("/orders/verify", {
+                method: "POST",
+                body: { reference: ref },
+              });
+              order = verified.data;
+              if (order && String(order.status).toLowerCase() === "paid") {
+                clearPaidCart();
+              }
+            } catch (verifyErr) {
+              errorEl.textContent = verifyErr.message || "Could not verify payment.";
+              errorEl.classList.add("visible");
+            }
+          }
+
+          if (!order && getToken()) {
+            try {
+              const one = await api("/orders/" + encodeURIComponent(ref));
+              order = one.data;
+            } catch {
+              const mine = await api("/orders/mine");
+              const list = mine.data || [];
+              order = list.find(
+                (o) =>
+                  String(o._id) === ref ||
+                  String(o.id) === ref ||
+                  o.paystackRef === ref,
+              );
+            }
+          } else if (!order && !opts.fromPaystack) {
+            try {
+              const verified = await api("/orders/verify", {
+                method: "POST",
+                body: { reference: ref },
+              });
+              order = verified.data;
+            } catch {
+              if (!getToken()) {
+                errorEl.textContent = "Please log in to track your orders.";
+                errorEl.classList.add("visible");
+                return;
+              }
+            }
+          }
+
+          if (!order) {
+            if (!errorEl.classList.contains("visible")) {
+              errorEl.textContent = "Order not found.";
+              errorEl.classList.add("visible");
+            }
+            return;
+          }
+
+          if (String(order.status).toLowerCase() === "paid") {
+            clearPaidCart();
+          }
+          renderOrder(order);
         } catch (e) {
           errorEl.textContent = e.message || "Could not load order.";
           errorEl.classList.add("visible");
