@@ -13,7 +13,6 @@ html, body {
 }
 img, video, iframe {
   max-width: 100%;
-  height: auto;
 }
 svg { max-width: 100%; }
 
@@ -41,7 +40,7 @@ svg { max-width: 100%; }
   background-image: none !important;
 }
 
-/* Product photos scale to the card — never native resolution */
+/* Product photos scale to the card — seller avatars stay a small circle */
 .product_grid {
   width: 100%;
   max-width: 100%;
@@ -53,7 +52,6 @@ svg { max-width: 100%; }
   min-width: 0;
   max-width: 100%;
 }
-.product_card img,
 .card_img {
   width: 100% !important;
   max-width: 100% !important;
@@ -61,6 +59,47 @@ svg { max-width: 100%; }
   aspect-ratio: 4 / 3;
   object-fit: cover;
   display: block;
+}
+.card_seller {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  max-width: 100%;
+  text-decoration: none;
+  color: var(--clr-dark, #160c02);
+}
+.card_seller_avatar {
+  width: 28px !important;
+  height: 28px !important;
+  max-width: 28px !important;
+  min-width: 28px !important;
+  aspect-ratio: 1 !important;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.card_seller_text {
+  min-width: 0;
+  overflow: hidden;
+}
+.card_seller_by {
+  display: block;
+  font-size: 0.68rem;
+  color: var(--clr-muted, #7a6555);
+}
+.card_seller_name {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.btn_chat_link {
+  font-size: 0.8rem;
+  color: var(--clr-accent, #c8440c);
+  text-decoration: none;
 }
 .cart_item img {
   width: 68px !important;
@@ -80,14 +119,6 @@ svg { max-width: 100%; }
   max-width: 100%;
   height: auto;
   aspect-ratio: 1;
-  object-fit: cover;
-}
-.logo_img,
-.nav_user_avatar,
-.card_seller_avatar,
-.footer_img,
-.test_img {
-  height: auto;
   object-fit: cover;
 }
 
@@ -307,8 +338,7 @@ svg { max-width: 100%; }
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: .9rem;
   }
-  .card_img,
-  .product_card img { aspect-ratio: 1; }
+  .card_img { aspect-ratio: 1; }
   .products_area { padding: 1.1rem .85rem; }
   .sidebar { padding: 1rem; gap: 1.1rem; }
   .filter_group { min-width: 130px; }
