@@ -443,7 +443,8 @@ main {
   width: 4rem;
   height: 4rem;
   border-radius: 50%;
-  object-fit: fill;
+  object-fit: cover;
+  object-position: center;
   margin-top: 1rem;
 }
 
