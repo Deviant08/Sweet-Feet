@@ -344,7 +344,16 @@ svg { max-width: 100%; }
   .filter_group { min-width: 130px; }
   .toolbar { gap: .6rem; }
   .toolbar_left { flex-direction: column; align-items: stretch; gap: .5rem; }
-  .toast { bottom: 5.5rem; white-space: normal; max-width: calc(100% - 2rem); }
+  .toast {
+    bottom: 5.5rem;
+    white-space: normal;
+    max-width: calc(100% - 2rem);
+  }
+  .toast:not(.visible) {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
   .cart_icon_wrap { bottom: 1.4rem; right: 1.1rem; }
   .fb_panel_left { padding: 3rem 1.6rem; min-height: 24vh; }
   .fb_headline { font-size: clamp(2.2rem, 9vw, 3rem); }

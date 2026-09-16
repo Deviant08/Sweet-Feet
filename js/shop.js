@@ -340,12 +340,17 @@ export function initShop() {
     });
   }
 
+  let toastTimer;
   function showToast(msg) {
     const t = document.getElementById("toast");
     if (!t) return;
     t.textContent = msg;
     t.classList.add("visible");
-    setTimeout(() => t.classList.remove("visible"), 2200);
+    t.setAttribute("aria-live", "polite");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      t.classList.remove("visible");
+    }, 2200);
   }
 
   function injectCheckoutModal() {
