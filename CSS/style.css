@@ -232,7 +232,6 @@ main {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  flex-wrap: nowrap;
   gap: clamp(2.4rem, 4vw, 10rem);
 }
 .pd {
