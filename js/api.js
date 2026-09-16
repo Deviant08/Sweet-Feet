@@ -211,3 +211,150 @@ export function mapProduct(p) {
     retailerLogo: avatarUrl(rName, retailer.logo),
   };
 }
+
+const SF_DIALOG_CSS = `
+.sf_dialog{position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;padding:20px}
+.sf_dialog[hidden]{display:none!important}
+.sf_dialog_backdrop{position:absolute;inset:0;background:rgba(22,12,2,.55);backdrop-filter:blur(5px)}
+.sf_dialog_card{position:relative;background:#fdfaf6;border:1px solid #e8ddd4;border-radius:16px;padding:28px 24px 20px;width:min(400px,100%);box-shadow:0 20px 50px rgba(22,12,2,.28);text-align:center;font-family:"Kumbh Sans",system-ui,sans-serif;color:#160c02}
+.sf_dialog_logo{width:52px;height:52px;border-radius:50%;object-fit:cover;border:1px solid #d5b074;margin:0 auto 14px;display:block;background:#160c02}
+.sf_dialog_card h3{font-family:"Work Sans",system-ui,sans-serif;font-size:20px;font-weight:800;margin:0 0 8px;color:#160c02;letter-spacing:-.02em}
+.sf_dialog_card p{font-size:14px;line-height:1.5;color:#6d5f49;margin:0 0 22px;font-weight:500}
+.sf_dialog_card p[hidden]{display:none}
+.sf_dialog_actions{display:flex;gap:10px}
+.sf_dialog_actions button{flex:1;padding:12px 16px;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px;font-family:inherit;transition:background .15s,color .15s,filter .15s}
+.sf_dialog_cancel{background:transparent;border:1.5px solid #160c02;color:#160c02}
+.sf_dialog_cancel:hover{background:#160c02;color:#f7dfb8}
+.sf_dialog_ok{background:#160c02;border:1.5px solid #160c02;color:#f7dfb8}
+.sf_dialog_ok:hover{filter:brightness(1.12)}
+.sf_dialog_ok.danger{background:#c8440c;border-color:#c8440c;color:#fff}
+.sf_dialog_cancel[hidden]{display:none}
+`;
+
+function ensureSfDialog() {
+  if (typeof document === "undefined") return null;
+  if (!document.getElementById("sfDialogStyles")) {
+    const s = document.createElement("style");
+    s.id = "sfDialogStyles";
+    s.textContent = SF_DIALOG_CSS;
+    document.head.appendChild(s);
+  }
+  let el = document.getElementById("sfDialog");
+  if (el) return el;
+  el = document.createElement("div");
+  el.id = "sfDialog";
+  el.className = "sf_dialog";
+  el.hidden = true;
+  el.setAttribute("role", "dialog");
+  el.setAttribute("aria-modal", "true");
+  el.setAttribute("aria-labelledby", "sfDialogTitle");
+  el.innerHTML = `
+    <div class="sf_dialog_backdrop" data-sf-dialog-dismiss="1"></div>
+    <div class="sf_dialog_card">
+      <img class="sf_dialog_logo" src="/assets/Sweet-feet-logo.png" alt="" />
+      <h3 id="sfDialogTitle"></h3>
+      <p id="sfDialogMsg"></p>
+      <div class="sf_dialog_actions">
+        <button type="button" class="sf_dialog_cancel" id="sfDialogCancel">Cancel</button>
+        <button type="button" class="sf_dialog_ok" id="sfDialogOk">OK</button>
+      </div>
+    </div>`;
+  document.body.appendChild(el);
+  return el;
+}
+
+let sfDialogCloser = null;
+
+function openSfDialog({ title, message, confirmText, cancelText, danger }) {
+  return new Promise((resolve) => {
+    const el = ensureSfDialog();
+    if (!el) {
+      resolve(cancelText ? window.confirm(message || title) : (window.alert(message || title), true));
+      return;
+    }
+    if (sfDialogCloser) sfDialogCloser(false);
+
+    const titleEl = el.querySelector("#sfDialogTitle");
+    const msgEl = el.querySelector("#sfDialogMsg");
+    const okBtn = el.querySelector("#sfDialogOk");
+    const cancelBtn = el.querySelector("#sfDialogCancel");
+    titleEl.textContent = title || "Sweet Feet";
+    msgEl.textContent = message || "";
+    msgEl.hidden = !message;
+    okBtn.textContent = confirmText || "OK";
+    okBtn.classList.toggle("danger", !!danger);
+    const hasCancel = !!(cancelText != null && cancelText !== "");
+    cancelBtn.hidden = !hasCancel;
+    if (hasCancel) cancelBtn.textContent = cancelText;
+    el.hidden = false;
+    (hasCancel ? cancelBtn : okBtn).focus();
+
+    const close = (value) => {
+      el.hidden = true;
+      el.removeEventListener("click", onClick);
+      document.removeEventListener("keydown", onKey);
+      if (sfDialogCloser === close) sfDialogCloser = null;
+      resolve(value);
+    };
+    sfDialogCloser = close;
+    const onClick = (e) => {
+      if (e.target.closest("#sfDialogOk")) close(true);
+      else if (e.target.closest("#sfDialogCancel") || e.target.getAttribute("data-sf-dialog-dismiss")) {
+        close(hasCancel ? false : true);
+      }
+    };
+    const onKey = (e) => {
+      if (e.key === "Escape") close(hasCancel ? false : true);
+    };
+    el.addEventListener("click", onClick);
+    document.addEventListener("keydown", onKey);
+  });
+}
+
+export function sfAlert(message, opts = {}) {
+  const isObj = message && typeof message === "object";
+  return openSfDialog({
+    title: isObj ? message.title || "Sweet Feet" : opts.title || "Sweet Feet",
+    message: isObj ? message.message || "" : String(message ?? ""),
+    confirmText: isObj ? message.confirmText || "OK" : opts.confirmText || "OK",
+    cancelText: null,
+    danger: false,
+  }).then(() => undefined);
+}
+
+export function sfConfirm(message, opts = {}) {
+  const isObj = message && typeof message === "object";
+  return openSfDialog({
+    title: isObj ? message.title || "Please confirm" : opts.title || "Please confirm",
+    message: isObj ? message.message || "" : String(message ?? ""),
+    confirmText: isObj ? message.confirmText || "OK" : opts.confirmText || "OK",
+    cancelText: isObj ? message.cancelText ?? "Cancel" : opts.cancelText ?? "Cancel",
+    danger: isObj ? !!message.danger : !!opts.danger,
+  });
+}
+
+export async function confirmAndLogout(redirectUrl) {
+  const ok = await sfConfirm({
+    title: "Log out?",
+    message: "You’ll need to sign in again to continue.",
+    confirmText: "Log out",
+    cancelText: "Stay signed in",
+    danger: true,
+  });
+  if (!ok) return false;
+  try {
+    await api("/auth/logout", { method: "POST" });
+  } catch {
+    /* ignore */
+  }
+  const dest = redirectUrl || logoutRedirectUrl();
+  clearSession();
+  window.location.href = dest;
+  return true;
+}
+
+if (typeof window !== "undefined") {
+  window.sfAlert = sfAlert;
+  window.sfConfirm = sfConfirm;
+  window.confirmAndLogout = confirmAndLogout;
+}

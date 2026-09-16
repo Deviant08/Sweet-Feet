@@ -50,7 +50,7 @@
   </div>
 </div>
 <script type="module">
-import { api, setSession, clearSession, getToken } from "/js/api.js";
+import { api, setSession, clearSession, getToken, confirmAndLogout } from "/js/api.js";
 const tbody = document.getElementById("ordersBody");
 async function requireAdmin() {
   if (!getToken()) { window.location.replace("/nav/login.html?role=admin"); return false; }
@@ -94,19 +94,8 @@ async function loadDashboard() {
 }
 document.getElementById("logoutBtn").addEventListener("click", async (e) => {
   e.preventDefault();
-  try { await api("/auth/logout", { method: "POST" }); } catch {}
-  clearSession();
-  window.location.href = "/nav/login.html?role=admin";
+  await confirmAndLogout("/nav/login.html?role=admin");
 });
 loadDashboard();
-</script>
-<script>
-  document.getElementById("logoutBtn").addEventListener("click", function () {
-    try {
-      ["sf_token","sf_user","sf_retailer","sf_user_id","sf_user_email","sf_user_name"].forEach(function (k) {
-        localStorage.removeItem(k);
-      });
-    } catch (e) {}
-  });
 </script>
 </body></html>

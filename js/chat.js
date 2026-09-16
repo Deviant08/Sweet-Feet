@@ -6,7 +6,7 @@
  * ============================================================
  */
 
-import { api, getToken, clearSession, getWsUrl, logoutRedirectUrl } from "./api.js";
+import { api, getToken, clearSession, getWsUrl, logoutRedirectUrl, sfAlert } from "./api.js";
 
 export function initChat() {
   const inboxList = document.getElementById("inboxList");
@@ -386,7 +386,7 @@ export function initChat() {
         await fetchMessages();
         clearUnread(activePartnerId);
       } catch (e) {
-        alert(e.message || "Could not send message.");
+        await sfAlert(e.message || "Could not send message.");
       }
     } else {
       clearUnread(activePartnerId);

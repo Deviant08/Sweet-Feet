@@ -5,7 +5,7 @@
  * ============================================================
  */
 
-import { api, mapProduct, setSession, clearSession, getToken } from "./api.js";
+import { api, mapProduct, setSession, getToken, confirmAndLogout, sfAlert } from "./api.js";
 
 export function initRetailer() {
   function fmtDate(d) {
@@ -25,13 +25,7 @@ export function initRetailer() {
   }
 
   async function doLogout(redirectUrl) {
-    try {
-      await api("/auth/logout", { method: "POST" });
-    } catch {
-      /* ignore */
-    }
-    clearSession();
-    window.location.href = redirectUrl || "/nav/login.html?role=retailer";
+    await confirmAndLogout(redirectUrl || "/nav/login.html?role=retailer");
   }
 
   // ── Retailer Signup ──────────────────────────────────────
@@ -344,7 +338,7 @@ export function initRetailer() {
         await api(`/products/${id}`, { method: "PATCH", body: { isActive: !currentlyActive } });
         loadProducts();
       } catch (err) {
-        alert(err.message || "Update failed");
+        await sfAlert(err.message || "Update failed");
       }
     }
 

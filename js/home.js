@@ -6,7 +6,7 @@
  * ============================================================
  */
 
-import { api, setSession } from "./api.js";
+import { api, setSession, sfAlert } from "./api.js";
 
 export function initHome() {
   const productStrip = document.querySelector(".sweet_product .product");
@@ -123,7 +123,7 @@ export function initHome() {
       } catch (err) {
         btn.textContent = "Send Feedback →";
         btn.disabled = false;
-        alert(err.message || "Could not send feedback.");
+        await sfAlert(err.message || "Could not send feedback.");
       }
     });
   }

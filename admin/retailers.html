@@ -61,7 +61,7 @@
 </div>
 
 <script type="module">
-import { api, setSession, clearSession, getToken } from "/js/api.js";
+import { api, setSession, clearSession, getToken, sfConfirm, sfAlert, confirmAndLogout } from "/js/api.js";
 
 const tbody = document.getElementById("retailersBody");
 async function requireAdmin() {
@@ -137,7 +137,13 @@ async function loadRetailers() {
       btn.addEventListener("click", async () => {
         const action = btn.dataset.status;
         const label = action === "declined" ? "decline" : action;
-        if (!window.confirm(`Really ${label} this retailer?`)) return;
+        if (!(await sfConfirm({
+          title: `${label.charAt(0).toUpperCase() + label.slice(1)} this retailer?`,
+          message: `This will ${label} ${btn.closest("tr")?.querySelector("td")?.textContent || "this seller"} on Sweet Feet.`,
+          confirmText: label.charAt(0).toUpperCase() + label.slice(1),
+          cancelText: "Cancel",
+          danger: action === "declined",
+        }))) return;
         try {
           await api(`/retailers/${btn.dataset.id}/status`, {
             method: "PATCH",
@@ -145,7 +151,7 @@ async function loadRetailers() {
           });
           loadRetailers();
         } catch (e) {
-          alert(e.message || "Update failed");
+          await sfAlert(e.message || "Update failed");
         }
       });
     });
@@ -156,10 +162,7 @@ async function loadRetailers() {
 
 document.getElementById("logoutBtn").addEventListener("click", async (e) => {
   e.preventDefault();
-  if (!window.confirm("Log out of admin?")) return;
-  try { await api("/auth/logout", { method: "POST" }); } catch { /* ignore */ }
-  clearSession();
-  window.location.href = "/nav/login.html?role=admin";
+  await confirmAndLogout("/nav/login.html?role=admin");
 });
 
 loadRetailers();

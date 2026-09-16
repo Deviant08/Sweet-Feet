@@ -227,6 +227,8 @@
         clearSession,
         getToken,
         avatarUrl,
+        sfAlert,
+        confirmAndLogout,
       } from "/js/api.js";
 
       let activeRetailerId = null;
@@ -413,7 +415,7 @@
             });
             await loadMessages();
           } catch (err) {
-            alert(err.message || "Send failed");
+            await sfAlert(err.message || "Send failed");
           }
         });
 
@@ -421,12 +423,7 @@
         .getElementById("logoutBtn")
         .addEventListener("click", async (e) => {
           e.preventDefault();
-          if (!confirm("Log out?")) return;
-          try {
-            await api("/auth/logout", { method: "POST" });
-          } catch {}
-          clearSession();
-          window.location.href = "/nav/login.html?role=admin";
+          await confirmAndLogout("/nav/login.html?role=admin");
         });
 
       async function boot() {

@@ -9,7 +9,7 @@ import { initHome } from "./home.js";
 import { initShop } from "./shop.js";
 import { initRetailer } from "./retailer.js";
 import { initChat } from "./chat.js";
-import { getUser, getToken, clearSession, avatarUrl, api, chatAppUrl, logoutRedirectUrl } from "./api.js";
+import { getUser, getToken, avatarUrl, chatAppUrl, confirmAndLogout } from "./api.js";
 
 (function injectCoreStyles() {
   if (document.getElementById("sf-core-styles")) return;
@@ -203,17 +203,7 @@ const sections = document.querySelectorAll("section");
 }
 
 function confirmLogout() {
-  if (!window.confirm("Log out of Sweet Feet?")) return;
-  (async () => {
-    try {
-      await api("/auth/logout", { method: "POST" });
-    } catch {
-      /* ignore */
-    }
-    const dest = logoutRedirectUrl();
-    clearSession();
-    window.location.href = dest;
-  })();
+  confirmAndLogout();
 }
 
 function buildAuthLinks() {
