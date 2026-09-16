@@ -2,6 +2,9 @@
  * Sweet Feet — queries.css
  * Linked AFTER page CSS. Does NOT change html font-size
  * (shop/login/retailer use different rem bases).
+ *
+ * Homepage hero lives on #header / body > .nav_bar.
+ * Shop uses .shop_page — never inherit the full-screen photo.
  */
 
 html, body {
@@ -12,9 +15,33 @@ img, video, iframe, svg {
   max-width: 100%;
 }
 
-/* ── 1100px ─────────────────────────────────────── */
+/* Shop header is a compact bar, same as desktop */
+.shop_page header {
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: #fff !important;
+  background-image: none !important;
+  animation: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+.shop_page .nav_bar {
+  margin-bottom: 0 !important;
+  border-radius: 0 !important;
+  width: 100% !important;
+  box-shadow: none;
+}
+.shop_page .shop_hero {
+  min-height: 0 !important;
+  background-image: none !important;
+}
+
+/* ── 1100px ─────────────────────────────────────────── */
 @media (max-width: 1100px) {
-  header {
+  #header {
     background-position: center;
     padding: 2.4rem 2rem 0;
   }
@@ -25,7 +52,7 @@ img, video, iframe, svg {
   .footer { gap: 4rem; flex-wrap: wrap; height: auto; }
 }
 
-/* ── 1024px ─────────────────────────────────────── */
+/* ── 1024px ─────────────────────────────────────────── */
 @media (max-width: 1024px) {
   .shop_wrapper { grid-template-columns: 200px 1fr; }
   .sidebar { padding: 1.5rem 1.1rem; }
@@ -43,8 +70,9 @@ img, video, iframe, svg {
   .menu_toggle { display: flex !important; }
   .nav_bar .nav { display: none !important; }
   .nav_bar .nav.open { display: flex !important; flex-direction: column; width: 100%; gap: 1.2rem; }
-  header { width: 100%; padding: 1.6rem 1.2rem 0; }
-  .nav_bar {
+  #header { width: 100%; padding: 1.6rem 1.2rem 0; }
+  body > .nav_bar,
+  #header .nav_bar {
     padding: 1rem 1.4rem;
     margin-bottom: 3rem;
     border-radius: 2rem;
@@ -81,7 +109,11 @@ img, video, iframe, svg {
   .sidebar h3 { display: none; }
   .filter_group { flex-shrink: 0; margin-bottom: 0; min-width: 150px; }
   .products_area { padding: 1.5rem 1rem; }
-  .shop_hero { padding: 2.2rem 1.4rem 1.8rem; }
+  .shop_hero {
+    padding: 2.2rem 1.4rem 1.8rem;
+    min-height: 0;
+    background: #160c02;
+  }
   .toolbar { flex-direction: column; margin-bottom: 1.25rem; }
   .search_bar { flex: 1; width: 100%; }
   .search_bar input { width: 100%; min-width: 0; }
@@ -91,9 +123,9 @@ img, video, iframe, svg {
   .product_grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
 }
 
-/* ── 768px ──────────────────────────────────────── */
+/* ── 768px ──────────────────────────────────────────── */
 @media (max-width: 768px) {
-  header { width: 100%; min-height: 100svh; height: auto; }
+  #header { width: 100%; min-height: 100svh; height: auto; }
   .location, .testimonials { flex-direction: column; }
   .test { height: auto; width: min(100%, 48rem); }
   .flex { flex-direction: column; }
@@ -116,7 +148,7 @@ img, video, iframe, svg {
 
 /* ── 700px — homepage collapse ──────────────────── */
 @media (max-width: 700px) {
-  header {
+  #header {
     width: 100%;
     min-height: 100svh;
     height: auto;
@@ -130,7 +162,8 @@ img, video, iframe, svg {
     background-size: cover;
     background-position: center;
   }
-  .nav_bar {
+  body > .nav_bar,
+  #header .nav_bar {
     flex-wrap: wrap;
     gap: 1rem;
     padding: 1rem 1.2rem;
@@ -175,6 +208,7 @@ img, video, iframe, svg {
   .icon { display: flex; padding-bottom: 0; }
   .logo { padding: 0; }
   .logo_txt { font-size: clamp(1.6rem, 5vw, 2.4rem); }
+  .shop_page .logo_txt { font-size: 1.15rem; }
 }
 
 /* ── 640px — shop phone ─────────────────────────── */
@@ -182,13 +216,32 @@ img, video, iframe, svg {
   .nav_bar { padding: .85rem 1rem; }
   .logo_txt { font-size: 1.15rem; }
   .shop_hero {
-    padding: 1.6rem 1.1rem 1.4rem;
+    padding: 1.75rem 1.25rem 1.5rem;
     flex-direction: column;
     align-items: flex-start;
-    gap: .7rem;
+    justify-content: flex-end;
+    gap: .55rem;
+    min-height: 0;
+    background: #160c02;
+    background-image: none;
   }
-  .shop_hero h1 { font-size: clamp(1.7rem, 7vw, 2.3rem); }
-  .shop_hero p { font-size: .9rem; max-width: 100%; }
+  .shop_hero h1 {
+    font-size: clamp(1.7rem, 7vw, 2.3rem);
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+    max-width: 100%;
+  }
+  .shop_hero p {
+    font-size: .88rem;
+    max-width: 100%;
+    margin-top: .2rem;
+  }
+  .hero_count {
+    font-size: 2.4rem;
+    opacity: .22;
+    align-self: flex-end;
+    line-height: 1;
+  }
   .cat_tabs {
     flex-wrap: nowrap;
     overflow-x: auto;
@@ -217,12 +270,13 @@ img, video, iframe, svg {
   .mobile_nav { gap: .8rem; }
 }
 
-/* ── 480px ──────────────────────────────────────── */
+/* ── 480px ──────────────────────────────────────────── */
 @media (max-width: 480px) {
   .nav_bar { padding: .7rem .85rem; }
   .logo_img { width: 32px; height: 32px; }
-  .shop_hero { padding: 1.3rem .9rem 1.1rem; }
+  .shop_hero { padding: 1.4rem 1rem 1.2rem; }
   .shop_hero h1 { font-size: clamp(1.5rem, 8vw, 2rem); }
+  .hero_count { font-size: 2rem; }
   .product_grid { grid-template-columns: 1fr; gap: 1rem; }
   .card_body { padding: .85rem .9rem; }
   .drawer_footer { padding: 1rem 1.1rem; }
@@ -231,7 +285,7 @@ img, video, iframe, svg {
   .bolden { font-size: 1.8rem; }
   .message { padding: 1.6rem; }
   .message h1 { font-size: clamp(2.4rem, 10vw, 3.6rem); margin: 1.6rem 0; }
-  .logo { padding: 1.2rem 1.4rem !important; }
+  .logo { padding: 0; }
   .auth_card { padding: 2.2rem 1.6rem; }
   .modal { padding: 1.8rem; max-height: 92svh; }
   .support_compose { flex-direction: column; }
@@ -240,7 +294,7 @@ img, video, iframe, svg {
   table thead th, table tbody td { padding: 1rem 1.2rem; }
 }
 
-/* ── 360px ──────────────────────────────────────── */
+/* ── 360px ──────────────────────────────────────────── */
 @media (max-width: 360px) {
   .logo_txt { font-size: 1rem; }
   .products_area { padding: .85rem .65rem; }
