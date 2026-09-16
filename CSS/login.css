@@ -13,6 +13,7 @@ a:visited {
 }
 
 html {
+  overflow-x: hidden;
   font-size: 62.5%;
   box-sizing: border-box;
   font-family: "Kumbh Sans", sans-serif;
@@ -26,7 +27,7 @@ html {
   color: #f7dfb8;
   transition: transform 0.4s ease-in-out;
   width: fit-content;
-  padding: 3em;
+  padding: 1.6rem 2rem;
 }
 
 .logo:hover {
@@ -53,7 +54,7 @@ body {
   display: flex;
 }
 .width50 {
-  width: 50vw;
+  width: 50%;
 }
 
 .form_container {
@@ -287,13 +288,13 @@ h3 {
     flex-direction: column;
   }
   .width50 {
-    width: 100vw;
+    width: 100%;
   }
   .img_container {
     min-height: 28vh;
   }
   .form {
-    width: min(35rem, 90vw);
+    width: min(35rem, 92%);
     margin: 2rem auto;
   }
 }

@@ -17,10 +17,12 @@ html {
   font-size: 62.5%;
   box-sizing: border-box;
   font-family: "Work Sana", sans-serif;
+  overflow-x: hidden;
 }
 
 body {
   max-width: 100%;
+  overflow-x: hidden;
   position: relative;
   background-color: #fffbf8;
   text-align: center;
@@ -40,7 +42,7 @@ p {
 
 header {
   position: relative;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   max-width: 100%;
   color: #f7dfb8;
@@ -91,7 +93,7 @@ header {
   margin-bottom: 9rem;
   background-color: #fcf2e813;
   box-shadow: 1px 1px 15px 1px #3e342624;
-  padding: 1.7em 4em;
+  padding: 1.2em clamp(1.2rem, 3vw, 4em);
   border-radius: 6rem;
 }
 
@@ -129,7 +131,7 @@ header {
 }
 
 main {
-  margin: 7rem;
+  margin: clamp(2.4rem, 6vw, 7rem);
 }
 
 .sweet_intro {
@@ -225,12 +227,13 @@ main {
 }
 .product {
   max-width: 100%;
-  width: 100vw;
+  width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10rem;
+  flex-wrap: wrap;
+  gap: 4rem;
 }
 .product img {
   border: 0.5px ridge #4325063a;
@@ -501,8 +504,11 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 20vh;
-  gap: 30rem;
+  flex-wrap: wrap;
+  height: auto;
+  min-height: 16vh;
+  gap: clamp(2rem, 8vw, 8rem);
+  padding: 2rem 1.6rem 4rem;
 }
 
 .footer_logo a {
@@ -637,8 +643,9 @@ section {
 
 .form__container {
   position: fixed;
-  width: 500px;
-  height: 400px;
+  width: min(500px, 92vw);
+  height: auto;
+  max-height: 90vh;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -709,7 +716,7 @@ section {
 .exit {
   position: fixed;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   background-color: rgba(230, 224, 224, 0);
   z-index: 1;
 }

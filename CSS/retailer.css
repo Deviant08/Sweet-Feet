@@ -31,13 +31,14 @@ a:visited {
   --sidebar: 240px;
 }
 
-html { font-size: 62.5%; }
+html { font-size: 62.5%; overflow-x: hidden; }
 body {
   font-family: var(--ff-ui);
   background: var(--clr-bg);
   color: var(--clr-dark);
   font-size: 1.3rem;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 body::-webkit-scrollbar {
@@ -856,5 +857,19 @@ tbody tr:hover td { background: #fffdf9; }
   .product_grid,
   .rp_grid { grid-template-columns: 1fr; }
   .stats_grid { grid-template-columns: 1fr 1fr; }
-  .rp_header { padding: 1.6rem; }
+  .rp_header { padding: 1.4rem; }
+  .page_body { padding: 1.4rem; }
+  .page_header { padding: 1.2rem 1.4rem; }
+  .auth_card { padding: 2.2rem 1.6rem; }
+  .modal { padding: 1.8rem; width: 100%; }
+  .bubble { max-width: 92%; }
+  .support_compose { flex-wrap: wrap; }
+  .mobile_nav { gap: 0.8rem; }
+  .track_nav { padding: 0 1.2rem; height: auto; min-height: 5.6rem; flex-wrap: wrap; }
+  .track_input_row { flex-direction: column; }
+  .track_input_row button { width: 100%; }
+  table { font-size: 1.2rem; }
+}
+@media (max-width: 400px) {
+  .stats_grid { grid-template-columns: 1fr; }
 }

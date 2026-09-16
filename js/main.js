@@ -37,7 +37,6 @@ import { getUser, getToken, clearSession, avatarUrl, api, chatAppUrl, logoutRedi
       border-radius: 2px;
       transition: transform .2s, opacity .2s;
     }
-    .nav_bar { color: #f7dfb8; }
     .nav a:link,
     .nav a:visited,
     .cust_nav_links a:link,
@@ -82,10 +81,10 @@ import { getUser, getToken, clearSession, avatarUrl, api, chatAppUrl, logoutRedi
       background: #160c02;
       color: #f7dfb8;
       z-index: 1001;
-      padding: 1.5rem 1.25rem 2rem;
+      padding: 24px 20px 32px;
       display: flex;
       flex-direction: column;
-      gap: 0.85rem;
+      gap: 14px;
       transform: translateX(-105%);
       transition: transform .28s ease;
       box-shadow: 8px 0 24px rgba(0,0,0,.25);
@@ -96,7 +95,7 @@ import { getUser, getToken, clearSession, avatarUrl, api, chatAppUrl, logoutRedi
       color: #f7dfb8;
       text-decoration: none;
       font-weight: 600;
-      font-size: 1.05rem;
+      font-size: 16px;
       padding: 0.35rem 0;
     }
     .nav_sidebar a:hover,
@@ -127,7 +126,7 @@ import { getUser, getToken, clearSession, avatarUrl, api, chatAppUrl, logoutRedi
     }
 
     @media (max-width: 900px) {
-      .menu_toggle { display: flex; color: #f7dfb8; }
+      .menu_toggle { display: flex; color: currentColor; }
       .nav_bar .nav { display: none; }
     }
     @media (min-width: 901px) {
@@ -318,7 +317,7 @@ if (navBar) {
   const auth = buildAuthLinks();
   navSidebar.innerHTML = `
     <a class="sidebar_logo" href="/index.html">
-      <img src="/assets/Sweet-feet-logo.png" alt="Sweet Feet" />
+      <img src="/assets/images (7).jpeg" alt="Sweet Feet" />
       <span>Sweet Feet</span>
     </a>
     ${auth.html}

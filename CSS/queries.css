@@ -1,132 +1,74 @@
 /*
- * ============================================================
- *  Sweet Feet v2 — queries.css
- *  All media queries for the entire project.
- *  Link this AFTER style.css in every HTML page.
- *
- *  Breakpoints (largest to smallest):
- *    1440px  Large desktop
- *    1360px  Desktop
- *    1100px  Small desktop / large tablet
- *    1024px  Tablet landscape — shop sidebar squeezes
- *     860px  Tablet portrait  — shop sidebar collapses
- *     768px  Tablet           — feedback panel collapses
- *     700px  Large phone      — homepage layout collapses
- *     640px  Standard phone   — shop single column
- *     480px  Mid phone        — nav compression
- *     360px  Small phone      — minimum viable layout
- *
- *  Special:
- *    prefers-reduced-motion
- *    print
- * ============================================================
+ * Sweet Feet — queries.css
+ * Linked AFTER page CSS. Does NOT change html font-size
+ * (shop/login/retailer use different rem bases).
  */
 
-
-/* ════════════════════════════════════════
-   1440px — Large desktop
-   ════════════════════════════════════════ */
-
-@media (max-width: 1440px) {
-  html { font-size: 50%; }
-  body { width: 100%; height: 100%; }
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+img, video, iframe, svg {
+  max-width: 100%;
 }
 
-
-/* ════════════════════════════════════════
-   1360px — Desktop
-   ════════════════════════════════════════ */
-
-@media (max-width: 1360px) {
-  html { font-size: 50%; }
-
-  header {
-    border-top-right-radius: 0.7rem;
-    border-top-left-radius: 0.7rem;
-    transform-style: preserve-3d;
-  }
-
-  .product img { width: 22rem; height: 22rem; }
-
-  .location { justify-content: center; gap: 6rem; }
-
-  .lc { width: 45rem; height: 45rem; }
-
-  .test   { height: 43rem; }
-  .test p { font-size: 1.8rem; }
-
-  .footer { gap: 20rem; }
-}
-
-
-/* ════════════════════════════════════════
-   1100px — Small desktop / large tablet
-   ════════════════════════════════════════ */
-
+/* ── 1100px ─────────────────────────────────────── */
 @media (max-width: 1100px) {
-  html { font-size: 50%; }
-
   header {
     background-position: center;
-    border-top-right-radius: 0.5rem;
-    border-top-left-radius: 0.5rem;
-    transform-style: preserve-3d;
+    padding: 2.4rem 2rem 0;
   }
-
-  .product { gap: 7.5rem; }
-  .product img { width: 25rem; height: 25rem; transform-style: preserve-3d; }
-
-  .lc { width: 50rem; height: 50rem; }
-
-  .testimonials { flex-direction: column; }
-  .test p { font-size: 2rem; }
-
-  .footer { gap: 25rem; }
+  .product { gap: 4rem; flex-wrap: wrap; width: 100%; }
+  .product img { width: min(22rem, 42vw); height: auto; aspect-ratio: 1; }
+  .lc { width: min(30rem, 42vw); height: min(30rem, 42vw); }
+  .testimonials { flex-wrap: wrap; gap: 2rem; }
+  .footer { gap: 4rem; flex-wrap: wrap; height: auto; }
 }
 
-
-/* ════════════════════════════════════════
-   1024px — Tablet landscape
-   Shop sidebar starts squeezing.
-   ════════════════════════════════════════ */
-
+/* ── 1024px ─────────────────────────────────────── */
 @media (max-width: 1024px) {
-
-  /* Shop sidebar: narrower to give grid more room */
-  .shop_wrapper { grid-template-columns: 210px 1fr; }
-  .sidebar      { padding: 1.5rem 1.1rem; }
-  .products_area { padding: 1.75rem 1.75rem; }
-
-  /* Shop hero */
-  .shop_hero { padding: 2.75rem 2rem 2.5rem; }
-  .hero_count { font-size: 3rem; opacity: .18; }
-
-  /* Product grid: allow 2 columns */
-  .product_grid { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); }
-
-  /* Feedback page */
-  .fb_headline  { font-size: 4rem; }
-  .fb_panel_left { padding: 5rem 3.5rem; }
-  .fb_form_card  { padding: 3.5rem; }
+  .shop_wrapper { grid-template-columns: 200px 1fr; }
+  .sidebar { padding: 1.5rem 1.1rem; }
+  .products_area { padding: 1.75rem 1.5rem; }
+  .shop_hero { padding: 2.5rem 1.75rem 2.2rem; }
+  .product_grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+  .fb_headline { font-size: 4rem; }
+  .fb_panel_left { padding: 4rem 3rem; }
+  .fb_form_card { padding: 3rem; }
+  main { margin: 4rem 3rem; }
 }
 
+/* ── 900px — hamburger (matches js/main.js) ─────── */
+@media (max-width: 900px) {
+  .menu_toggle { display: flex !important; }
+  .nav_bar .nav { display: none !important; }
+  .nav_bar .nav.open { display: flex !important; flex-direction: column; width: 100%; gap: 1.2rem; }
+  header { width: 100%; padding: 1.6rem 1.2rem 0; }
+  .nav_bar {
+    padding: 1rem 1.4rem;
+    margin-bottom: 3rem;
+    border-radius: 2rem;
+    gap: 1rem;
+  }
+  main { margin: 3rem 1.6rem; }
+  .footer { gap: 2.4rem; flex-wrap: wrap; height: auto; padding: 2rem 1rem 4rem; }
+  .copy { position: static; transform: none; left: auto; margin-top: 1.2rem; }
+  .product { flex-wrap: wrap; gap: 3rem; width: 100%; }
+  .lc { width: min(100%, 32rem); height: auto; min-height: 22rem; aspect-ratio: 1; }
+  .form__container { width: min(500px, 92vw); height: auto; }
+  .dashboard_wrap { grid-template-columns: 1fr; }
+  .track_nav { padding: 0 1.6rem !important; height: auto !important; min-height: 6.4rem; flex-wrap: wrap; }
+  .track_nav_links { flex-wrap: wrap; gap: 1rem !important; }
+}
 
-/* ════════════════════════════════════════
-   860px — Tablet portrait
-   Shop sidebar collapses to horizontal strip.
-   ════════════════════════════════════════ */
-
+/* ── 860px — shop sidebar collapses ─────────────── */
 @media (max-width: 860px) {
-
-  /* Shop: stack sidebar above products */
   .shop_wrapper { grid-template-columns: 1fr; }
-
-  /* Sidebar becomes horizontal scrollable bar */
   .sidebar {
     position: static;
     height: auto;
     border-right: none;
-    border-bottom: 1px solid var(--clr-border);
+    border-bottom: 1px solid var(--clr-border, #e8ddd4);
     padding: 1.25rem 1.5rem;
     display: flex;
     flex-direction: row;
@@ -137,375 +79,181 @@
   }
   .sidebar::-webkit-scrollbar { display: none; }
   .sidebar h3 { display: none; }
-
-  .filter_group {
-    flex-shrink: 0;
-    margin-bottom: 0;
-    min-width: 160px;
-  }
-
+  .filter_group { flex-shrink: 0; margin-bottom: 0; min-width: 150px; }
   .products_area { padding: 1.5rem 1rem; }
-
-  .shop_hero { padding: 2.5rem 1.5rem 2rem; }
-
-  /* Toolbar: stack vertically */
+  .shop_hero { padding: 2.2rem 1.4rem 1.8rem; }
   .toolbar { flex-direction: column; margin-bottom: 1.25rem; }
-  .toolbar_left { flex-direction: row; justify-content: space-between; align-items: center; }
-
-  .search_bar { flex: 1; }
-  .search_bar input { width: 100%; }
+  .search_bar { flex: 1; width: 100%; }
+  .search_bar input { width: 100%; min-width: 0; }
   .sort_select { width: 100%; }
-
-  /* Cart drawer: full width on tablet portrait */
-  .cart_drawer { width: 100%; right: -100%; }
+  .cart_drawer { width: min(100%, 42rem); right: -100%; }
   .cart_drawer.open { right: 0; }
+  .product_grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
 }
 
-
-/* ════════════════════════════════════════
-   768px — Tablet
-   Feedback panel collapses. Login/signup stack.
-   ════════════════════════════════════════ */
-
+/* ── 768px ──────────────────────────────────────── */
 @media (max-width: 768px) {
-  html { font-size: 50%; }
-
-  header { width: 100%; height: 100vh; }
-
-  .location    { flex-direction: column; }
-  .testimonials { flex-direction: column; }
-  .test        { height: unset; }
-  .footer      { gap: 5rem; }
-
-  /* Login / Signup pages */
-  .flex            { flex-direction: column; }
-  .width50         { width: 100%; height: 50vh; }
-  .img_container   { border-radius: 0; }
-  .form_container  { border-radius: 0; }
-  .form            { width: 90%; padding: 3rem 2rem; }
-
-  /* Feedback page — THE KEY FIX
-     fb_main must collapse to single column.
-     The left panel shrinks to a banner. */
+  header { width: 100%; min-height: 100svh; height: auto; }
+  .location, .testimonials { flex-direction: column; }
+  .test { height: auto; width: min(100%, 48rem); }
+  .flex { flex-direction: column; }
+  .width50 { width: 100% !important; height: auto; min-height: 28vh; }
+  .img_container { border-radius: 0; min-height: 24vh; }
+  .form_container { border-radius: 0; }
+  .form { width: min(40rem, 92%); padding: 3rem 2rem; }
   .fb_main { grid-template-columns: 1fr; }
-
-  .fb_panel_left {
-    padding: 4rem 3rem;
-    min-height: 36vh;
-  }
-
-  .fb_headline { font-size: 3.5rem; }
-
-  .fb_panel_right { padding: 4rem 2rem; }
-  .fb_form_card   { padding: 3rem 2.5rem; }
-  .fb_header      { padding: 0 2rem; }
-
-  body.fb_page footer { padding: 2.5rem 2rem; }
-  body.fb_page .footer { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+  .fb_panel_left { padding: 3.2rem 2.2rem; min-height: 28vh; }
+  .fb_headline { font-size: clamp(2.4rem, 8vw, 3.5rem); }
+  .fb_panel_right { padding: 3rem 1.6rem; }
+  .fb_form_card { padding: 2.4rem 1.8rem; }
+  .fb_header { padding: 0 1.4rem; }
+  .auth_wrap { grid-template-columns: 1fr; }
+  .auth_panel_left { padding: 3rem 2rem; min-height: 24vh; }
+  .auth_panel_right { padding: 2.4rem 1.6rem; }
+  .support_header, .support_messages, .support_compose { padding-left: 1.4rem; padding-right: 1.4rem; }
+  .bubble { max-width: 90%; }
 }
 
-
-/* ════════════════════════════════════════
-   700px — Large phone
-   Homepage layout collapses fully.
-   ════════════════════════════════════════ */
-
+/* ── 700px — homepage collapse ──────────────────── */
 @media (max-width: 700px) {
-  html { font-size: 50%; }
-
   header {
     width: 100%;
-    height: 100vh;
+    min-height: 100svh;
+    height: auto;
     animation: none;
     border: none;
-    border-radius: unset;
+    border-radius: 0;
+    padding: 1.2rem 1rem 3rem;
     background-color: #160c02;
     background-image: linear-gradient(#160c0296, #160c0296),
       url(https://i.pinimg.com/736x/f3/07/df/f307df96d4ec5faa44f8fafb4edffded.jpg);
     background-size: cover;
+    background-position: center;
   }
-
-  /* Logo left, hamburger right — same row */
   .nav_bar {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    flex-wrap: wrap;
     gap: 1rem;
-    padding: 0.9rem 1.4rem;
+    padding: 1rem 1.2rem;
     margin-bottom: 3rem;
     width: 100%;
+    border-radius: 1.6rem;
   }
-
-  .menu_toggle { display: flex; flex-shrink: 0; }
-  .nav         { display: none; }
-
   .intro_uno { text-align: center; }
-
   .header_uno { display: none; }
   .header_dos {
     display: block;
-    font-size: 5rem;
-    letter-spacing: 1.5px;
-    margin-bottom: 6rem;
+    font-size: clamp(2.8rem, 10vw, 4.4rem);
+    letter-spacing: 1px;
+    margin-bottom: 2.4rem;
     font-weight: 700;
   }
-
   .para_uno { display: none; }
   .para_dos {
     display: block;
-    font-size: 1.7rem;
+    font-size: 1.6rem;
     font-weight: 500;
-    line-height: 1.9;
-    letter-spacing: 1px;
-    margin-bottom: 4rem;
+    line-height: 1.7;
+    margin-bottom: 2.4rem;
   }
-
-  .top_btn { width: 100%; }
-
+  .top_btn { width: 100%; max-width: 28rem; margin-inline: auto; }
+  .intro_dos h2, .sweet_product h2, .sweet_location h2, .test_head, .c_head {
+    font-size: clamp(2.4rem, 7vw, 3.4rem);
+  }
   .intro_dos p { text-align: left; font-size: 1.5rem; line-height: 1.5; }
-
-  .product { flex-direction: column; margin-bottom: 8rem; }
-
-  .location { flex-direction: column; gap: 4rem; }
-
-  .testimonials { font-size: 1.7rem; flex-direction: column; }
-  .test         { padding: 1.5em; }
-
-  .action_button { flex-direction: column; gap: 3rem; }
-  .action        { width: 50%; }
-
-  /* Footer */
-  footer  { height: unset; }
-  .footer { display: block; margin: 0; height: unset; }
-  .footer_logo   { padding-top: 3em; margin-bottom: 6em; }
-  .footer_links  { display: flex; flex-direction: column; margin-bottom: 6em; }
-  .link          { text-align: center; }
-  .icon          { display: flex; padding-bottom: 4em; }
+  .product { flex-direction: column; margin-bottom: 5rem; gap: 2.4rem; }
+  .product img { width: min(22rem, 80vw); height: auto; aspect-ratio: 1; }
+  .location { flex-direction: column; gap: 2rem; }
+  .testimonials { flex-direction: column; font-size: 1.6rem; }
+  .test { padding: 1.5em; }
+  .action_button { flex-direction: column; gap: 1.2rem; }
+  .action { width: min(100%, 28rem); text-align: center; padding: 1.2em 2em; }
+  footer { height: auto; }
+  .footer { display: flex; flex-direction: column; align-items: center; gap: 1.6rem; height: auto; padding: 2.4rem 1.2rem 3.2rem; }
+  .footer_logo { padding-top: 0; margin-bottom: 0; }
+  .footer_links { display: flex; flex-wrap: wrap; justify-content: center; margin-bottom: 0; gap: 1rem; }
+  .link { text-align: center; }
+  .icon { display: flex; padding-bottom: 0; }
+  .logo { padding: 0; }
+  .logo_txt { font-size: clamp(1.6rem, 5vw, 2.4rem); }
 }
 
-
-/* ════════════════════════════════════════
-   640px — Standard phone
-   Shop: single column, scrollable tabs.
-   ════════════════════════════════════════ */
-
+/* ── 640px — shop phone ─────────────────────────── */
 @media (max-width: 640px) {
-
-  /* Shop nav */
-  .nav_bar { padding: .85rem 1.25rem; }
-  .nav     { gap: .9rem; }
-  .nav a   { font-size: .8rem; }
-  .logo_txt { font-size: 1.1rem; }
-
-  /* Shop hero */
+  .nav_bar { padding: .85rem 1rem; }
+  .logo_txt { font-size: 1.15rem; }
   .shop_hero {
-    padding: 1.75rem 1.25rem 1.5rem;
+    padding: 1.6rem 1.1rem 1.4rem;
     flex-direction: column;
     align-items: flex-start;
-    gap: .75rem;
+    gap: .7rem;
   }
-  .shop_hero h1 { font-size: clamp(1.65rem, 7vw, 2.25rem); }
-  .shop_hero p  { font-size: .83rem; max-width: 100%; margin-top: .35rem; }
-
-  /* Category tabs: horizontal scroll */
+  .shop_hero h1 { font-size: clamp(1.7rem, 7vw, 2.3rem); }
+  .shop_hero p { font-size: .9rem; max-width: 100%; }
   .cat_tabs {
     flex-wrap: nowrap;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding-bottom: .25rem;
     gap: .4rem;
-    margin-bottom: 1.1rem;
   }
   .cat_tabs::-webkit-scrollbar { display: none; }
-  .cat_tab { flex-shrink: 0; padding: .4rem .95rem; font-size: .78rem; }
-
-  /* Single column product grid */
-  .product_grid { grid-template-columns: 1fr; gap: 1rem; }
-
-  /* Shorter card images on phone */
-  .card_img { aspect-ratio: 16 / 9; }
-
-  .products_area { padding: 1.25rem 1rem; }
-
-  /* Sidebar: smaller chips */
-  .sidebar      { padding: 1rem; gap: 1.25rem; }
-  .filter_group { min-width: 140px; }
-  .chip         { font-size: .72rem; padding: .3rem .65rem; }
-
-  /* Toolbar */
-  .toolbar { gap: .65rem; }
+  .cat_tab { flex-shrink: 0; }
+  .product_grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .9rem; }
+  .card_img { aspect-ratio: 1; }
+  .products_area { padding: 1.1rem .85rem; }
+  .sidebar { padding: 1rem; gap: 1.1rem; }
+  .filter_group { min-width: 130px; }
+  .toolbar { gap: .6rem; }
   .toolbar_left { flex-direction: column; align-items: stretch; gap: .5rem; }
-  .result_count { font-size: .78rem; text-align: right; }
-
-  /* Toast: lift above cart FAB */
-  .toast { bottom: 5.5rem; }
-
-  /* Cart FAB */
-  .cart_icon_wrap { bottom: 1.5rem; right: 1.25rem; }
-
-  /* Footer */
-  .footer { flex-direction: column; align-items: flex-start; gap: 1.1rem; }
-  .footer_links { gap: 1rem; flex-wrap: wrap; }
-
-  /* Feedback page */
-  .fb_panel_left { padding: 4rem 2rem; min-height: 30vh; }
-  .fb_headline   { font-size: 3rem; }
-  .fb_perks      { gap: 1.2rem; }
-  .fb_perks li   { font-size: 1.3rem; }
-  .fb_panel_right { padding: 3rem 1.2rem; }
-  .fb_form_card   { padding: 2.5rem 1.8rem; border-radius: 1rem; }
-  .fb_form_title  { font-size: 2.2rem; }
-  .fb_submit      { font-size: 1.35rem; padding: 1.3rem 2rem; }
-  body.fb_page .footer_links { gap: 1.2rem; }
-  .fb_header .nav a { font-size: 1.1rem; }
+  .toast { bottom: 5.5rem; white-space: normal; max-width: calc(100% - 2rem); }
+  .cart_icon_wrap { bottom: 1.4rem; right: 1.1rem; }
+  .fb_panel_left { padding: 3rem 1.6rem; min-height: 24vh; }
+  .fb_headline { font-size: clamp(2.2rem, 9vw, 3rem); }
+  .fb_panel_right { padding: 2.4rem 1.1rem; }
+  .fb_form_card { padding: 2rem 1.4rem; }
+  .page_body { padding: 1.4rem !important; }
+  .page_header { padding: 1.2rem 1.4rem !important; }
+  .stats_grid { grid-template-columns: 1fr 1fr; }
+  .mobile_nav { gap: .8rem; }
 }
 
-
-/* ════════════════════════════════════════
-   480px — Mid-range phone
-   Nav compression, tighter spacing.
-   ════════════════════════════════════════ */
-
+/* ── 480px ──────────────────────────────────────── */
 @media (max-width: 480px) {
-
-  /* Hide less critical nav links on shop page */
-  body.shop_page .nav a[href*="login"],
-  body.shop_page .nav a[href*="feedback"] { display: none; }
-
-  .nav     { gap: .75rem; }
-  .nav a   { font-size: .78rem; }
-  .nav_bar { padding: .75rem 1rem; }
-  .logo_img { width: 30px; height: 30px; }
-  .logo_txt { font-size: 1rem; }
-
-  /* Shop hero */
-  .shop_hero    { padding: 1.5rem 1rem 1.25rem; }
+  .nav_bar { padding: .7rem .85rem; }
+  .logo_img { width: 32px; height: 32px; }
+  .shop_hero { padding: 1.3rem .9rem 1.1rem; }
   .shop_hero h1 { font-size: clamp(1.5rem, 8vw, 2rem); }
-
-  /* Card tweaks */
-  .card_body  { padding: .85rem .9rem .9rem; gap: .4rem; }
-  .card_name  { font-size: .92rem; }
-  .card_price { font-size: 1.05rem; }
-  .btn_order  { font-size: .75rem; padding: .48rem .9rem; }
-  .size_dot   { width: 25px; height: 25px; font-size: .63rem; border-radius: 5px; }
-
-  /* Chips */
-  .chip { font-size: .68rem; padding: .28rem .55rem; }
-  .filter_group h4 { font-size: .78rem; }
-
-  /* Cart drawer footer */
+  .product_grid { grid-template-columns: 1fr; gap: 1rem; }
+  .card_body { padding: .85rem .9rem; }
   .drawer_footer { padding: 1rem 1.1rem; }
-  .btn_checkout  { font-size: .88rem; padding: .8rem; }
-
-  /* Cart FAB */
-  .cart_fab { width: 48px; height: 48px; font-size: 1.1rem; }
-
-  /* Login / signup */
-  .form   { width: 95%; padding: 2.5rem 1.5rem; }
+  .cart_fab { width: 48px; height: 48px; }
+  .form { width: 94%; padding: 2.2rem 1.4rem; }
   .bolden { font-size: 1.8rem; }
+  .message { padding: 1.6rem; }
+  .message h1 { font-size: clamp(2.4rem, 10vw, 3.6rem); margin: 1.6rem 0; }
+  .logo { padding: 1.2rem 1.4rem !important; }
+  .auth_card { padding: 2.2rem 1.6rem; }
+  .modal { padding: 1.8rem; max-height: 92svh; }
+  .support_compose { flex-direction: column; }
+  .rp_wrap { padding: 1.6rem 1rem 4rem; }
+  .rp_header { padding: 1.4rem; }
+  table thead th, table tbody td { padding: 1rem 1.2rem; }
 }
 
-
-/* ════════════════════════════════════════
-   360px — Small phone (minimum viable layout)
-   ════════════════════════════════════════ */
-
+/* ── 360px ──────────────────────────────────────── */
 @media (max-width: 360px) {
-
-  /* Logo: text hidden, only image */
-  .logo_txt { display: none; }
-  .logo_img { width: 28px; height: 28px; }
-
-  /* Nav */
-  .nav   { gap: .6rem; }
-  .nav a { font-size: .75rem; }
-  body.shop_page .nav a[href*="login"],
-  body.shop_page .nav a[href*="feedback"] { display: none; }
-
-  /* Shop hero */
-  .shop_hero    { padding: 1.25rem .85rem 1rem; }
-  .shop_hero h1 { font-size: 1.5rem; letter-spacing: -.02em; }
-  .shop_hero p  { font-size: .78rem; }
-
-  /* Products area */
-  .products_area { padding: 1rem .75rem; }
-  .product_grid  { gap: .85rem; }
-
-  /* Sidebar */
-  .sidebar { padding: .85rem .75rem; gap: 1rem; }
-
-  /* Search */
-  .search_bar { min-width: 0; padding: .35rem .75rem; }
-  .search_bar input { width: 100%; min-width: 0; }
-  .sort_select { font-size: .78rem; }
-
-  /* Cart drawer: full screen */
-  .cart_drawer { border-radius: 0; }
-
-  /* Footer */
-  .footer_links { gap: .75rem; }
-  .footer_links a { font-size: .75rem; }
-  .copy { font-size: .68rem; }
-
-  /* Toast */
-  .toast { width: calc(100% - 2rem); text-align: center; white-space: normal; font-size: .78rem; }
+  .logo_txt { font-size: 1rem; }
+  .products_area { padding: .85rem .65rem; }
+  .product_grid { gap: .8rem; }
+  .search_bar { min-width: 0; padding: .35rem .7rem; }
+  .cart_drawer { border-radius: 0; width: 100%; }
+  .toast { width: calc(100% - 1.6rem); font-size: .8rem; }
 }
-
-
-/* ════════════════════════════════════════
-   Reduced motion
-   ════════════════════════════════════════ */
-
-/* @media (prefers-reduced-motion: reduce) {
-  .product img,
-  .product_card,
-  .btn_order,
-  .cart_fab,
-  .cart_drawer,
-  .drawer_overlay,
-  .toast,
-  .chip,
-  .cat_tab,
-  .nav_sidebar {
-    transition: none !important;
-    animation: none !important;
-  }
-
-  .product_card:hover { transform: none; }
-  .lc:hover          { transform: none; }
-  .product img:hover { transform: none; }
-}
- */
-
-/* ════════════════════════════════════════
-   Print
-   ════════════════════════════════════════ */
 
 @media print {
-  .sidebar,
-  .toolbar,
-  .cat_tabs,
-  .cart_icon_wrap,
-  .cart_drawer,
-  .drawer_overlay,
-  .toast,
-  .nav_sidebar,
-  .menu_toggle,
-  footer { display: none !important; }
-
-  .shop_wrapper { grid-template-columns: 1fr; }
-
-  .shop_hero {
-    background: #fff;
-    color: #000;
-    border-bottom: 2px solid #000;
-    padding: 1rem 0;
+  .sidebar, .toolbar, .cat_tabs, .cart_icon_wrap, .cart_drawer,
+  .drawer_overlay, .toast, .nav_sidebar, .menu_toggle, footer {
+    display: none !important;
   }
-  .shop_hero h1 span { color: #000; }
-
-  .product_card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
-  .btn_order    { display: none; }
-  .card_price   { font-size: 1rem; }
+  .shop_wrapper { grid-template-columns: 1fr; }
 }
