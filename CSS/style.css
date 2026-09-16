@@ -230,16 +230,26 @@ main {
   width: 100%;
   height: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 4rem;
+  flex-wrap: nowrap;
+  gap: clamp(2.4rem, 4vw, 10rem);
+}
+.pd {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 0 0 20rem;
+  width: 20rem;
+  max-width: 20rem;
 }
 .product img {
   border: 0.5px ridge #4325063a;
   border-radius: 5%;
   width: 20rem;
   height: 20rem;
+  object-fit: cover;
+  flex-shrink: 0;
   transform-style: preserve-3d;
   transition: all 0.4s ease-in-out;
 }
