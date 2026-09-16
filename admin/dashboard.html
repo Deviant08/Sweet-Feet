@@ -87,7 +87,7 @@ async function loadDashboard() {
       <div class="stat_card"><div class="stat_icon">⏳</div><div class="stat_value">${pending}</div><div class="stat_label">Pending Approvals</div></div>
       <div class="stat_card"><div class="stat_icon">👟</div><div class="stat_value">${prods.length}</div><div class="stat_label">Active Listings</div></div>
       <div class="stat_card"><div class="stat_icon">📦</div><div class="stat_value">${retailers.length}</div><div class="stat_label">Total Retailers</div></div>`;
-    tbody.innerHTML = retailers.length ? retailers.map((r) => `<tr><td>${r.businessName || "—"}</td><td>${r.email || ""}</td><td>${r.location || ""}</td><td><span class="badge ${r.status}">${r.status}</span></td><td><a class="btn_sm outline" href="/admin/retailers.html">Manage</a></td></tr>`).join("") : `<tr><td colspan="5" style="text-align:center;padding:3rem;color:var(--clr-muted)">No retailers yet.</td></tr>`;
+    tbody.innerHTML = retailers.length ? retailers.map((r) => `<tr><td><a href="/admin/retailer.html?id=${r._id || r.id}">${r.businessName || "—"}</a></td><td>${r.email || ""}</td><td>${r.location || ""}</td><td><span class="badge ${r.status}">${r.status}</span></td><td><a class="btn_sm outline" href="/admin/retailer.html?id=${r._id || r.id}">Profile</a></td></tr>`).join("") : `<tr><td colspan="5" style="text-align:center;padding:3rem;color:var(--clr-muted)">No retailers yet.</td></tr>`;
   } catch (err) {
     tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:3rem">${err.message || "Failed to load retailers"}</td></tr>`;
   }
