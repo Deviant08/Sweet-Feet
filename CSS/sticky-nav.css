@@ -1,0 +1,19 @@
+/* Shared sticky navigation — used on homepage, shop, feedback, dashboards */
+.nav_bar,
+header:has(> .nav_bar),
+.fb_header,
+.mobile_topbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1000 !important;
+}
+
+body > .nav_bar {
+  position: sticky !important;
+  top: 1.2rem !important;
+  z-index: 1000 !important;
+  margin: 1.2rem 1.6rem 0;
+  background-color: rgba(22, 12, 2, 0.62);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
