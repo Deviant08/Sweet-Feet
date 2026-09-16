@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/jpeg" href="/assets/20251102_172020.png" sizes="32x32"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/CSS/retailer.css" />
+  <title>Retailer profile — Sweet Feet Admin</title>
+</head>
+<body>
+<div class="dashboard_wrap">
+  <nav class="sidebar_nav">
+    <a class="sidebar_logo" href="/index.html">
+      <img src="/assets/Sweet-feet-logo.png" alt="Sweet Feet" />
+      <span>Sweet Feet</span>
+    </a>
+    <span class="sidebar_label">Admin</span>
+    <a class="sidebar_link" href="/admin/dashboard.html"><span class="icon">📊</span> Overview</a>
+    <a class="sidebar_link active" href="/admin/retailers.html"><span class="icon">🏪</span> Retailers</a>
+    <a class="sidebar_link" href="/admin/chat.html"><span class="icon">💬</span> Support Chat</a>
+    <div class="sidebar_divider"></div>
+    <a class="sidebar_link" href="/index.html" target="_blank"><span class="icon">🌐</span> View Site</a>
+    <a class="sidebar_link" id="logoutBtn" href="/nav/login.html?role=admin"><span class="icon">🚪</span> Log Out</a>
+  </nav>
+
+  <div class="main_content">
+    <div class="page_header">
+      <div>
+        <h1 id="profilePageTitle">Retailer profile</h1>
+        <p>Read only — you can view this store, not edit it.</p>
+      </div>
+    </div>
+    <div class="page_body">
+      <div id="profileRoot">
+        <div class="profile_card">
+          <div class="profile_hero">
+            <div class="sk" style="width:96px;height:96px;border-radius:50%"></div>
+            <div style="flex:1">
+              <div class="sk" style="height:18px;width:40%;margin-bottom:10px;border-radius:8px"></div>
+              <div class="sk" style="height:12px;width:55%;border-radius:8px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="module">
+  import { initProfile } from "/js/profile.js";
+  initProfile({ mode: "admin" });
+</script>
+</body>
+</html>

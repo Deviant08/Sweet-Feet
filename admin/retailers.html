@@ -78,18 +78,19 @@ async function requireAdmin() {
 function actionButtons(r, id) {
   const s = r.status;
   const chat = `<a class="btn_sm outline" href="/admin/chat.html?retailer=${id}">Chat</a>`;
+  const view = `<a class="btn_sm outline" href="/admin/retailer.html?id=${id}">Profile</a>`;
   if (s === "pending") {
-    return `${chat}
+    return `${view} ${chat}
       <button class="btn_sm dark" data-id="${id}" data-status="approved">Approve</button>
       <button class="btn_sm danger" data-id="${id}" data-status="declined">Decline</button>`;
   }
   if (s === "approved") {
-    return `${chat} <button class="btn_sm danger" data-id="${id}" data-status="suspended">Suspend</button>`;
+    return `${view} ${chat} <button class="btn_sm danger" data-id="${id}" data-status="suspended">Suspend</button>`;
   }
   if (s === "declined" || s === "suspended") {
-    return `${chat} <button class="btn_sm dark" data-id="${id}" data-status="approved">Approve</button>`;
+    return `${view} ${chat} <button class="btn_sm dark" data-id="${id}" data-status="approved">Approve</button>`;
   }
-  return chat;
+  return `${view} ${chat}`;
 }
 
 async function loadRetailers() {
@@ -123,7 +124,7 @@ async function loadRetailers() {
       .map((r) => {
         const id = r._id || r.id;
         return `<tr>
-        <td>${r.businessName || "—"}</td>
+        <td><a href="/admin/retailer.html?id=${id}">${r.businessName || "—"}</a></td>
         <td>${r.email || ""}</td>
         <td>${r.phone || ""}</td>
         <td>${r.location || ""}</td>
