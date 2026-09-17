@@ -203,25 +203,38 @@ svg { max-width: 100%; }
     align-self: stretch;
     border-right: none;
     border-bottom: 1px solid var(--clr-border, #e8ddd4);
-    padding: 1.15rem 1.2rem 1.25rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem 1.2rem;
-    overflow: visible;
+    padding: 1.15rem 1.2rem 1.7rem;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1.5rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #c8440c #f3ede8;
   }
-  .sidebar::-webkit-scrollbar { display: none; }
-  .sidebar h3 {
+  .sidebar::-webkit-scrollbar {
+    height: 8px;
     display: block;
-    grid-column: 1 / -1;
-    margin-bottom: 0;
   }
+  .sidebar::-webkit-scrollbar-track {
+    background: #f3ede8;
+    border-radius: 999px;
+  }
+  .sidebar::-webkit-scrollbar-thumb {
+    background: #c8440c;
+    border-radius: 999px;
+  }
+  .sidebar h3 { display: none; }
   .filter_group {
-    flex-shrink: 1;
+    flex: 0 0 auto;
     margin-bottom: 0;
-    min-width: 0;
+    min-width: 168px;
   }
   .filter_group:nth-of-type(2) {
-    grid-column: 1 / -1;
+    min-width: 240px;
+    grid-column: auto;
   }
   .products_area { padding: 1.5rem 1rem; min-width: 0; }
   .shop_hero {
@@ -379,8 +392,8 @@ svg { max-width: 100%; }
   }
   .card_img { aspect-ratio: 1; }
   .products_area { padding: 1.1rem .85rem; }
-  .sidebar { padding: 1rem; }
-  .filter_group { min-width: 0; }
+  .sidebar { padding: 1rem 1rem 1.6rem; }
+  .filter_group { min-width: 160px; }
   .toolbar { gap: .6rem; }
   .toolbar_left { flex-direction: column; align-items: stretch; gap: .5rem; }
   .toast {
@@ -412,8 +425,6 @@ svg { max-width: 100%; }
   .shop_hero h1 { font-size: clamp(1.5rem, 8vw, 2rem); }
   .hero_count { font-size: 2rem; }
   .product_grid { grid-template-columns: 1fr; gap: 1rem; }
-  .sidebar { grid-template-columns: 1fr; }
-  .filter_group:nth-of-type(2) { grid-column: auto; }
   .card_body { padding: .85rem .9rem; }
   .drawer_footer { padding: 1rem 1.1rem; }
   .cart_fab { width: 48px; height: 48px; }

@@ -970,21 +970,15 @@ footer {
     max-height: none;
     border-right: none;
     border-bottom: 1px solid var(--clr-border);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem 1.25rem;
-    overflow: visible;
-  }
-  .sidebar h3 {
-    grid-column: 1 / -1;
-    margin-bottom: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1.5rem;
+    overflow-x: auto;
   }
   .filter_group {
     margin-bottom: 0;
-    min-width: 0;
-  }
-  .filter_group:nth-of-type(2) {
-    grid-column: 1 / -1;
+    flex-shrink: 0;
   }
   .products_area {
     padding: 1.5rem 1rem;
