@@ -313,9 +313,34 @@ h3 {
 }
 
 @media (max-width: 800px) {
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    background: #160c02;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-image: linear-gradient(#160c0278, #160c02c4),
+      url(https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg);
+    background-size: cover;
+    background-position: center;
+    pointer-events: none;
+  }
+
   .flex {
+    position: relative;
+    z-index: 1;
     flex-direction: column;
+    height: 100svh;
     min-height: 100svh;
+    overflow: auto;
   }
 
   .width50 {
@@ -323,13 +348,15 @@ h3 {
   }
 
   .img_container {
+    background: none;
     min-height: 0;
     height: auto;
-    border-radius: 0;
+    flex: 0 0 auto;
+    justify-content: flex-start;
   }
 
   .logo {
-    padding: 1.6rem 1.8rem 0.4rem;
+    padding: 1.6rem 1.8rem 0.2rem;
   }
 
   .logo_txt {
@@ -337,29 +364,35 @@ h3 {
   }
 
   .message {
-    padding: 1.2rem 1.8rem 2.2rem;
+    padding: 0.4rem 1.8rem 1.2rem;
   }
 
   .message h1 {
-    font-size: clamp(2.8rem, 9vw, 3.6rem);
-    margin: 0 0 0.8rem;
+    font-size: clamp(2.4rem, 8vw, 3.2rem);
+    margin: 0 0 0.5rem;
   }
 
   .message p {
-    font-size: 1.35rem;
-    line-height: 1.45;
+    font-size: 1.3rem;
+    line-height: 1.4;
     max-width: none;
   }
 
   .form_container {
+    background: none;
+    background-image: none;
     border-radius: 0;
-    padding: 2rem 1.4rem 3.2rem;
-    align-items: flex-start;
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8rem 1.6rem 2.4rem;
+    min-height: 0;
   }
 
   .form {
     width: 100%;
-    max-width: 44rem;
+    max-width: 42rem;
     margin: 0 auto;
     padding: 2.6rem 2rem;
   }
@@ -376,11 +409,11 @@ h3 {
   }
 
   .message {
-    padding: 0.8rem 1.6rem 1.8rem;
+    padding: 0.2rem 1.6rem 1rem;
   }
 
   .message h1 {
-    font-size: clamp(2.4rem, 10vw, 3.2rem);
+    font-size: clamp(2.2rem, 8vw, 2.8rem);
   }
 
   .form {
