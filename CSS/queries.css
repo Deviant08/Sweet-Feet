@@ -390,7 +390,7 @@ svg { max-width: 100%; }
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: .9rem;
   }
-  .card_img { aspect-ratio: 1; }
+  .card_img { aspect-ratio: 4 / 3; }
   .products_area { padding: 1.1rem .85rem; }
   .sidebar { padding: 1rem 1rem 1.6rem; }
   .filter_group { min-width: 160px; }
@@ -424,8 +424,9 @@ svg { max-width: 100%; }
   .shop_hero { padding: 1.4rem 1rem 1.2rem; }
   .shop_hero h1 { font-size: clamp(1.5rem, 8vw, 2rem); }
   .hero_count { font-size: 2rem; }
-  .product_grid { grid-template-columns: 1fr; gap: 1rem; }
-  .card_body { padding: .85rem .9rem; }
+  .product_grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+  .card_img { aspect-ratio: 4 / 3; }
+  .card_body { padding: .7rem .75rem .8rem; gap: .35rem; }
   .drawer_footer { padding: 1rem 1.1rem; }
   .cart_fab { width: 48px; height: 48px; }
   .form { width: 94%; padding: 2.2rem 1.4rem; }
