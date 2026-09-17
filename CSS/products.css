@@ -197,9 +197,10 @@ body::-webkit-scrollbar {
 /* ── Shop layout ──────────────────────────────── */
 .shop_wrapper {
   display: grid;
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 240px minmax(0, 1fr);
   gap: 0;
-  min-height: calc(100vh - 60px);
+  align-content: start;
+  min-height: 0;
 }
 
 /* ── Sidebar / Filters ────────────────────────── */
@@ -209,8 +210,10 @@ body::-webkit-scrollbar {
   padding: 2rem 1.5rem;
   position: sticky;
   top: 61px;
-  height: calc(100vh - 61px);
+  height: auto;
+  max-height: calc(100vh - 61px);
   overflow-y: auto;
+  align-self: start;
 }
 
 .sidebar h3 {
@@ -273,9 +276,14 @@ body::-webkit-scrollbar {
 .price_labels {
   display: flex;
   justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
   font-family: var(--ff-ui);
   font-size: 0.78rem;
   color: var(--clr-muted);
+}
+.price_labels span {
+  white-space: nowrap;
 }
 
 /* ── Products area ────────────────────────────── */
@@ -959,13 +967,24 @@ footer {
   .sidebar {
     position: static;
     height: auto;
+    max-height: none;
     border-right: none;
     border-bottom: 1px solid var(--clr-border);
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 1.25rem;
+    overflow: visible;
+  }
+  .sidebar h3 {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
   }
   .filter_group {
-    margin-bottom: 1.25rem;
+    margin-bottom: 0;
+    min-width: 0;
+  }
+  .filter_group:nth-of-type(2) {
+    grid-column: 1 / -1;
   }
   .products_area {
     padding: 1.5rem 1rem;
