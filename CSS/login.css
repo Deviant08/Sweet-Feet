@@ -19,6 +19,12 @@ html {
   font-family: "Kumbh Sans", sans-serif;
 }
 
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: #160c02;
+}
+
 .logo {
   display: flex;
   align-items: center;
@@ -27,7 +33,7 @@ html {
   color: #f7dfb8;
   transition: transform 0.4s ease-in-out;
   width: fit-content;
-  padding: 1.6rem 2rem;
+  padding: 2rem 2.4rem;
 }
 
 .logo:hover {
@@ -35,44 +41,66 @@ html {
 }
 
 .logo_img {
-  border-radius: 60%;
+  border-radius: 50%;
   border: 1px ridge #d9b882;
   width: 5.4rem;
   height: 5.4rem;
   object-fit: cover;
+  flex-shrink: 0;
   box-shadow: 1px 1px 1px 1px #51432e22;
 }
 
 .logo_txt {
-  font-size: 3rem;
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.1;
 }
 
-body {
-  margin: 0;
-}
 .flex {
   display: flex;
+  min-height: 100svh;
 }
+
 .width50 {
   width: 50%;
+  min-width: 0;
+}
+
+.height100 {
+  min-height: 100svh;
+  height: auto;
+  margin: 0;
+}
+
+.img_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-image: linear-gradient(#160c0296, #160c0296),
+    url(https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
 }
 
 .form_container {
   background-image: linear-gradient(to right bottom, #facea2, #160c02e0);
-  border-radius: 1rem 0 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3.2rem 2.4rem;
   text-align: center;
-  align-content: center;
-  transform-style: preserve-3d;
 }
 
 .form {
   background-color: #fff;
-  border-radius: 1rem;
-  box-shadow: 0px 1px 30px 2px #c9c0b883;
+  border-radius: 1.6rem;
+  box-shadow: 0 1px 30px 2px #c9c0b883;
   padding: 4rem;
   text-align: left;
-  width: 35rem;
-  margin: auto;
+  width: min(38rem, 100%);
+  margin: 0 auto;
 }
 
 .bolden {
@@ -81,41 +109,28 @@ body {
   margin-bottom: 1rem;
 }
 
-.img_container {
-  background-image: linear-gradient(#160c0296, #160c0296),
-    url(https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  border-radius: 0.5rem;
-  transform-style: preserve-3d;
-}
-
-.height100 {
-  height: 100vh;
-  margin: 0px;
-}
-
 h3 {
   font-size: 1.7rem;
 }
 
 .message {
   color: #f7dfb8;
-  padding: 3rem;
+  padding: 3.2rem 3.2rem 4rem;
 }
 
 .message h1 {
-  font-size: 5rem;
-  margin: 4rem 0;
+  font-size: clamp(3.2rem, 4.6vw, 5.2rem);
+  margin: 0 0 1.2rem;
   font-weight: 700;
   text-align: left;
+  line-height: 1.08;
 }
 
 .message p {
   font-size: 1.5rem;
-  line-height: 1.9;
-  letter-spacing: 1px;
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+  max-width: 38rem;
 }
 
 .mb_10 {
@@ -123,10 +138,16 @@ h3 {
 }
 
 .inp {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: 600;
-  color: gray;
-  opacity: 0.9;
+  color: #3d342c;
+  opacity: 0.95;
+  font-family: inherit;
+}
+
+.inp::placeholder {
+  color: #8a7b6a;
+  font-weight: 500;
 }
 
 .border {
@@ -134,14 +155,20 @@ h3 {
   border-radius: 20px;
   border: 1px solid rgb(238, 236, 236);
   padding: 1.5rem;
+  background: #fff;
+}
+
+.border:focus {
+  outline: 2px solid #d9b882;
+  outline-offset: 1px;
 }
 
 .btn_login {
   width: 100%;
   background-color: #323231;
   border: none;
-  transition: 1s ease;
-  font-size: 1.2rem;
+  transition: 0.25s ease;
+  font-size: 1.4rem;
   font-weight: 600;
   color: #fff;
   cursor: pointer;
@@ -152,6 +179,7 @@ h3 {
   align-items: center;
   justify-content: center;
   position: relative;
+  font-family: inherit;
 }
 
 .btn_login:hover {
@@ -206,7 +234,7 @@ h3 {
 }
 
 .link {
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 700;
   text-decoration: none;
   color: #160c02e0;
@@ -217,7 +245,7 @@ h3 {
 }
 
 .link_forgot {
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.8rem;
 }
 
 .role_toggle {
@@ -240,6 +268,7 @@ h3 {
   color: #5c4a35;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
+  font-family: inherit;
 }
 
 .role_btn.active {
@@ -286,15 +315,81 @@ h3 {
 @media (max-width: 800px) {
   .flex {
     flex-direction: column;
+    min-height: 100svh;
   }
+
   .width50 {
     width: 100%;
   }
+
   .img_container {
-    min-height: 28vh;
+    min-height: 0;
+    height: auto;
+    border-radius: 0;
   }
+
+  .logo {
+    padding: 1.6rem 1.8rem 0.4rem;
+  }
+
+  .logo_txt {
+    font-size: 2.2rem;
+  }
+
+  .message {
+    padding: 1.2rem 1.8rem 2.2rem;
+  }
+
+  .message h1 {
+    font-size: clamp(2.8rem, 9vw, 3.6rem);
+    margin: 0 0 0.8rem;
+  }
+
+  .message p {
+    font-size: 1.35rem;
+    line-height: 1.45;
+    max-width: none;
+  }
+
+  .form_container {
+    border-radius: 0;
+    padding: 2rem 1.4rem 3.2rem;
+    align-items: flex-start;
+  }
+
   .form {
-    width: min(35rem, 92%);
-    margin: 2rem auto;
+    width: 100%;
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 2.6rem 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo_img {
+    width: 4.4rem;
+    height: 4.4rem;
+  }
+
+  .logo_txt {
+    font-size: 2rem;
+  }
+
+  .message {
+    padding: 0.8rem 1.6rem 1.8rem;
+  }
+
+  .message h1 {
+    font-size: clamp(2.4rem, 10vw, 3.2rem);
+  }
+
+  .form {
+    padding: 2.2rem 1.6rem;
+    border-radius: 1.4rem;
+  }
+
+  .role_btn {
+    font-size: 1.05rem;
+    padding: 0.7rem 0.3rem;
   }
 }
