@@ -186,8 +186,10 @@ export async function api(path, opts = {}) {
 
 export function mapProduct(p) {
   if (!p) return null;
+  const house = !!(p.isHouse || p.is_house);
   const retailer = p.retailer || {};
-  const rName = retailer.businessName || "Sweet Feet";
+  const rName = house ? "Sweet Feet" : retailer.businessName || "Sweet Feet";
+  const retailerId = house ? "" : retailer._id || retailer.id || p.retailer || "";
   return {
     id: p._id || p.id,
     name: p.name,
@@ -199,16 +201,19 @@ export function mapProduct(p) {
     rating: Number(p.rating) || 0,
     ratingCount: Number(p.ratingCount) || 0,
     color: p.color || "",
-    badge: p.badge || "",
-    badgeLabel: p.badgeLabel || p.badge || "",
+    badge: p.badge || (house ? "top" : ""),
+    badgeLabel: p.badgeLabel || p.badge || (house ? "SWEET FEET" : ""),
     img: p.img,
     sizes: Array.isArray(p.sizes) ? p.sizes : [],
     is_active: p.isActive !== false,
     isActive: p.isActive !== false,
-    retailer_id: retailer._id || retailer.id || p.retailer || "",
+    isHouse: house,
+    retailer_id: retailerId,
     retailerName: rName,
-    retailerLocation: retailer.location || "",
-    retailerLogo: avatarUrl(rName, retailer.logo),
+    retailerLocation: house ? "" : retailer.location || "",
+    retailerLogo: house
+      ? "/assets/images (7).jpeg"
+      : avatarUrl(rName, retailer.logo),
   };
 }
 

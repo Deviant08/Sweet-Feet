@@ -101,6 +101,13 @@ svg { max-width: 100%; }
   color: var(--clr-accent, #c8440c);
   text-decoration: none;
 }
+.card_official {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--clr-muted, #7a6555);
+}
 .cart_item img {
   width: 68px !important;
   height: 68px !important;

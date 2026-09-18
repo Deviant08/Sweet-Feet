@@ -15,6 +15,7 @@ export function formatPrice(p) {
 export function initShop() {
   // Retailer portal has its own #productGrid (My Products). Never mix in other sellers.
   if (/\/retailer\//.test(window.location.pathname)) return;
+  if (/\/admin\//.test(window.location.pathname)) return;
 
   const productGrid = document.getElementById("productGrid");
   if (!productGrid) return;
@@ -126,16 +127,39 @@ export function initShop() {
   }
 
   function renderCard(p) {
-    const profileUrl = `/nav/retailer.html?id=${encodeURIComponent(p.retailer_id)}`;
-    const chatUrl = chatAppUrl({
-      retailer_id: p.retailer_id,
-      retailer_name: p.retailerName || "",
-      product_id: p.id,
-      product_name: p.name,
-    });
+    const house = !!p.isHouse;
+    const profileUrl = house
+      ? "/nav/products.html"
+      : `/nav/retailer.html?id=${encodeURIComponent(p.retailer_id)}`;
+    const chatUrl = house
+      ? ""
+      : chatAppUrl({
+          retailer_id: p.retailer_id,
+          retailer_name: p.retailerName || "",
+          product_id: p.id,
+          product_name: p.name,
+        });
+
+    const sellerBlock = house
+      ? `<div class="card_seller" title="Official Sweet Feet product">
+            <img class="card_seller_avatar" src="${p.retailerLogo}" alt="" />
+            <span class="card_seller_text">
+              <span class="card_seller_by">Sold by</span>
+              <span class="card_seller_name">Sweet Feet</span>
+            </span>
+          </div>
+          <span class="card_official">Official listing</span>`
+      : `<a class="card_seller" href="${profileUrl}" title="View ${p.retailerName || "seller"}">
+            <img class="card_seller_avatar" src="${p.retailerLogo}" alt="" />
+            <span class="card_seller_text">
+              <span class="card_seller_by">Sold by</span>
+              <span class="card_seller_name">${p.retailerName || "Sweet Feet"}</span>
+            </span>
+          </a>
+          <a class="btn_chat_link" href="${chatUrl}">💬 Chat with seller</a>`;
 
     return `
-      <article class="product_card" data-id="${p.id}">
+      <article class="product_card${house ? " product_card--house" : ""}" data-id="${p.id}">
         ${p.badge ? `<span class="card_badge badge_${p.badge}">${p.badgeLabel}</span>` : ""}
         <button class="card_wishlist" title="Save for later" type="button">♡</button>
         <img class="card_img" src="${p.img}" alt="${p.name}" loading="lazy" />
@@ -156,14 +180,7 @@ export function initShop() {
             </div>
             <button class="btn_order" type="button" data-id="${p.id}">Add to cart</button>
           </div>
-          <a class="card_seller" href="${profileUrl}" title="View ${p.retailerName || "seller"}">
-            <img class="card_seller_avatar" src="${p.retailerLogo}" alt="" />
-            <span class="card_seller_text">
-              <span class="card_seller_by">Sold by</span>
-              <span class="card_seller_name">${p.retailerName || "Sweet Feet"}</span>
-            </span>
-          </a>
-          <a class="btn_chat_link" href="${chatUrl}">💬 Chat with seller</a>
+          ${sellerBlock}
         </div>
       </article>`;
   }

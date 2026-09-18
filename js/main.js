@@ -140,6 +140,7 @@ import { getUser, getToken, avatarUrl, chatAppUrl, confirmAndLogout } from "./ap
     .card_seller_by{font-size:.7rem;color:#8a7b6c;text-transform:uppercase;letter-spacing:.04em;}
     .card_seller_name{font-size:.9rem;font-weight:700;}
     .btn_chat_link{display:inline-block;margin-top:.5rem;font-size:.85rem;font-weight:600;color:#c8440c;text-decoration:none;}
+    .card_official{display:block;margin-top:.45rem;font-size:.8rem;font-weight:600;color:#7a6555;}
     .nav_user_chip{display:inline-flex;align-items:center;gap:.5rem;}
     .nav_user_avatar{width:28px;height:28px;border-radius:50%;object-fit:cover;}
     .nav_logout_btn{cursor:pointer;border:1px solid currentColor;background:transparent;color:inherit;padding:.35rem .75rem;border-radius:8px;font:inherit;}

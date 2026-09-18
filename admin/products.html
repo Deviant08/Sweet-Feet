@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/jpeg" href="/assets/20251102_172020.png" sizes="32x32"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/CSS/retailer.css" />
+  <link rel="stylesheet" href="/CSS/skeletons.css" />
+  <title>Official Catalogue — Sweet Feet Admin</title>
+</head>
+<body>
+<div class="dashboard_wrap">
+  <nav class="sidebar_nav">
+    <a class="sidebar_logo" href="/index.html">
+      <img src="/assets/images (7).jpeg" alt="Sweet Feet" />
+      <span>Sweet Feet</span>
+    </a>
+    <span class="sidebar_label">Admin</span>
+    <a class="sidebar_link" href="/admin/dashboard.html"><span class="icon">📊</span> Overview</a>
+    <a class="sidebar_link" href="/admin/retailers.html"><span class="icon">🏪</span> Retailers</a>
+    <a class="sidebar_link active" href="/admin/products.html"><span class="icon">👟</span> Official Shop</a>
+    <a class="sidebar_link" href="/admin/chat.html"><span class="icon">💬</span> Support Chat</a>
+    <div class="sidebar_divider"></div>
+    <a class="sidebar_link" href="/nav/products.html" target="_blank"><span class="icon">🌐</span> View Shop</a>
+    <a class="sidebar_link" id="logoutBtn" href="/nav/login.html?role=admin"><span class="icon">🚪</span> Log Out</a>
+  </nav>
+
+  <div class="main_content">
+    <div class="page_header">
+      <div>
+        <h1>Official Catalogue</h1>
+        <p>Sweet Feet’s own products — not tied to any retailer. These appear on the shop as sold by Sweet Feet.</p>
+      </div>
+      <div class="header_actions">
+        <button class="btn_sm dark" id="addProductBtn" type="button">+ Add Product</button>
+      </div>
+    </div>
+
+    <div class="page_body">
+      <div class="product_grid" id="productGrid" aria-busy="true">
+        <article class="product_card product_card--skeleton" aria-hidden="true"><div class="sk sk-img"></div><div class="card_body"><div class="sk sk-line sk-w-40"></div><div class="sk sk-line sk-w-80"></div></div></article>
+        <article class="product_card product_card--skeleton" aria-hidden="true"><div class="sk sk-img"></div><div class="card_body"><div class="sk sk-line sk-w-40"></div><div class="sk sk-line sk-w-80"></div></div></article>
+        <article class="product_card product_card--skeleton" aria-hidden="true"><div class="sk sk-img"></div><div class="card_body"><div class="sk sk-line sk-w-40"></div><div class="sk sk-line sk-w-80"></div></div></article>
+      </div>
+
+      <div class="table_wrap" style="margin-top:3rem">
+        <div class="table_header"><h3>Orders for Sweet Feet products</h3></div>
+        <table>
+          <thead>
+            <tr>
+              <th>Order Ref</th>
+              <th>Customer</th>
+              <th>Product</th>
+              <th>Qty · Size</th>
+              <th>Subtotal</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="ordersBody">
+            <tr class="sk-row"><td colspan="8"><div class="sk sk-w-80"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal_overlay" id="productModal">
+  <div class="modal">
+    <h3 id="modalTitle">Add Official Product</h3>
+    <input type="hidden" id="editProductId" value="" />
+    <div class="form_group">
+      <label>Product Name</label>
+      <input type="text" id="pName" placeholder="e.g. Trainers" required />
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div class="form_group">
+        <label>Category</label>
+        <select id="pCategory">
+          <option value="trainers">Trainers</option>
+          <option value="casual">Casual</option>
+          <option value="corporate">Corporate</option>
+          <option value="loafers">Loafers</option>
+          <option value="runners">Runners</option>
+          <option value="sandals">Sandals</option>
+          <option value="boots">Boots</option>
+        </select>
+      </div>
+      <div class="form_group">
+        <label>Gender</label>
+        <select id="pGender">
+          <option value="unisex">Unisex</option>
+          <option value="men">Men</option>
+          <option value="women">Women</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div class="form_group">
+        <label>Price (₦)</label>
+        <input type="number" id="pPrice" placeholder="e.g. 45000" min="0" step="1" required />
+      </div>
+      <div class="form_group">
+        <label>Old Price (₦) — optional</label>
+        <input type="number" id="pOldPrice" placeholder="e.g. 52000" min="0" step="1" />
+      </div>
+    </div>
+    <div class="form_group">
+      <label>Colour</label>
+      <select id="pColor">
+        <option value="black">Black</option>
+        <option value="white">White</option>
+        <option value="brown">Brown</option>
+        <option value="multi">Multi</option>
+      </select>
+    </div>
+    <div class="form_group">
+      <label>Available Sizes (comma separated)</label>
+      <input type="text" id="pSizes" placeholder="e.g. 39,40,41,42,43" required />
+    </div>
+    <div class="form_group">
+      <label>Product Image URL</label>
+      <input type="url" id="pImg" placeholder="https://example.com/shoe.jpg" required />
+    </div>
+    <div class="msg_error" id="modalError"></div>
+    <div class="modal_footer">
+      <button class="btn_sm outline" id="modalCancelBtn" type="button">Cancel</button>
+      <button class="btn_sm dark" id="modalSaveBtn" type="button">Save Product</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal_overlay" id="statusModal">
+  <div class="modal">
+    <h3>Update Order Status</h3>
+    <p style="font-size:1.2rem;color:var(--clr-muted);margin-bottom:2rem" id="statusModalMeta"></p>
+    <div class="form_group">
+      <label>New Status</label>
+      <select id="newStatusSelect">
+        <option value="confirmed">Confirmed</option>
+        <option value="packed">Packed</option>
+        <option value="dispatched">Dispatched</option>
+        <option value="delivered">Delivered</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+    </div>
+    <div class="form_group">
+      <label>Note to Customer (optional)</label>
+      <textarea id="statusNote" placeholder="e.g. Your package is with the courier…"></textarea>
+    </div>
+    <div class="msg_error" id="statusError"></div>
+    <div class="modal_footer">
+      <button class="btn_sm outline" id="statusCancelBtn" type="button">Cancel</button>
+      <button class="btn_sm dark" id="statusSaveBtn" type="button">Update Status</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="/js/admin-products.js"></script>
+</body>
+</html>
