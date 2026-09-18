@@ -112,13 +112,19 @@
         btn.classList.add("is-loading");
 
         try {
+          const nextRaw = new URLSearchParams(window.location.search).get("next") || "";
+          const next =
+            nextRaw.startsWith("/") && !nextRaw.startsWith("//") && !nextRaw.includes("://")
+              ? nextRaw
+              : "";
+
           if (role === "retailer") {
             const data = await api("/auth/retailer/login", {
               method: "POST",
               body: { email, password },
             });
             setSession(data.token, data.data, "retailer");
-            window.location.href = "/retailer/dashboard.html";
+            window.location.href = next || "/retailer/dashboard.html";
             return;
           }
 
@@ -132,11 +138,10 @@
             if (data.data?.role !== "admin") {
               throw new Error("This account is not an admin. Choose Customer, or use an admin email.");
             }
-            window.location.href = "/admin/dashboard.html";
+            window.location.href = next || "/admin/dashboard.html";
             return;
           }
 
-          const next = new URLSearchParams(window.location.search).get("next");
           window.location.href = next || "/index.html";
         } catch (err) {
           errorEl.textContent = err.message || "Login failed";

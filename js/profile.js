@@ -13,12 +13,17 @@ function fmtDate(d) {
   });
 }
 
+const AMP = String.fromCharCode(38) + "amp;";
+const LT = String.fromCharCode(38) + "lt;";
+const GT = String.fromCharCode(38) + "gt;";
+const QUOT = String.fromCharCode(38) + "quot;";
+
 function esc(s) {
   return String(s ?? "")
-    .replace(/&/g, "&")
-    .replace(/</g, "<")
-    .replace(/>/g, ">")
-    .replace(/"/g, """);
+    .replace(/&/g, AMP)
+    .replace(/</g, LT)
+    .replace(/>/g, GT)
+    .replace(/"/g, QUOT);
 }
 
 function photoSrc(retailer) {
@@ -27,6 +32,12 @@ function photoSrc(retailer) {
 
 function statusLabel(s) {
   return s ? s.charAt(0).toUpperCase() + s.slice(1) : "—";
+}
+
+function loginUrl(isAdmin) {
+  const role = isAdmin ? "admin" : "retailer";
+  const next = encodeURIComponent(window.location.pathname + window.location.search);
+  return `/nav/login.html?role=${role}&next=${next}`;
 }
 
 async function fileToSquareJpeg(file) {
@@ -73,14 +84,14 @@ export function initProfile({ mode }) {
   });
 
   if (!getToken()) {
-    window.location.replace(isAdmin ? "/nav/login.html?role=admin" : "/nav/login.html?role=retailer");
+    window.location.replace(loginUrl(isAdmin));
     return;
   }
 
   let retailer = null;
   let meta = { canEdit: false };
   let pendingLogo = null;
-  let editing = false;
+  let logoDirty = false;
 
   function cooldownCopy() {
     if (meta.canEdit) {
@@ -90,9 +101,9 @@ export function initProfile({ mode }) {
   }
 
   function renderView() {
-    editing = false;
     const r = retailer || {};
-    const shopHref = `/nav/retailer.html?id=${encodeURIComponent(r._id || r.id || "")}`;
+    const id = r._id || r.id || "";
+    const shopHref = `/nav/retailer.html?id=${encodeURIComponent(id)}`;
     const canEdit = !isAdmin && meta.canEdit;
     root.innerHTML = `
       <div class="profile_card">
@@ -113,19 +124,15 @@ export function initProfile({ mode }) {
           <div><dt>Joined</dt><dd>${esc(fmtDate(r.createdAt))}</dd></div>
           <div><dt>Last profile edit</dt><dd>${r.lastProfileEditAt ? esc(fmtDate(r.lastProfileEditAt)) : "Never"}</dd></div>
         </dl>
-        ${
-          isAdmin
-            ? ""
-            : `<p class="profile_note">${cooldownCopy()}</p>`
-        }
+        ${isAdmin ? "" : `<p class="profile_note">${cooldownCopy()}</p>`}
         <div class="profile_actions">
           ${
             isAdmin
               ? `<a class="btn_sm outline" href="/admin/retailers.html">Back to retailers</a>
-                 <a class="btn_sm outline" href="/admin/chat.html?retailer=${esc(r._id || r.id || "")}">Chat</a>
-                 <a class="btn_sm dark" href="${shopHref}" target="_blank">View shop</a>`
+                 <a class="btn_sm outline" href="/admin/chat.html?retailer=${esc(id)}">Chat</a>
+                 <a class="btn_sm dark" href="${shopHref}" target="_blank" rel="noopener">View shop</a>`
               : `${canEdit ? `<button type="button" class="btn_sm dark" id="profileEditBtn">Edit profile</button>` : `<button type="button" class="btn_sm outline" disabled>Edit locked until ${esc(fmtDate(meta.nextEditAt))}</button>`}
-                 <a class="btn_sm outline" href="${shopHref}" target="_blank">View shop</a>`
+                 <a class="btn_sm outline" href="${shopHref}" target="_blank" rel="noopener">View shop</a>`
           }
         </div>
       </div>`;
@@ -133,8 +140,8 @@ export function initProfile({ mode }) {
   }
 
   function renderEdit() {
-    editing = true;
-    pendingLogo = retailer?.logo || null;
+    pendingLogo = null;
+    logoDirty = false;
     const r = retailer || {};
     root.innerHTML = `
       <form class="profile_card" id="profileForm">
@@ -195,6 +202,7 @@ export function initProfile({ mode }) {
       try {
         const dataUrl = await fileToSquareJpeg(file);
         pendingLogo = dataUrl;
+        logoDirty = true;
         preview.src = dataUrl;
       } catch (err) {
         photoError.textContent = err.message || "Could not use that photo.";
@@ -209,6 +217,7 @@ export function initProfile({ mode }) {
         input.click();
       }
     });
+    input.addEventListener("click", (e) => e.stopPropagation());
     input.addEventListener("change", () => {
       const file = input.files && input.files[0];
       if (file) applyFile(file);
@@ -253,7 +262,7 @@ export function initProfile({ mode }) {
       location: document.getElementById("pf_location").value.trim(),
       bio: document.getElementById("pf_bio").value.trim(),
     };
-    if (pendingLogo) payload.logo = pendingLogo;
+    if (logoDirty && pendingLogo) payload.logo = pendingLogo;
     try {
       const json = await api("/retailers/me", { method: "PATCH", body: payload, timeoutMs: 45000 });
       retailer = json.data;
@@ -297,7 +306,7 @@ export function initProfile({ mode }) {
         }
         const me = await api("/auth/me");
         if (me.data?.role !== "admin") {
-          window.location.replace("/nav/login.html?role=admin");
+          window.location.replace(loginUrl(true));
           return;
         }
         const json = await api("/retailers/" + encodeURIComponent(id));
@@ -313,6 +322,10 @@ export function initProfile({ mode }) {
       if (title) title.textContent = isAdmin ? retailer.businessName || "Retailer" : "Your profile";
       renderView();
     } catch (err) {
+      if (err.status === 401 || err.status === 403) {
+        window.location.replace(loginUrl(isAdmin));
+        return;
+      }
       root.innerHTML = `<p class="profile_note">${esc(err.message || "Could not load profile.")}</p>`;
     }
   }
