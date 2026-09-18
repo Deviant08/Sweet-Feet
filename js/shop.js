@@ -240,6 +240,16 @@ export function initShop() {
         addToCart(btn.dataset.id, size);
       });
     });
+
+    productGrid.querySelectorAll(".btn_chat_link").forEach((a) => {
+      a.addEventListener("click", (e) => {
+        if (!getToken()) {
+          e.preventDefault();
+          const href = a.getAttribute("href") || "/nav/chat.html";
+          window.location.href = "/nav/login.html?next=" + encodeURIComponent(href);
+        }
+      });
+    });
   }
 
   function addToCart(id, size) {
@@ -400,7 +410,7 @@ export function initShop() {
       <div class="sf_checkout_backdrop" data-close></div>
       <div class="sf_checkout_card">
         <h3 id="sfCheckoutTitle">Receipt email</h3>
-        <p>Paystack will send the payment receipt to this address.</p>
+        <p>You can pay as a guest. Paystack will send the receipt to this address.</p>
         <label for="sfCheckoutEmail">Email address</label>
         <input id="sfCheckoutEmail" type="email" autocomplete="email" placeholder="you@example.com" />
         <div class="sf_checkout_err" id="sfCheckoutErr"></div>
@@ -458,12 +468,6 @@ export function initShop() {
   async function initiatePayment() {
     if (state.cart.length === 0) {
       showToast("Your cart is empty.");
-      return;
-    }
-    if (!getToken()) {
-      showToast("Please log in to checkout.");
-      window.location.href =
-        "/nav/login.html?next=" + encodeURIComponent(window.location.pathname + window.location.search);
       return;
     }
 
