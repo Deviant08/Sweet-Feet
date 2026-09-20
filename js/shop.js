@@ -20,6 +20,14 @@ export function initShop() {
   const productGrid = document.getElementById("productGrid");
   if (!productGrid) return;
 
+  const shopHeader = document.querySelector(".shop_page header");
+  const syncShopNavHeight = () => {
+    if (!shopHeader) return;
+    document.documentElement.style.setProperty("--shop-nav-h", `${shopHeader.offsetHeight}px`);
+  };
+  syncShopNavHeight();
+  window.addEventListener("resize", syncShopNavHeight);
+
   let products = [];
   const params = new URLSearchParams(window.location.search);
   const retailerFilter = params.get("id") || params.get("retailer") || params.get("retailer_id");

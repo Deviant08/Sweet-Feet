@@ -100,7 +100,7 @@ body::-webkit-scrollbar {
   background: var(--clr-surface);
   border-bottom: 1px solid var(--clr-border);
   position: sticky;
-  top: 5;
+  top: 0;
   z-index: 100;
 }
 
@@ -209,10 +209,11 @@ body::-webkit-scrollbar {
   border-right: 1px solid var(--clr-border);
   padding: 2rem 1.5rem;
   position: sticky;
-  top: 61px;
+  top: var(--shop-nav-h, 4.75rem);
   height: auto;
-  max-height: calc(100vh - 61px);
+  max-height: calc(100svh - var(--shop-nav-h, 4.75rem));
   overflow-y: auto;
+  overscroll-behavior: contain;
   align-self: start;
 }
 
