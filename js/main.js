@@ -141,7 +141,7 @@ import { getUser, getToken, avatarUrl, chatAppUrl, confirmAndLogout } from "./ap
     .card_seller_name{font-size:.9rem;font-weight:700;}
     .btn_chat_link{display:inline-block;margin-top:.5rem;font-size:.85rem;font-weight:600;color:#c8440c;text-decoration:none;}
     .card_official{display:block;margin-top:.45rem;font-size:.8rem;font-weight:600;color:#7a6555;}
-    .nav_user_chip{display:inline-flex;align-items:center;gap:.5rem;}
+    .nav_user_chip{display:inline-flex;align-items:center;gap:.5rem;color:inherit;text-decoration:none;}
     .nav_user_avatar{width:28px;height:28px;border-radius:50%;object-fit:cover;}
     .nav_logout_btn{cursor:pointer;border:1px solid currentColor;background:transparent;color:inherit;padding:.35rem .75rem;border-radius:8px;font:inherit;}
 
@@ -230,13 +230,14 @@ function buildAuthLinks() {
   return {
     loggedIn: true,
     html: `
-      <div class="nav_user_chip">
+      <a class="nav_user_chip" href="/nav/profile.html">
         <img class="nav_user_avatar" src="${photo}" alt="" />
         <span class="nav_user_name">${name}</span>
-      </div>
+      </a>
       <a href="/nav/products.html">Shop</a>
       <a href="/nav/track.html">Track Order</a>
       <a href="${chatAppUrl()}">Messages</a>
+      <a href="/nav/profile.html">Profile</a>
       <a href="/nav/feedback.html">Feedback</a>
       <button type="button" class="nav_logout_btn" data-logout>Log out</button>
     `,
@@ -279,9 +280,10 @@ function applyAuthToPageNav() {
       wrap.style.cssText = "display:inline-flex;align-items:center;gap:.75rem;margin-left:.5rem;";
       wrap.innerHTML = `
         <span class="nav_user_chip">
-          <img class="nav_user_avatar" src="${avatarUrl(name)}" alt="" />
+          <img class="nav_user_avatar" src="${avatarUrl(name, user?.photo || user?.avatar)}" alt="" />
           <strong class="nav_user_name">${name}</strong>
         </span>
+        <a href="/nav/profile.html" class="nav_logout_btn" style="text-decoration:none">Profile</a>
         <button type="button" class="nav_logout_btn" data-logout>Log out</button>
       `;
       nav.appendChild(wrap);

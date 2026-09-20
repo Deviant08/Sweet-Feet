@@ -102,12 +102,39 @@ export function initShop() {
     const title = document.getElementById("shopHeroTitle");
     const sub = document.getElementById("shopHeroSub");
     const count = document.querySelector(".hero_count");
-    if (title) title.innerHTML = `${name}'s <span>shop.</span>`;
+    const heroCopy = title?.parentElement;
+    if (heroCopy && !document.getElementById("sellerIdent")) {
+      const ident = document.createElement("div");
+      ident.id = "sellerIdent";
+      ident.className = "seller_ident";
+      heroCopy.insertBefore(ident, heroCopy.firstChild);
+    }
+    const ident = document.getElementById("sellerIdent");
+    const photo = seller?.logo || products[0]?.retailerLogo || "";
+    if (ident) {
+      ident.innerHTML = photo
+        ? `<img class="seller_ident_avatar" src="${photo.replace(/"/g, "")}" alt="" />`
+        : "";
+    }
+    if (title) title.innerHTML = `${name.replace(/</g, "")}'s <span>shop.</span>`;
     if (sub) {
       const loc = seller?.location || "";
       const n = products.length;
-      const countLabel = `${n} product${n === 1 ? "" : "s"} from this seller only.`;
-      sub.textContent = loc ? `${loc} · ${countLabel}` : countLabel;
+      const countLabel = `${n} product${n === 1 ? "" : "s"} from this seller.`;
+      const bio = seller?.bio ? String(seller.bio).slice(0, 180) : "";
+      sub.textContent = [loc, countLabel].filter(Boolean).join(" · ");
+      let bioEl = document.getElementById("sellerBio");
+      if (bio) {
+        if (!bioEl && sub.parentElement) {
+          bioEl = document.createElement("p");
+          bioEl.id = "sellerBio";
+          bioEl.className = "seller_bio";
+          sub.insertAdjacentElement("afterend", bioEl);
+        }
+        if (bioEl) bioEl.textContent = bio;
+      } else if (bioEl) {
+        bioEl.remove();
+      }
     }
     if (count) count.textContent = String(products.length);
     document.title = `${name} — Sweet Feet`;

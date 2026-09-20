@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/jpeg" href="/assets/20251102_172020.png" sizes="32x32"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/CSS/products.css" />
+  <link rel="stylesheet" href="/CSS/profile.css" />
+  <title>Your profile — Sweet Feet</title>
+</head>
+<body class="cust_profile_page">
+  <header>
+    <div class="nav_bar">
+      <a class="logo" href="/index.html">
+        <img class="logo_img" src="/assets/Sweet-feet-logo.png" alt="Sweet Feet logo" />
+        <h1 class="logo_txt">Sweet Feet</h1>
+      </a>
+      <nav class="nav auth_nav_slot"></nav>
+    </div>
+  </header>
+
+  <main class="cust_profile_wrap">
+    <div class="page_lead">
+      <h1 id="profilePageTitle">Your profile</h1>
+      <p>Your name and photo are used in messages and on your orders.</p>
+    </div>
+    <div id="profileRoot">
+      <div class="sf_profile">
+        <div class="sf_profile_head">
+          <div class="sk" style="width:112px;height:112px;border-radius:50%"></div>
+          <div style="flex:1">
+            <div class="sk" style="height:18px;width:40%;margin-bottom:10px;border-radius:8px"></div>
+            <div class="sk" style="height:12px;width:55%;border-radius:8px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="/js/main.js"></script>
+  <script type="module">
+    import { initProfile } from "/js/profile.js";
+    initProfile({ mode: "customer" });
+  </script>
+</body>
+</html>
