@@ -17,12 +17,12 @@ html {
   font-size: 62.5%;
   box-sizing: border-box;
   font-family: "Work Sana", sans-serif;
-  overflow-x: clip;
+  overflow-x: hidden;
 }
 
 body {
   max-width: 100%;
-  overflow-x: clip;
+  overflow-x: hidden;
   position: relative;
   background-color: #fffbf8;
   text-align: center;
@@ -52,6 +52,8 @@ header {
   border-bottom-left-radius: 1.7rem;
   padding: 4rem;
   padding-bottom: 0;
+  -webkit-animation: slide-in-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation: slide-in-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 .logo,
 .logo:link,
@@ -630,21 +632,21 @@ footer {
 }
 
 section {
-  transition: none;
+  transition: transform 1.5s, opacity 1s;
 }
 .section--hidden {
-  opacity: 1;
-  transform: none;
+  opacity: 0;
+  transform: translateY(10rem);
 }
 
 .gallary {
-  transform: none;
-  transition: none;
+  transform: translateX(-20rem);
+  transition: 3s;
 }
 
 .inverse-gallary {
-  transform: none;
-  transition: none;
+  transform: translateX(20rem);
+  transition: 3s;
 }
 
 .form__container {
