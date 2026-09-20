@@ -20,6 +20,34 @@ export function initShop() {
   const productGrid = document.getElementById("productGrid");
   if (!productGrid) return;
 
+  function bindCardMouseBorder() {
+    if (productGrid.dataset.mouseBorder === "1") return;
+    productGrid.dataset.mouseBorder = "1";
+    const setPos = (card, clientX, clientY) => {
+      const rect = card.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      card.style.setProperty("--mouse-x", `${((clientX - rect.left) / rect.width) * 100}%`);
+      card.style.setProperty("--mouse-y", `${((clientY - rect.top) / rect.height) * 100}%`);
+    };
+    productGrid.addEventListener("mousemove", (e) => {
+      const card = e.target.closest(".product_card");
+      if (!card) return;
+      setPos(card, e.clientX, e.clientY);
+    });
+    productGrid.addEventListener(
+      "touchstart",
+      (e) => {
+        const t = e.touches[0];
+        if (!t) return;
+        const card = e.target.closest(".product_card");
+        if (!card) return;
+        setPos(card, t.clientX, t.clientY);
+      },
+      { passive: true }
+    );
+  }
+  bindCardMouseBorder();
+
   const shopHeader = document.querySelector(".shop_page header");
   const syncShopNavHeight = () => {
     if (!shopHeader) return;

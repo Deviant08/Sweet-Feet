@@ -429,10 +429,12 @@ body::-webkit-scrollbar {
 }
 
 .product_card {
+  --mouse-x: 50%;
+  --mouse-y: 50%;
   background: var(--clr-surface);
   border-radius: var(--radius);
   overflow: hidden;
-  border: 1px solid var(--clr-border);
+  border: 2px ridge #d5b074;
   box-shadow: var(--shadow);
   transition:
     box-shadow 0.25s,
@@ -444,6 +446,47 @@ body::-webkit-scrollbar {
 .product_card:hover {
   box-shadow: var(--shadow-hover);
   transform: translateY(-3px);
+}
+.product_card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 3px;
+  background: radial-gradient(
+    280px circle at var(--mouse-x) var(--mouse-y),
+    #f7dfb8 0%,
+    #efbc8a 28%,
+    #c8440c 55%,
+    transparent 72%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+  transition: opacity 0.4s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .product_card:hover::before {
+    opacity: 1;
+    transition: none;
+  }
+}
+@media (hover: none), (pointer: coarse) {
+  .product_card:hover::before {
+    opacity: 0;
+  }
+  .product_card:active::before {
+    opacity: 1;
+    transition: none;
+  }
 }
 
 .card_badge {
