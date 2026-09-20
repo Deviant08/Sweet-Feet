@@ -176,14 +176,7 @@ export function initShop() {
         });
 
     const sellerBlock = house
-      ? `<div class="card_seller" title="Official Sweet Feet product">
-            <img class="card_seller_avatar" src="${p.retailerLogo}" alt="" />
-            <span class="card_seller_text">
-              <span class="card_seller_by">Sold by</span>
-              <span class="card_seller_name">Sweet Feet</span>
-            </span>
-          </div>
-          <span class="card_official">Official listing</span>`
+      ? `<span class="card_official">Official listing</span>`
       : `<a class="card_seller" href="${profileUrl}" title="View ${p.retailerName || "seller"}">
             <img class="card_seller_avatar" src="${p.retailerLogo}" alt="" />
             <span class="card_seller_text">
