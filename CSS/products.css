@@ -586,9 +586,10 @@ body::-webkit-scrollbar {
 
 .card_footer {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+  align-items: flex-end;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: 0.65rem;
   margin-top: auto;
   padding-top: 0.75rem;
   border-top: 1px solid var(--clr-border);
@@ -599,12 +600,14 @@ body::-webkit-scrollbar {
   flex-direction: column;
   align-items: flex-start;
   gap: 0.1rem;
-  min-width: 0;
+  flex: 1 1 auto;
+  min-width: min-content;
   font-family: var(--ff-display);
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 800;
   color: var(--clr-dark);
-  line-height: 1.15;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 .card_price .old_price {
   font-size: 0.78rem;
@@ -1085,6 +1088,14 @@ footer {
   }
   .product_grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .card_footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .btn_order {
+    width: 100%;
+    text-align: center;
   }
   .toolbar {
     flex-direction: column;
