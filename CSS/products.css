@@ -75,8 +75,7 @@ a:visited {
 }
 
 html {
-  scroll-behavior: smooth;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
@@ -84,7 +83,7 @@ body {
   background: var(--clr-bg);
   color: var(--clr-dark);
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body::-webkit-scrollbar {

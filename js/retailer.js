@@ -8,6 +8,29 @@
 import { api, mapProduct, setSession, getToken, confirmAndLogout, sfAlert } from "./api.js";
 
 export function initRetailer() {
+  const sidebar = document.querySelector(".sidebar_nav");
+  const main = document.querySelector(".main_content");
+  if (sidebar && main && !main.querySelector(".mobile_topbar")) {
+    const bar = document.createElement("div");
+    bar.className = "mobile_topbar";
+    const links = [...sidebar.querySelectorAll(".sidebar_link")]
+      .map((a) => {
+        const href = a.getAttribute("href") || "#";
+        const active = a.classList.contains("active") ? " active" : "";
+        const label = (a.textContent || "").replace(/\s+/g, " ").trim();
+        return `<a class="${active.trim()}" href="${href}">${label}</a>`;
+      })
+      .join("");
+    bar.innerHTML = `
+      <a class="sidebar_logo" href="/index.html">
+        <img src="/assets/images (7).jpeg" alt="Sweet Feet" />
+        <span>Sweet Feet</span>
+      </a>
+      <nav class="mobile_nav">${links}</nav>
+    `;
+    main.prepend(bar);
+  }
+
   function fmtDate(d) {
     return new Date(d).toLocaleDateString("en-GB", {
       day: "2-digit",

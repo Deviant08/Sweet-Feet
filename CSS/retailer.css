@@ -31,14 +31,14 @@ a:visited {
   --sidebar: 240px;
 }
 
-html { font-size: 62.5%; overflow-x: hidden; }
+html { font-size: 62.5%; overflow-x: clip; }
 body {
   font-family: var(--ff-ui);
   background: var(--clr-bg);
   color: var(--clr-dark);
   font-size: 1.3rem;
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body::-webkit-scrollbar {
@@ -191,19 +191,24 @@ img { max-width: 100%; }
 
 /* ── Dashboard shell ──────────────────────────────────── */
 .dashboard_wrap {
-  display: grid;
-  grid-template-columns: var(--sidebar) 1fr;
+  display: block;
   min-height: 100vh;
 }
 .sidebar_nav {
   background: var(--clr-dark);
   display: flex;
   flex-direction: column;
-  padding: 2.5rem 1.5rem;
-  position: sticky;
+  padding: 2.5rem 1.5rem 2rem;
+  position: fixed;
   top: 0;
+  left: 0;
+  width: var(--sidebar);
   height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   gap: 0.4rem;
+  z-index: 40;
 }
 .sidebar_logo {
   display: flex;
@@ -256,7 +261,7 @@ img { max-width: 100%; }
 .sidebar_link .icon { font-size: 1.5rem; line-height: 1; }
 .sidebar_divider { height: 1px; background: rgba(255, 255, 255, 0.08); margin: 1.5rem 0; }
 
-.main_content { display: flex; flex-direction: column; min-height: 100vh; background: var(--clr-bg); }
+.main_content { display: flex; flex-direction: column; min-height: 100vh; margin-left: var(--sidebar); background: var(--clr-bg); }
 .main_content.flush { min-height: 100vh; }
 
 .page_header {
@@ -289,6 +294,9 @@ img { max-width: 100%; }
   justify-content: space-between;
   gap: 1.2rem;
   flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
 .mobile_topbar .sidebar_logo { margin: 0; padding: 0; }
 .mobile_nav { display: flex; gap: 1.4rem; flex-wrap: wrap; align-items: center; }
@@ -842,6 +850,7 @@ tbody tr:hover td { background: #fffdf9; }
 @media (max-width: 900px) {
   .dashboard_wrap { grid-template-columns: 1fr; }
   .sidebar_nav { display: none; }
+  .main_content { margin-left: 0; }
   .mobile_topbar { display: flex; }
   .page_body { padding: 1.6rem; }
   .page_header { padding: 1.4rem 1.6rem; }

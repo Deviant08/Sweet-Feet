@@ -187,22 +187,6 @@ import { getUser, getToken, avatarUrl, chatAppUrl, confirmAndLogout } from "./ap
   document.head.appendChild(s);
 })();
 
-const sections = document.querySelectorAll("section");
- if (sections.length > 0) {
-  sections.forEach((s) => s.classList.add("section--hidden"));
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.remove("section--hidden");
-        observer.unobserve(entry.target);
-      });
-    },
-    { root: null, threshold: 0.15 }
-  );
-  sections.forEach((s) => observer.observe(s));
-}
-
 function confirmLogout() {
   confirmAndLogout();
 }

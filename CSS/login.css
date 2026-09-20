@@ -13,7 +13,7 @@ a:visited {
 }
 
 html {
-  overflow-x: hidden;
+  overflow-x: clip;
   font-size: 62.5%;
   box-sizing: border-box;
   font-family: "Kumbh Sans", sans-serif;

@@ -9,7 +9,7 @@
 
 html, body {
   max-width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 img, video, iframe {
   max-width: 100%;
@@ -197,6 +197,8 @@ svg { max-width: 100%; }
   .lc { width: min(100%, 32rem); height: auto; min-height: 22rem; aspect-ratio: 1; }
   .form__container { width: min(500px, 92vw); height: auto; }
   .dashboard_wrap { grid-template-columns: 1fr; }
+  .sidebar_nav { display: none !important; }
+  .main_content { margin-left: 0; }
   .track_nav { padding: 0 1.6rem !important; height: auto !important; min-height: 6.4rem; flex-wrap: wrap; }
   .track_nav_links { flex-wrap: wrap; gap: 1rem !important; }
 }
