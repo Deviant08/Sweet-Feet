@@ -218,38 +218,58 @@ body::-webkit-scrollbar {
 /* ── Shop layout ──────────────────────────────── */
 .shop_wrapper {
   display: grid;
-  grid-template-columns: 240px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 0;
   align-content: start;
   min-height: 0;
 }
 
-/* ── Sidebar / Filters ────────────────────────── */
+/* ── Filters (top bar, all viewports) ─────────── */
 .sidebar {
   background: var(--clr-surface);
-  border-right: 1px solid var(--clr-border);
-  padding: 2rem 1.5rem;
+  border-right: none;
+  border-bottom: 1px solid var(--clr-border);
+  padding: 1.15rem 1.5rem 1.7rem;
   position: sticky;
   top: var(--shop-nav-h, 4.75rem);
+  z-index: 50;
   height: auto;
-  max-height: calc(100svh - var(--shop-nav-h, 4.75rem));
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  align-self: start;
+  max-height: none;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1.5rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #c8440c #f3ede8;
+  align-self: stretch;
+}
+.sidebar::-webkit-scrollbar {
+  height: 8px;
+  display: block;
+}
+.sidebar::-webkit-scrollbar-track {
+  background: #f3ede8;
+  border-radius: 999px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background: #c8440c;
+  border-radius: 999px;
 }
 
 .sidebar h3 {
-  font-family: var(--ff-display);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--clr-muted);
-  margin-bottom: 1rem;
+  display: none;
 }
 
 .filter_group {
-  margin-bottom: 2rem;
+  flex: 0 0 auto;
+  margin-bottom: 0;
+  min-width: 168px;
+}
+.filter_group:nth-of-type(2) {
+  min-width: 240px;
 }
 
 .filter_group h4 {
@@ -996,20 +1016,7 @@ footer {
     grid-template-columns: 1fr;
   }
   .sidebar {
-    position: static;
-    height: auto;
-    max-height: none;
-    border-right: none;
-    border-bottom: 1px solid var(--clr-border);
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 1.5rem;
-    overflow-x: auto;
-  }
-  .filter_group {
-    margin-bottom: 0;
-    flex-shrink: 0;
+    padding: 1.15rem 1.2rem 1.7rem;
   }
   .products_area {
     padding: 1.5rem 1rem;

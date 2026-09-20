@@ -164,8 +164,8 @@ svg { max-width: 100%; }
 
 /* ── 1024px ─────────────────────────────────────────── */
 @media (max-width: 1024px) {
-  .shop_wrapper { grid-template-columns: 220px minmax(0, 1fr); align-content: start; }
-  .sidebar { padding: 1.5rem 1.1rem; }
+  .shop_wrapper { grid-template-columns: minmax(0, 1fr); align-content: start; }
+  .sidebar { padding: 1.15rem 1.25rem 1.6rem; }
   .products_area { padding: 1.75rem 1.5rem; min-width: 0; }
   .shop_hero { padding: 2.5rem 1.75rem 2.2rem; }
   .product_grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); }
