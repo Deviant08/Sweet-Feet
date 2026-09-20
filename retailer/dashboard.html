@@ -92,36 +92,6 @@
   </div>
 </div>
 
-<script type="module">
-  import { getRetailer } from "/js/api.js";
-
-  const banner = document.getElementById("statusBanner");
-  const status = (getRetailer()?.status || "").toLowerCase();
-  const supportLink = ' <a href="/retailer/support.html" style="font-weight:700;color:#160c02">Message admin →</a>';
-  if (banner) {
-    if (status === "pending") {
-      banner.style.cssText =
-        "display:block;padding:1.25rem 1.5rem;border-radius:12px;margin-bottom:1.5rem;background:#fff6e5;border:1px solid #e8c47a;font-size:1.2rem;line-height:1.5;";
-      banner.innerHTML =
-        "<strong>⏳ Pending approval.</strong> An admin still needs to approve your store. You cannot list products until then." + supportLink;
-    } else if (status === "declined") {
-      banner.style.cssText =
-        "display:block;padding:1.25rem 1.5rem;border-radius:12px;margin-bottom:1.5rem;background:#fdecea;border:1px solid #e8a0a0;font-size:1.2rem;line-height:1.5;";
-      banner.innerHTML =
-        "<strong>Application declined.</strong> An admin declined your retailer application." + supportLink;
-    } else if (status === "suspended") {
-      banner.style.cssText =
-        "display:block;padding:1.25rem 1.5rem;border-radius:12px;margin-bottom:1.5rem;background:#fdecea;border:1px solid #e8a0a0;font-size:1.2rem;line-height:1.5;";
-      banner.innerHTML =
-        "<strong>Account suspended.</strong> Your store is suspended." + supportLink;
-    } else if (status === "approved") {
-      banner.style.cssText =
-        "display:block;padding:1.25rem 1.5rem;border-radius:12px;margin-bottom:1.5rem;background:#e8f7ee;border:1px solid #8fd4a8;font-size:1.2rem;line-height:1.5;";
-      banner.innerHTML =
-        "<strong>Approved.</strong> Your store is live. You can list products and receive orders." + supportLink;
-    }
-  }
-</script>
 <script type="module" src="/js/main.js"></script>
 </body>
 </html>

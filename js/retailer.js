@@ -114,13 +114,54 @@ export function initRetailer() {
     if (!requireRetailer()) return;
     dashboardHeading.textContent = `Welcome back, ${localStorage.getItem("sf_retailer_name")}`;
 
+    function renderStatusBanner(statusRaw) {
+      const banner = document.getElementById("statusBanner");
+      if (!banner) return;
+      const status = String(statusRaw || "").toLowerCase();
+      const supportLink =
+        ' <a href="/retailer/support.html" style="font-weight:700;color:#160c02">Message admin →</a>';
+      const base =
+        "display:block;padding:1.25rem 1.5rem;border-radius:12px;margin-bottom:1.5rem;font-size:1.2rem;line-height:1.5;";
+      if (status === "pending") {
+        banner.style.cssText = base + "background:#fff6e5;border:1px solid #e8c47a;";
+        banner.innerHTML =
+          "<strong>⏳ Pending approval.</strong> An admin still needs to approve your store. You cannot list products until then." +
+          supportLink;
+        return;
+      }
+      if (status === "declined") {
+        banner.style.cssText = base + "background:#fdecea;border:1px solid #e8a0a0;";
+        banner.innerHTML =
+          "<strong>Application declined.</strong> An admin declined your retailer application." +
+          supportLink;
+        return;
+      }
+      if (status === "suspended") {
+        banner.style.cssText = base + "background:#fdecea;border:1px solid #e8a0a0;";
+        banner.innerHTML =
+          "<strong>Account suspended.</strong> Your store is suspended." + supportLink;
+        return;
+      }
+      banner.style.display = "none";
+      banner.innerHTML = "";
+    }
+
     async function loadDashboard() {
       try {
-        const [oRes, pRes, uRes] = await Promise.all([
+        const [oRes, pRes, uRes, meRes] = await Promise.all([
           api("/orders/retailer").catch(() => ({ data: [] })),
           api("/products/mine").catch(() => ({ data: [] })),
           api("/messages/unread").catch(() => ({ data: { unread: 0, shop: 0, staff: 0 } })),
+          api("/retailers/me").catch(() => api("/auth/me").catch(() => null)),
         ]);
+        if (meRes?.data) {
+          setSession(getToken(), meRes.data, "retailer");
+          renderStatusBanner(meRes.data.status);
+          const name = meRes.data.businessName || localStorage.getItem("sf_retailer_name");
+          if (name) dashboardHeading.textContent = `Welcome back, ${name}`;
+        } else {
+          renderStatusBanner("");
+        }
         const orders = oRes.data || [];
         const prods = pRes.data || [];
         const unreadData = uRes.data || {};
