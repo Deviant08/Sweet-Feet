@@ -6,7 +6,7 @@
  * ============================================================
  */
 
-import { api, getToken, clearSession, getWsUrl, logoutRedirectUrl, sfAlert } from "./api.js";
+import { api, getToken, clearSession, getWsUrl, logoutRedirectUrl, sfAlert, escapeHtml } from "./api.js";
 
 export function initChat() {
   const inboxList = document.getElementById("inboxList");
@@ -55,7 +55,7 @@ export function initChat() {
     return new Date(d).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
   }
   function escHtml(t) {
-    return String(t).replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">");
+    return escapeHtml(t);
   }
   function initial(name) {
     return (name || "?").charAt(0).toUpperCase();
@@ -80,20 +80,16 @@ export function initChat() {
     const token = getToken();
     if (!token) return;
     try {
-      const url = `${getWsUrl()}?token=${encodeURIComponent(token)}`;
-      socket = new WebSocket(url);
+      socket = new WebSocket(getWsUrl());
     } catch {
       startPollFallback();
       return;
     }
 
     socket.addEventListener("open", () => {
-      socketReady = true;
-      setLiveHint("live");
+      wsSend({ type: "auth", token });
       if (pingTimer) clearInterval(pingTimer);
       pingTimer = setInterval(() => wsSend({ type: "ping" }), 25000);
-      if (activePartnerId) wsSend({ type: "join", partnerId: activePartnerId });
-      stopPollFallback();
     });
 
     socket.addEventListener("message", (ev) => {
@@ -101,6 +97,13 @@ export function initChat() {
       try {
         frame = JSON.parse(ev.data);
       } catch {
+        return;
+      }
+      if (frame.type === "ready") {
+        socketReady = true;
+        setLiveHint("live");
+        if (activePartnerId) wsSend({ type: "join", partnerId: activePartnerId });
+        stopPollFallback();
         return;
       }
       if (frame.type === "message" && frame.data) {
@@ -263,11 +266,11 @@ export function initChat() {
         const isActive = String(activePartnerId) === String(c.partnerId);
         const unread = parseInt(c.unread_count, 10) || 0;
         return `
-        <div class="inbox_item ${isActive ? "active" : ""}" data-id="${c.partnerId}" data-name="${c.partnerName}">
-          <div class="inbox_avatar">${initial(c.partnerName)}</div>
+        <div class="inbox_item ${isActive ? "active" : ""}" data-id="${escapeHtml(c.partnerId)}" data-name="${escapeHtml(c.partnerName)}">
+          <div class="inbox_avatar">${escapeHtml(initial(c.partnerName))}</div>
           <div class="inbox_info">
-            <div class="inbox_name">${c.partnerName}</div>
-            <div class="inbox_preview">${c.last_message || ""}</div>
+            <div class="inbox_name">${escapeHtml(c.partnerName)}</div>
+            <div class="inbox_preview">${escapeHtml(c.last_message || "")}</div>
           </div>
           ${unread > 0 ? `<span class="inbox_unread">${unread}</span>` : ""}
         </div>`;

@@ -5,7 +5,7 @@
  * ============================================================
  */
 
-import { api, mapProduct, setSession, getToken, confirmAndLogout, sfAlert } from "./api.js";
+import { api, mapProduct, setSession, getToken, confirmAndLogout, sfAlert, escapeHtml } from "./api.js";
 
 export function initRetailer() {
   const sidebar = document.querySelector(".sidebar_nav");
@@ -234,11 +234,11 @@ export function initRetailer() {
           orders.slice(0, 5).forEach((o) => {
             (o.items || []).forEach((it) => {
               rows.push(`<tr>
-                <td>${o.user?.fullName || "Customer"}</td>
-                <td>${it.productName || "—"}</td>
-                <td>${it.quantity}</td>
+                <td>${escapeHtml(o.user?.fullName || "Customer")}</td>
+                <td>${escapeHtml(it.productName || "—")}</td>
+                <td>${escapeHtml(it.quantity)}</td>
                 <td>₦${Number(it.subtotal || 0).toFixed(2)}</td>
-                <td><span class="badge ${it.status}">${it.status}</span></td>
+                <td><span class="badge ${escapeHtml(it.status)}">${escapeHtml(it.status)}</span></td>
                 <td>${fmtDate(o.orderedAt || o.createdAt)}</td>
               </tr>`);
             });
@@ -462,16 +462,16 @@ export function initRetailer() {
         .map((o) => {
           const canUpdate = !["delivered", "cancelled"].includes(o.status);
           return `<tr>
-          <td style="font-family:monospace;font-size:1.1rem">${o.paystack_ref || "—"}</td>
-          <td>${o.customer_name}</td>
-          <td>${o.product_name}</td>
-          <td>${o.quantity} · ${o.size || "—"}</td>
+          <td style="font-family:monospace;font-size:1.1rem">${escapeHtml(o.paystack_ref || "—")}</td>
+          <td>${escapeHtml(o.customer_name)}</td>
+          <td>${escapeHtml(o.product_name)}</td>
+          <td>${escapeHtml(o.quantity)} · ${escapeHtml(o.size || "—")}</td>
           <td>₦${Number(o.subtotal || 0).toFixed(2)}</td>
-          <td><span class="badge ${o.status}">${o.status}</span></td>
+          <td><span class="badge ${escapeHtml(o.status)}">${escapeHtml(o.status)}</span></td>
           <td>${fmtDate(o.ordered_at)}</td>
           <td>${
             canUpdate
-              ? `<button class="btn_sm dark update_status_btn" data-order="${o.orderId}" data-id="${o.itemId}" data-status="${o.status}" data-name="${o.product_name}" data-customer="${o.customer_name}">Update →</button>`
+              ? `<button class="btn_sm dark update_status_btn" data-order="${escapeHtml(o.orderId)}" data-id="${escapeHtml(o.itemId)}" data-status="${escapeHtml(o.status)}" data-name="${escapeHtml(o.product_name)}" data-customer="${escapeHtml(o.customer_name)}">Update →</button>`
               : `<span style="font-size:1.1rem;color:var(--clr-muted)">${o.status === "delivered" ? "✓ Done" : "Cancelled"}</span>`
           }</td></tr>`;
         })

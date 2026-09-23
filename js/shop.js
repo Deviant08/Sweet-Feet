@@ -5,7 +5,7 @@
  * ============================================================
  */
 
-import { api, mapProduct, getToken, getUser, chatAppUrl } from "./api.js";
+import { api, mapProduct, getToken, getUser, chatAppUrl, escapeHtml, safeUrl } from "./api.js";
 
 export function formatPrice(p) {
   const n = Number(p) || 0;
@@ -138,13 +138,13 @@ export function initShop() {
       heroCopy.insertBefore(ident, heroCopy.firstChild);
     }
     const ident = document.getElementById("sellerIdent");
-    const photo = seller?.logo || products[0]?.retailerLogo || "";
+    const photo = safeUrl(seller?.logo || products[0]?.retailerLogo || "");
     if (ident) {
       ident.innerHTML = photo
-        ? `<img class="seller_ident_avatar" src="${photo.replace(/"/g, "")}" alt="" />`
+        ? `<img class="seller_ident_avatar" src="${escapeHtml(photo)}" alt="" />`
         : "";
     }
-    if (title) title.innerHTML = `${name.replace(/</g, "")}'s <span>shop.</span>`;
+    if (title) title.innerHTML = `${escapeHtml(name)}'s <span>shop.</span>`;
     if (sub) {
       const loc = seller?.location || "";
       const n = products.length;
@@ -205,36 +205,36 @@ export function initShop() {
 
     const sellerBlock = house
       ? `<span class="card_official">Official listing</span>`
-      : `<a class="card_seller" href="${profileUrl}" title="View ${p.retailerName || "seller"}">
-            <img class="card_seller_avatar" src="${p.retailerLogo}" alt="" />
+      : `<a class="card_seller" href="${profileUrl}" title="View ${escapeHtml(p.retailerName || "seller")}">
+            <img class="card_seller_avatar" src="${escapeHtml(safeUrl(p.retailerLogo))}" alt="" />
             <span class="card_seller_text">
               <span class="card_seller_by">Sold by</span>
-              <span class="card_seller_name">${p.retailerName || "Sweet Feet"}</span>
+              <span class="card_seller_name">${escapeHtml(p.retailerName || "Sweet Feet")}</span>
             </span>
           </a>
           <a class="btn_chat_link" href="${chatUrl}">💬 Chat with seller</a>`;
 
     return `
-      <article class="product_card${house ? " product_card--house" : ""}" data-id="${p.id}">
-        ${p.badge ? `<span class="card_badge badge_${p.badge}">${p.badgeLabel}</span>` : ""}
+      <article class="product_card${house ? " product_card--house" : ""}" data-id="${escapeHtml(p.id)}">
+        ${p.badge ? `<span class="card_badge badge_${escapeHtml(p.badge)}">${escapeHtml(p.badgeLabel)}</span>` : ""}
         <button class="card_wishlist" title="Save for later" type="button">♡</button>
-        <img class="card_img" src="${p.img}" alt="${p.name}" loading="lazy" />
+        <img class="card_img" src="${escapeHtml(safeUrl(p.img))}" alt="${escapeHtml(p.name)}" loading="lazy" />
         <div class="card_body">
-          <span class="card_category">${p.category} · ${p.gender}</span>
-          <h2 class="card_name">${p.name}</h2>
+          <span class="card_category">${escapeHtml(p.category)} · ${escapeHtml(p.gender)}</span>
+          <h2 class="card_name">${escapeHtml(p.name)}</h2>
           <div class="card_rating">
             <span class="stars">${stars(p.rating)}</span>
             <span>${p.rating} (${p.ratingCount})</span>
           </div>
           <div class="card_sizes">
-            ${(p.sizes || []).map((s) => `<span class="size_dot" data-size="${s}">${s}</span>`).join("")}
+            ${(p.sizes || []).map((s) => `<span class="size_dot" data-size="${escapeHtml(s)}">${escapeHtml(s)}</span>`).join("")}
           </div>
           <div class="card_footer">
             <div class="card_price">
               ${formatPrice(p.price)}
               ${p.oldPrice ? `<span class="old_price">${formatPrice(p.oldPrice)}</span>` : ""}
             </div>
-            <button class="btn_order" type="button" data-id="${p.id}">Add to cart</button>
+            <button class="btn_order" type="button" data-id="${escapeHtml(p.id)}">Add to cart</button>
           </div>
           ${sellerBlock}
         </div>
@@ -383,16 +383,16 @@ export function initShop() {
         const sizeAttr = cartSizeKey(item.selectedSize);
         return `
       <div class="cart_item">
-        <img src="${item.img}" alt="${item.name}" />
+        <img src="${escapeHtml(safeUrl(item.img))}" alt="${escapeHtml(item.name)}" />
         <div class="cart_item_info">
-          <div class="cart_item_name">${item.name}</div>
-          <div class="cart_item_meta">${item.retailerName || ""} · Size: ${sizeAttr || "—"}</div>
+          <div class="cart_item_name">${escapeHtml(item.name)}</div>
+          <div class="cart_item_meta">${escapeHtml(item.retailerName || "")} · Size: ${escapeHtml(sizeAttr || "—")}</div>
           <div class="qty_control">
-            <button type="button" class="qty_btn" data-id="${item.id}" data-size="${sizeAttr}" data-delta="-1">−</button>
+            <button type="button" class="qty_btn" data-id="${escapeHtml(item.id)}" data-size="${escapeHtml(sizeAttr)}" data-delta="-1">−</button>
             <span class="qty_num">${item.qty}</span>
-            <button type="button" class="qty_btn" data-id="${item.id}" data-size="${sizeAttr}" data-delta="1">+</button>
+            <button type="button" class="qty_btn" data-id="${escapeHtml(item.id)}" data-size="${escapeHtml(sizeAttr)}" data-delta="1">+</button>
           </div>
-          <button type="button" class="cart_remove" data-id="${item.id}" data-size="${sizeAttr}">Remove</button>
+          <button type="button" class="cart_remove" data-id="${escapeHtml(item.id)}" data-size="${escapeHtml(sizeAttr)}">Remove</button>
         </div>
         <div class="cart_item_price">${formatPrice(item.price * item.qty)}</div>
       </div>`;

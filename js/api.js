@@ -51,11 +51,10 @@ export function chatAppUrl(query = {}) {
     (typeof window !== "undefined" && window.SF_CHAT_URL) || "";
   const params = new URLSearchParams();
   for (const [k, v] of Object.entries(query)) {
+    if (k === "token") continue;
     if (v != null && String(v) !== "") params.set(k, String(v));
   }
-  const token = getToken();
   const base = String(configured).replace(/\/$/, "");
-  if (base && token) params.set("token", token);
   const qs = params.toString();
   if (base) return qs ? `${base}/?${qs}` : `${base}/`;
   return qs ? `/nav/chat.html?${qs}` : `/nav/chat.html`;
@@ -122,6 +121,24 @@ export function avatarUrl(name, existing) {
   if (existing) return existing;
   const label = encodeURIComponent((name || "SF").slice(0, 24));
   return `https://ui-avatars.com/api/?name=${label}&background=160c02&color=f7dfb8&size=128&bold=true`;
+}
+
+export function escapeHtml(s) {
+  return String(s ?? "")
+    .replace(/&/g, "&" + "amp;")
+    .replace(/</g, "&" + "lt;")
+    .replace(/>/g, "&" + "gt;")
+    .replace(/"/g, "&" + "quot;")
+    .replace(/'/g, "&#39;");
+}
+
+export function safeUrl(u) {
+  const s = String(u || "").trim();
+  if (!s) return "";
+  if (s.startsWith("/") && !s.startsWith("//")) return s;
+  if (/^https?:\/\//i.test(s)) return s;
+  if (/^data:image\/(jpeg|jpg|png|gif|webp);base64,/i.test(s)) return s;
+  return "";
 }
 
 export async function api(path, opts = {}) {
