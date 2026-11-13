@@ -1,0 +1,25 @@
+/* Heroicons — sized for Sweet Feet UI */
+.hi {
+  width: 1.15em;
+  height: 1.15em;
+  display: inline-block;
+  vertical-align: -0.15em;
+  flex-shrink: 0;
+  stroke: currentColor;
+  fill: none;
+}
+.hi.hi-solid { fill: currentColor; stroke: none; }
+.sidebar_link .icon { display: inline-flex; align-items: center; justify-content: center; width: 1.35rem; height: 1.35rem; font-size: 1.35rem; }
+.sidebar_link .icon .hi { width: 1.25rem; height: 1.25rem; }
+.stat_card .stat_icon { display: flex; align-items: center; justify-content: center; font-size: 1.6rem; }
+.stat_card .stat_icon .hi { width: 1.6rem; height: 1.6rem; }
+.empty_icon { display: flex; align-items: center; justify-content: center; }
+.empty_icon .hi { width: 3.2rem; height: 3.2rem; opacity: 0.45; }
+.cart_fab .hi { width: 1.4rem; height: 1.4rem; }
+.drawer_close .hi { width: 1.2rem; height: 1.2rem; }
+.card_wishlist .hi { width: 1.15rem; height: 1.15rem; }
+.perk_icon { display: inline-flex; align-items: center; }
+.perk_icon .hi { width: 1.4rem; height: 1.4rem; }
+.stars .hi { width: 0.9rem; height: 0.9rem; vertical-align: -0.1em; }
+.menu_toggle .hi { width: 1.5rem; height: 1.5rem; }
+.order_icon .hi, .icon.big .hi { width: 3.5rem; height: 3.5rem; }

@@ -298,7 +298,9 @@ if (navBar) {
   menuToggle.type = "button";
   menuToggle.className = "menu_toggle";
   menuToggle.setAttribute("aria-label", "Open menu");
-  menuToggle.innerHTML = `<span></span><span></span><span></span>`;
+  const BARS = `<svg class="hi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>`;
+  const CLOSE = `<svg class="hi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18 18 6M6 6l12 12"/></svg>`;
+  menuToggle.innerHTML = BARS;
 
   const navOverlay = document.createElement("div");
   navOverlay.className = "nav_overlay";
@@ -325,12 +327,16 @@ if (navBar) {
     navSidebar.classList.add("open");
     navOverlay.classList.add("visible");
     menuToggle.classList.add("open");
+    menuToggle.innerHTML = CLOSE;
+    menuToggle.setAttribute("aria-label", "Close menu");
     document.body.style.overflow = "hidden";
   }
   function closeSidebar() {
     navSidebar.classList.remove("open");
     navOverlay.classList.remove("visible");
     menuToggle.classList.remove("open");
+    menuToggle.innerHTML = BARS;
+    menuToggle.setAttribute("aria-label", "Open menu");
     document.body.style.overflow = "";
   }
 

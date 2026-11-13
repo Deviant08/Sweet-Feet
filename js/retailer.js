@@ -6,6 +6,7 @@
  */
 
 import { api, mapProduct, setSession, getToken, confirmAndLogout, sfAlert, escapeHtml } from "./api.js";
+import { HI } from "./icons.js";
 
 export function initRetailer() {
   const sidebar = document.querySelector(".sidebar_nav");
@@ -147,9 +148,7 @@ export function initRetailer() {
         "display:block;padding:1.25rem 1.5rem;border-radius:12px;margin-bottom:1.5rem;font-size:1.2rem;line-height:1.5;";
       if (status === "pending") {
         banner.style.cssText = base + "background:#fff6e5;border:1px solid #e8c47a;";
-        banner.innerHTML =
-          "<strong>⏳ Pending approval.</strong> An admin still needs to approve your store. You cannot list products until then." +
-          supportLink;
+        banner.innerHTML = `<strong>${HI.clock} Pending approval.</strong> An admin still needs to approve your store. You cannot list products until then.` + supportLink;
         return;
       }
       if (status === "declined") {
@@ -313,7 +312,7 @@ export function initRetailer() {
         const json = await api("/products/mine");
         catalog = (json.data || []).map(mapProduct).filter(Boolean);
         if (!catalog.length) {
-          productManageGrid.innerHTML = `<div class="empty_state"><div class="empty_icon">👟</div><p>No products listed yet.</p><small>Click "+ Add Product" to get started.</small></div>`;
+          productManageGrid.innerHTML = `<div class="empty_state"><div class="empty_icon"><svg class="hi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/></svg></div><p>No products listed yet.</p><small>Click "+ Add Product" to get started.</small></div>`;
           return;
         }
         productManageGrid.innerHTML = catalog.map(renderManageCard).join("");
@@ -472,7 +471,7 @@ export function initRetailer() {
           <td>${
             canUpdate
               ? `<button class="btn_sm dark update_status_btn" data-order="${escapeHtml(o.orderId)}" data-id="${escapeHtml(o.itemId)}" data-status="${escapeHtml(o.status)}" data-name="${escapeHtml(o.product_name)}" data-customer="${escapeHtml(o.customer_name)}">Update →</button>`
-              : `<span style="font-size:1.1rem;color:var(--clr-muted)">${o.status === "delivered" ? "✓ Done" : "Cancelled"}</span>`
+              : `<span style="font-size:1.1rem;color:var(--clr-muted)">${o.status === "delivered" ? `${HI.check} Done` : "Cancelled"}</span>`
           }</td></tr>`;
         })
         .join("");
