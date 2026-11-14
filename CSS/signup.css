@@ -244,3 +244,65 @@ h3 {
 .link_forgot:hover {
   color: #805122;
 }
+
+@media (max-width: 800px) {
+  .auth_page {
+    min-height: 100dvh;
+    background-image: linear-gradient(#160c0296, #160c0296),
+      url(https://i.pinimg.com/1200x/6a/e9/d1/6ae9d1e500ca9cbd7cf369a2fe0ceb20.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .auth_page .flex {
+    flex-direction: column;
+    min-height: 100dvh;
+    height: auto;
+  }
+  .auth_page .height100 { height: auto; min-height: 100dvh; }
+  .auth_page .width50 { width: 100%; min-height: 0 !important; height: auto; }
+  .auth_page .img_container {
+    width: 100%;
+    min-height: 0 !important;
+    height: auto;
+    background: none;
+    border-radius: 0;
+    padding: 1.4rem 1.6rem 0;
+  }
+  .auth_page .form_container {
+    width: 100%;
+    background: none;
+    border-radius: 0;
+    padding: 0 1.4rem 2.4rem;
+  }
+  .auth_page .logo { padding: 0.2rem 0 0.6rem; }
+  .auth_page .logo_img { width: 6.4rem !important; height: 6.4rem !important; }
+  .auth_page .logo_txt { font-size: 2.6rem !important; }
+  .auth_page .message { padding: 0.2rem 0 1.2rem; }
+  .auth_page .message h1 {
+    font-size: 1.7rem !important;
+    margin: 0.2rem 0 0.5rem !important;
+    line-height: 1.25;
+    font-weight: 700;
+  }
+  .auth_page .message p {
+    font-size: 1.25rem;
+    line-height: 1.45;
+    letter-spacing: 0;
+  }
+  .auth_page .message br { display: none; }
+  .auth_page .form {
+    width: 100% !important;
+    max-width: 42rem;
+    margin: 0 auto;
+    padding: 1.6rem 1.4rem !important;
+  }
+  .auth_page .bolden { font-size: 1.4rem !important; margin-bottom: 0.3rem; }
+  .auth_page h3 { font-size: 1.25rem; }
+  .auth_page .inp,
+  .auth_page .border { font-size: 1.3rem; padding: 1.1rem 1.2rem; }
+  .auth_page .btn_login { font-size: 1.3rem; min-height: 4.2rem; }
+  .auth_page .login_link { flex-wrap: wrap; }
+  .auth_page .login_link p,
+  .auth_page .link_forgot { font-size: 1.15rem; }
+}
