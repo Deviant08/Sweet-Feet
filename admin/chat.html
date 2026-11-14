@@ -156,6 +156,14 @@
       .status_dot.suspended {
         background: #c0392b;
       }
+      @media (max-width: 860px) {
+        .chat_layout { flex-direction: column; min-height: calc(100dvh - 6rem); }
+        .chat_inbox { width: 100%; max-height: 42vh; border-right: 0; border-bottom: 1px solid #e8e0d6; }
+        .chat_thread { min-height: 50vh; }
+        .bubble { max-width: 88%; }
+        .thread_compose { flex-wrap: wrap; }
+        .thread_compose button { width: 100%; }
+      }
     </style>
   </head>
   <body>
@@ -445,5 +453,6 @@
 
       boot();
     </script>
-  </body>
+  <script src="/js/dash-nav.js" defer></script>
+</body>
 </html>

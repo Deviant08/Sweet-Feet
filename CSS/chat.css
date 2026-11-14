@@ -246,7 +246,17 @@ a:visited {
 
 /* ── Responsive ───────────────────────────────────────────── */
 @media (max-width: 860px) {
-  .chat_layout { grid-template-columns: 1fr; }
-  .chat_inbox  { display: none; }
-  .chat_inbox.open { display: flex; position: fixed; inset: 0; z-index: 50; }
+  .chat_layout {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: calc(100dvh - 8rem);
+  }
+  .chat_inbox {
+    display: flex;
+    max-height: 42vh;
+    border-right: 0;
+    border-bottom: 1px solid var(--clr-border);
+  }
+  .chat_thread, .chat_panel { min-height: 50vh; }
+  .bubble { max-width: 88%; }
 }
