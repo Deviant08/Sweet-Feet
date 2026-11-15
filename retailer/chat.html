@@ -3,16 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/jpeg" href="/assets/20251102_172020.png" sizes="32x32"/>
+<link rel="icon" type="image/jpeg" href="/assets/20251102_172020.png" sizes="32x32"/>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/CSS/retailer.css" />
   <link rel="stylesheet" href="/CSS/chat.css" />
-  <link rel="stylesheet" href="/CSS/icons.css" />
-  <title>Customers — Sweet Feet Retailer</title>
+  <link rel="stylesheet" href="/CSS/skeletons.css" />
+  <title>Messages — Sweet Feet Retailer</title>
+  <style>.hidden { display: none !important; }</style>
 </head>
 <body>
+
 <div class="dashboard_wrap">
   <nav class="sidebar_nav">
     <a class="sidebar_logo" href="/index.html">
@@ -47,7 +49,7 @@
     <div class="chat_layout" style="height:calc(100vh - 5.6rem);width:100%">
       <div class="chat_inbox" id="inboxList">
         <div class="inbox_search">
-          <input type="text" id="inboxSearch" placeholder="Search customers…" />
+          <input type="text" id="inboxSearch" placeholder="Search conversations…" />
         </div>
         <div id="inboxItems">
           <div style="padding:2rem;text-align:center;color:var(--clr-muted)">Loading…</div>
@@ -55,7 +57,7 @@
       </div>
       <div class="chat_panel" id="chatPanel">
         <div class="chat_empty_state" id="chatEmptyState">
-          <p>Select a customer to start chatting</p>
+          <p>Select a conversation</p>
         </div>
         <div class="chat_header hidden" id="chatHeader">
           <button type="button" class="chat_back" id="chatBackBtn" aria-label="Back to conversations">←</button>
@@ -74,10 +76,8 @@
     </div>
   </div>
 </div>
-<script type="module">
-  import { initChat } from "/js/chat.js";
-  initChat();
-</script>
-<script src="/js/dash-nav.js" defer></script>
+
+<script type="module" src="/js/main.js"></script>
+<script src="/js/chat-mobile.js" defer></script>
 </body>
 </html>
